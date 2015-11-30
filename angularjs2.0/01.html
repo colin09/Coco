@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>hello , angularjs2<title>
+		<!--模块加载器-->
+		<script src="http://cdn.bootcss.com/systemjs/0.18.4/system.js"></script>
+		<!--angualr2模块库-->
+		<script src="http://cdn.bootcss.com/angular.js/2.0.0-alpha.46/anguar2.min.js"></script>
+		<script>
+			System.baseUrl= document.baseURI;
+			System.config({
+				map:{traceur:"lib/traceur"},
+				traceurOptions:{annotations:true}
+			});
+		</script>
+	</head>
+	<body>
+	
+		<pre class="logger"></pre>
+		
+		
+		<script>
+			//用ES6语法定义一个类
+			export class Logger(){
+				construtor(){
+					this.el=document.querySelector("pre.logger");
+					this.lines = [];
+				}
+				log(str){
+					this.lines.push(str);
+					this.el.textContent = this.lines.join("\n");
+				}
+			}
+			//实例化，测试一下
+			var _ = new Logger();
+			_.log("o you, not bed...");
+			_.log("realy using ES6!");
+		</script>
+	</body>
+</html>
