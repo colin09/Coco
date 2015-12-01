@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>hello , angularjs2<title>
+		<!--模块加载器-->
+		<script src="http://cdn.bootcss.com/systemjs/0.18.4/system.js"></script>
+		<!--angualr2模块库-->
+		<script src="http://cdn.bootcss.com/angular.js/2.0.0-alpha.46/anguar2.min.js"></script>
+		<script>
+			System.baseUrl= document.baseURI;
+			System.config({
+				map:{traceur:"lib/traceur"},
+				traceurOptions:{annotations:true}
+			});
+		</script>
+	</head>
+	<body>
+		<!--组件渲染锚点-->
+		<my-app></my-app>
+		
+		
+		<script>
+			//从模块库引入三个类型定义
+			import{Component,View,bootstrap} from "anguar2/anguar2";
+			
+			//组件定义 - 注解方式 
+			/*
+			@Component({selector:"my-app"})
+			@View({template:"<h1>Hello Angular2</h1>"})
+			*/
+			class EzApp{}  
+			
+			//非注解方式
+			EzApp.annotations=[
+				new Component({selector:"my-app"}),
+				new View({template:"<h1>Hello Angular2</h1>"})
+			]
+			
+			//渲染组件
+			bootstarp(EzApp);
+		</script>
+		
+	</body>
+</html>
