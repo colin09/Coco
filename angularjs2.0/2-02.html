@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <title>template - component </title>
+    <script type="text/javascript" src="lib/system@0.16.11.js"></script>
+    <script type="text/javascript" src="lib/angular2.dev.js"></script>
+    <script type="text/javascript" src="lib/system.config.js"></script>
+</head>
+<body>
+	<ez-app></ez-app>
+    <script type="module">
+    	import {Component,View,bootstrap} from "angular2/angular2";
+        
+        @Component({selector:"ez-app"})
+        @View({
+        	directives:[EzCard],
+        	template:`
+            	<div class="ez-app">
+                    <h1>EzApp</h1>
+                    <ez-card></ez-card>
+                </div>`
+        })
+        class EzApp{}
+        
+        @Component({selector : "ez-card"})
+        @View({
+        	directives:[EzLogo],
+        	template : `
+            	<div class="ez-card">
+            		<h1>EzCard</h1>
+                    <ez-logo></ez-logo>
+                </div>`
+        })
+        class EzCard{}
+        
+        @Component({selector:"ez-logo"})
+        @View({template:`<div class="ez-logo"><h2>EzLogo</h2></div>`})
+        class EzLogo{}
+        
+        bootstrap(EzApp);
+    </script>
+</body>
+</html>

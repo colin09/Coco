@@ -2,9 +2,10 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>hello , angularjs2<title>
+		<title>hello , angularjs2</title>
 		<!--模块加载器-->
 		<script type="text/javascript" src="lib/system@0.16.11.js"></script>
+		<script type="text/javascript" src="lib/traceur.js"></script>
 		<!--angualr2模块库-->
 		<script type="text/javascript" src="lib/angular2.dev.js"></script>
 		<script type="text/javascript">
@@ -22,7 +23,7 @@
 		
 		<script>
 			//用ES6语法定义一个类
-			export class Logger(){
+			 class Logger(){
 				construtor(){
 					this.el=document.querySelector("pre.logger");
 					this.lines = [];
