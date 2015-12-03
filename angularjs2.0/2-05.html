@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <title>template - component </title>
+    <script type="text/javascript" src="lib/system@0.16.11.js"></script>
+    <script type="text/javascript" src="lib/angular2.dev.js"></script>
+    <script type="text/javascript" src="lib/system.config.js"></script>
+</head>
+
+<body>
+	<ez-app></ez-app>
+    
+    <script type="module">
+    	import {Component,View,bootstrap} from "angular2/angular2";
+
+        @Component({selector:"ez-app"})
+        @View({
+			template:`	
+            	<h1 on-click="roulette()">Your turn! <b>{{sb}}</b></h1>
+            	<button (click)="roulette()">ROULETTE</button>
+           	`
+		})
+        class EzApp{
+        	constructor(){
+            	this.names = ["Jason","Mary","Linda","Lincoln","Albert","Jimmy"];
+                this.roulette();
+            }
+            //轮盘赌
+            roulette(){
+            	var idx = parseInt(Math.random()*this.names.length);
+                this.sb = this.names[idx];
+            }
+        }
+                
+        bootstrap(EzApp);
+
+    </script>
+</html>
