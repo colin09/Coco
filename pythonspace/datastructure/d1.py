@@ -261,7 +261,61 @@ def convert_to_str(num):
 	else:
 		return str(num)
 
-print(map(convert_to_str,[1,2,3,4]))
+def summ_left(lst):
+	summ = []
+	x = [i for i in range(len(lst))]
+	y = [j for j in range(len(lst[0]))]
+	sx = [i for i in x if i%2==0]
+	for i in sx:
+		s = 0
+		j = 0
+		while i>=0 and j<=y[-1]:
+			s = s + lst[i][j]
+			if i%2 ==1:
+				j = j+1
+			else:
+				j = j
+			i = i-1
+		summ.append(s)
+	return summ
+
+def summ_end(lst):
+	summ = []
+	y = [j for j in range(len(lst[0]))]
+	ex = len(lst) - 1
+	for m in range(len(y)):
+		s = 0
+		i = ex
+		j = m
+		while i>=0 and j <= y[-1]:
+			s += lst[i][j]
+			if i%2 ==1:
+				j = j+1
+			else:
+				j=j
+			i = i-1
+		summ.append(s)
+	return summ
+
+def take_digit(lst):
+	tmp = 0
+	digit_list = []
+	for m in range(len(lst)):
+		lstm = 0
+		lstm = lst[m]+tmp
+		if lstm < 10:
+			tmp = 0
+			digit_list.append(str(lstm))
+		else:
+			tmp = lstm/10
+			mm = lstm - tmp*10
+			digit_list.append(str(mm))
+	return digit_list
+
+
+
+
+print('\n计算 12345 × 67890 ====>')
 
 num1 = 12345
 num2 = 67890
@@ -269,13 +323,197 @@ num2 = 67890
 num_lst1 = [int(i) for i in str(num1)]
 num_lst2 = [int(i) for i in str(num2)]
 
-#两个lst中整数两两相乘
+print('\n两个lst中整数两两相乘 ')
 int_martix = [[i*j for i in num_lst1] for j in num_lst2]
 print(int_martix)
 
-str_martix = [map(convert_to_str,int_martix[i]) for i in range(len(int_martix))]
-# str_martix = [convert_to_str(int_martix[i]) for i in range(len(int_martix))]
+print('\n将上述元素为数字的list转化为元素类型是str，主要是将9-->09  ')
+str_martix = [list(map(convert_to_str,int_martix[i])) for i in range(len(int_martix))]
 print(str_martix)
 
+print("\n将上述各个list中的两位数字分开：['01','29','03']-->[0,2,0],[1,9,3] ")
 martix = [[int(str_martix[i][j][k]) for j in range(len(str_martix))] for i in range(len(str_martix)) for k in range(2)]
 print(martix)
+
+print('\n计算阿拉伯乘法表的左侧开始各项和')
+sum_left = summ_left(martix)
+print(sum_left)
+
+print('\n计算阿拉伯乘法表的底部开始各项和')
+sum_end = summ_end(martix)
+print(sum_end)
+
+print('\n将上述两个结果合并后翻转')
+sum_left.extend(sum_end)
+sum_left.reverse()
+print(sum_left)
+
+print('\n取得各个和的个位的数字（如果进位则加上）')
+result = take_digit(sum_left)
+print(result)
+
+print('\n翻转结果并合并为一个结果字符串数值')
+result.reverse()
+int_result = "".join(result)
+print('%d × %d = %s' %(num1,num2,int_result))
+print(int_result)
+print(num1 * num2)
+
+
+
+
+
+print('\n# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # \n')
+print('二叉树 ====>\n')
+
+class Node:
+	def __init__(self,data):
+		# 二叉树节点结构，包括：左枝、右枝、节点数据三个变量
+		self.left = None
+		self.right = None
+		self.data = data
+
+	def insert(self,data):
+		# 
+		if data < self.data:
+			if self.left is None:
+				self.left = Node(data)
+			else:
+				self.left.insert(data)
+		elif data > self.data:
+			if self.right is None:
+				self.right = Node(data)
+			else:
+				self.right.insert(data)
+
+	def search(self,data,parent=None):
+		#
+		if data < self.data:
+			if self.left is None:
+				return None ,None
+			return self.left.search(data,self)
+		elif data > self.data:
+			if self.right is None:
+				return None,None
+			return self.right.search(data,self)
+		else:
+			return self,parent
+
+	def children_count(self):
+		cnt = 0
+		if self.left:
+			cnt += 1
+		if self.right:
+			cnt += 1
+		return cnt
+
+	def delete(self,data):
+		node ,parent = self.search(data)
+		if node is not None:
+			children_count = node.children_count()
+			if children_count == 0 :
+				if parent.left is node:
+					parent.left = None
+				else:
+					parent.right = None
+				del node
+			elif children_count == 1:
+				if node.left:
+					n = node.left
+				else:
+					n = node.right
+				if parent:
+					if parent.left is node:
+						parent.left = n
+					else:
+						parent.right = n
+				del node
+			else:
+				parent = node
+				successor = node.right
+				while successor.left:
+					parent=successor
+					successor = successor.left
+				node.data = successor.data
+				if parent.left == successor:
+					parent.left = successor.right
+				else:
+					parent.right = successor.right
+		return self
+
+	def compare_trees(self,node): # 比较两个二叉树
+		if node is None:
+			return False
+		if self.data != node.data:
+			return False
+		res = True
+		if self.left is None:
+			if node.left:
+				return Fasel
+		else:
+			res = self.left.compare_trees(self.left)
+		if res is False:
+			return False
+		if self.right is None:
+			if data.right:
+				return False
+		else:
+			res = self.right.compare_trees(self.right)
+		return res
+
+	def tree_data(self):
+		stack = []
+		node = self
+		while stack or node:
+			# print('%s - %s' %(stack , node))
+			if node:
+				stack.append(node)
+				node = node.left
+			else:
+				node = stack.pop()
+				yield node.data
+				node = node.right
+	
+	def minValue(self):
+		node = self
+		while node.left is not None:
+			node = node.left
+		return node.data
+
+	def maxDepth(self):
+		root = self
+		if root is None:
+			return 0
+		else:
+			ldepth = root.left.maxDepth()
+			rdepth = root.right.maxDepth()
+			return max(ldepth,rdepth)
+
+
+root = Node(8)
+root.insert(3)
+root.insert(10)
+root.insert(1)
+
+root.insert(6)
+root.insert(4)
+root.insert(7)
+root.insert(14)
+root.insert(13)
+
+# print(root)
+print('\n search ==>')
+print(root.search(6))
+
+print('\n delete ==>')
+print(root.delete(1))
+
+print('\n 所有树元素的生成器 ==>')
+for data in root.tree_data():
+    print(data)
+
+print('\n min value ==>')
+print(root.minValue())
+
+print('\n max depth ==>')
+print(root.maxDepth())
