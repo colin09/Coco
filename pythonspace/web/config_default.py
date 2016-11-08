@@ -7,10 +7,9 @@ __author__ = 'coco'
 
 configs={
     'db':{
-        'host':'127.0.0.1',
-        'port':'3306',
+        'host':'192.168.1.182',
         'user':'sa',
-        'password':'sa123',
+        'password':'Sa123@456',
         'database':'blog'
         },
     'session':{

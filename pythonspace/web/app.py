@@ -14,16 +14,16 @@ from datetime import datetime
 from aiohttp import web
 from jinja2 import Environment,FileSystemLoader
 
-import orm, dbm
+import orm, dbm, cookie
 from coroweb import add_routes,add_static
 from config import configs
 
 
 async def init(loop):
-	#await dbm.create_pool(loop=loop,host='192.168.0.103',user='sa',password='Sa123@456',database='blog')
+	# await dbm.create_pool(loop=loop,host='192.168.0.103',user='sa',password='Sa123@456',database='blog')
 	await dbm.create_pool(loop=loop,**configs.db)
 	app = web.Application(loop=loop,middlewares=[
-		    logger_factory,response_factory
+		    logger_factory,auth_factory,response_factory
 		])
 	init_jinja2(app,filters=dict(datetime=datetime_filter))
 	add_routes(app,'handlers')
@@ -51,7 +51,7 @@ def init_jinja2(app,**kw):
 		path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'templates')
 	logging.info('set jinja2 template path: %s' % path)
 	env = Environment(loader=FileSystemLoader(path),**options)
-	filters = kw.get('filter',None)
+	filters = kw.get('filters',None)
 	if filters is not None:
 		for name ,f in filters.items():
 			env.filters[name] = f
@@ -59,11 +59,12 @@ def init_jinja2(app,**kw):
 
 
 async def logger_factory(app,handler):
-    async def logger(request):
-        logging.info('logger_factory ==> Request: %s %s' % (request.method,request.path))
+	logging.info('-------------------------------------------------------------------------------------------------------\n')
+	async def logger(request):
+		# logging.info('logger_factory ==> Request: %s %s' % (request.method,request.path))
         #await asyncio.sleep(0.3)
-        return (await handler(request))
-    return logger
+		return (await handler(request))
+	return logger
 
 
 async def data_factory(app,handler):
@@ -79,11 +80,29 @@ async def data_factory(app,handler):
         return await handler(request)
     return parse_data
 
+
+async def auth_factory(app,handler):
+	async def auth(request):
+		logging.info('check user: %s %s' % (request.method,request.path))
+		request.__user__ = None
+		cookie_str = request.cookies.get(cookie.COOKIE_NAME)
+		if cookie_str:
+			user = await cookie.cookie2user(cookie_str)
+			if user:
+				logging.info('set current user: %s' % user.EMail)
+				request.__user__ = user
+			if request.path.startwith('/manage/') and (request.__user__ in None or not request.__user__.Admin):
+				return web.HTTPFound('/signin')
+			return await handler(request)
+		return auth
+
+
+
 async def response_factory(app,handler):
 	async def response(request):
-		logging.info('response_factory ==> Response handler ...')
-		logging.info('response_factory ==> handler: %s' % handler)
-		logging.info('response_factory ==> request: %s' % request)
+		# logging.info('response_factory ==> Response handler ...')
+		# logging.info('response_factory ==> handler: %s' % handler)
+		# logging.info('response_factory ==> request: %s' % request)
 		r = await handler(request)
 		if isinstance(r,web.StreamResponse):
 			return r
@@ -124,11 +143,11 @@ def datetime_filter(t):
 	if times <60:
 		return u'一分钟前'
 	if times <3600:
-		return u'%s分钟前' % (times / 60)
+		return u'%s分钟前' % (times // 60)
 	if times < 86400:
-		return u'%s小时前' % (times / 3600)
+		return u'%s小时前' % (times // 3600)
 	if times < 604800:
-		return u'%s天前' % (times / 86400)
+		return u'%s天前' % (times // 86400)
 	dt = datetime.fromtimestamp(t)
 	return u'%s年%s月%s日' % (dt.year,dt.month,dt.day)
 
@@ -147,5 +166,12 @@ loop.run_forever()
  pip install aiohttp
  pip install aiomysql
 
- python F:\百度云同步盘\magicHourse\pythonspace\web\app.py
+ python F:\QQ-Sync\3378\pythonspace\web\app.py
+
+ python F:\QQ-Sync\3378\pythonspace\web\app.py
+
+ python F:\QQ-Sync\3378\pythonspace\web\app.py
+
 '''
+
+
