@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <title>template - component </title>
+
+	<script src="http://cdn.bootcss.com/systemjs/0.19.39/system.js"></script>
+	<script type="text/javascript" src="lib/traceur.js"></script>
+    <script type="text/javascript" src="/lib/system.config.js"></script>
+	<script src="http://cdn.bootcss.com/angular.js/2.0.0-beta.17/angular2.js"></script>
+
+</head>
+
+<body>
+	<ez-app></ez-app>
+
+    <script type="module">
+    	import {Component,View,bootstrap} from "angular2/angular2";
+
+    	@Component({selector:"ez-app"})
+    	@View({
+    		template:`
+    			<h1>I choose <b #v_who>who?</b></h1>
+    			<button on-click="v_who.textContent = 'Jason'"></button>
+    			<button on-click="v_who.textContent = 'Mary'"></button>
+    			<button on-click="v_who.textContent = 'Linda'"></button>
+    			<button on-click="v_who.textContent = 'Lincoln'"></button>
+    			<button on-click="v_who.textContent = 'Jimmy'"></button>
+    			<button on-click="v_who.textContent = 'Albert'"></button>
+    		`
+    	})
+    	class EzAPP{}
+
+    	bootstrap(EzAPP);
+    </script>
+</body>
+
+</html>
