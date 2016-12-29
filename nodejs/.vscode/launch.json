@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "启动程序",
-            "program": "${workspaceRoot}/app.js",
+            "program": "${workspaceRoot}/start.js",
             "cwd": "${workspaceRoot}"
         },
         {
@@ -19,3 +19,13 @@
         }
     ]
 }
+
+/* 
+还可以直接用命令node start.js在命令行启动程序，
+或者用npm start启动。
+
+npm start命令会让npm执行定义在package.json文件中的start对应命令：
+"scripts": {
+    "start": "node start.js"
+}
+*/
