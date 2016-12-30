@@ -29,7 +29,7 @@ var fn_hello = async (ctx, next) => {
 
 
 module.exports={
-    'GET /':fn_index,
-    'POST /SignIn':fn_signin,
-    'GET /hello/:name': fn_hello
+    'GET /0000':fn_index,
+    'POST /SignIn0000':fn_signin,
+    'GET /hello0000/:name': fn_hello
 }

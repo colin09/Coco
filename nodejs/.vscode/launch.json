@@ -5,17 +5,50 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "启动程序",
             "type": "node",
             "request": "launch",
-            "name": "启动程序",
             "program": "${workspaceRoot}/start.js",
-            "cwd": "${workspaceRoot}"
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "externalConsole": false,
+            "sourceMaps": false,
+            "outDir": null
         },
         {
             "type": "node",
             "request": "attach",
             "name": "附加到进程",
             "port": 5858
+        },
+        {
+            "name": "Test",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/mocha",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "test"
+            },
+            "externalConsole": false,
+            "sourceMaps": false,
+            "outDir": null
         }
     ]
 }
