@@ -1,5 +1,11 @@
 var ngApp = angular.module('ngApp',[]);
 
+/*
+app.config(['$interpolateProvider', function($interpolateProvider) {
+    $interpolateProvider.startSymbol('{[');
+    $interpolateProvider.endSymbol(']}');
+}]);*/
+
 ngApp.filter('subStr', function () {
     return function (value, max, tail) {
         if (!value) return '';
@@ -32,25 +38,36 @@ ngApp.controller('indexController',function($scope,$http,$filter,ShareData){
 
     $scope.roomUsers=[];
     $scope.roomMessages=[];
+    
+    $scope.txtMsg="";
+    $scope.sendMsg = function(){
+        if($scope.txtMsg.length<1)
+            return;
+        ws.send($scope.txtMsg);
+        $scope.txtMsg="";
+    };
 
-    var ws = new WebSocket('ws://localhost:3000/ws/chat');
+    var ws = new WebSocket('ws://127.0.0.1:3000/ws/chat');
 
     ws.onmessage = function(event) {
         var data = event.data;
         console.log(data);
         var msg = JSON.parse(data);
 
-        if (msg.type === 'list') {
-            $scope.roomUsers = msg.data;
-        } else if (msg.type === 'join') {
-            $scope.roomUsers.push(msg.user);
-            $scope.roomMessages.push(msg);
-        } else if (msg.type === 'left') {
-            //移除用户
-            $scope.roomMessages.push(msg);
-        } else if (msg.type === 'chat') {
-            $scope.roomMessages.push(msg);
-        }
+        $scope.$apply(function () {
+            if (msg.type === 'list') {
+                $scope.roomUsers = msg.data;
+            } else if (msg.type === 'join') {
+                $scope.roomUsers.push(msg.user);
+                $scope.roomMessages.push(msg);
+            } else if (msg.type === 'left') {
+                //移除用户
+                $scope.roomMessages.push(msg);
+            } else if (msg.type === 'chat') {
+                $scope.roomMessages.push(msg);
+            }
+         });
     };
+    
 
 });

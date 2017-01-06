@@ -13,7 +13,6 @@ const templating = require('./templating');
 // 导入WebSocket模块:
 const WebSocket = require('ws');
 const Cookies = require('cookies');
-const url = require('url');
 
 // 引用Server类:
 const WebSocketServer = WebSocket.Server;
@@ -66,6 +65,18 @@ app.use(async (ctx, next) => {
     ctx.response.set('X-Response-Time', `${execTime}ms`);
 });
 
+/*
+// add url-route:
+router.get('/list', async (ctx, next) => {
+    console.log(`params: ${ctx.params}`);
+    ctx.response.body = `<h1>Hello, list !</h1>`;
+});
+
+router.get('/', async (ctx, next) => {
+    ctx.response.body = '<h1>Index</h1>';
+});
+*/
+
 /**
  * 第二个middleware处理静态文件：
  */
@@ -101,51 +112,43 @@ app.use(controller());
  *  在端口3000监听:
  */ 
 let server = app.listen(3000);
-//console.log('app started at port 3000...');
+console.log('app started at port 3000...');
+
+let wss = new WebSocketServer({
+    server: server
+})
 
 
 
+wss.on('connection',function(ws){
+    console.log(`[server] connection...`);
+    let user = parseUser(ws.upgradeReq);
+    if (!user) {
+        // Cookie不存在或无效，直接关闭WebSocket:
+        //ws.close(4001, 'Invalid user');
+        console.log('Invalid user');
+    }
+    // 识别成功，把user绑定到该WebSocket对象:
+    ws.user = user;
+    // 绑定WebSocketServer对象:
+    ws.wss = wss;
 
 
-function createWebSocketServer(server,wssBroadcast, onConnection, onMessage, onClose, onError) {
-    let wss = new WebSocketServer({
-        server: server
+    ws.on('message',function(message){
+        console.log(`[server] received ${message}`);
+        if (message && message.trim()) {
+            let msg = createMessage('chat', this.user, message.trim());
+            this.wss.broadcast(msg);
+        }
     });
-    //wss.broadcast = wssBroadcast;
-    wss.broadcast = function(data) {
-        wss.clients.forEach(function (client) {
-            client.send(data);
+});
+
+// 广播
+wss.broadcast = function (data) {
+    wss.clients.forEach(function (client) {
+        client.send(data);
     });
 };
-
-    wss.on('connection',function(ws){        
-        let location = url.parse(ws.upgradeReq.url, true);
-        console.log('[WebSocketServer] connection: ' + location.href);
-
-        ws.on('message',onMessage);
-        ws.on('close', onClose);
-        ws.on('error', onError);
-
-        if (location.pathname !== '/ws/chat') {
-            ws.close(4000, 'Invalid URL');
-        }
-
-        let user = parseUser(ws.upgradeReq);
-        if (!user) {
-            // Cookie不存在或无效，直接关闭WebSocket:
-            ws.close(4001, 'Invalid user');
-            console.log('Invalid user');
-        }
-        // 识别成功，把user绑定到该WebSocket对象:
-        ws.user = user;
-        // 绑定WebSocketServer对象:
-        ws.wss = wss;
-        onConnection.apply(ws);
-    });
-    console.log('WebSocketServer was attached.');
-    return wss;
-}
-
 
 // 消息ID:
 var messageIndex = 0;
@@ -159,42 +162,3 @@ function createMessage(type, user, data) {
         data: data
     });
 }
-
-// 广播
-function wssBroadcast(data) {
-    wss.clients.forEach(function (client) {
-        client.send(data);
-    });
-};
-
-function onConnect() {
-    let user = this.user;
-    let msg = createMessage('join', user, `${user.name} joined.`);
-    this.wss.broadcast(msg);
-    // build user list:
-    let users = this.wss.clients.map(function (client) {
-        return client.user;
-    });
-    this.send(createMessage('list', user, users));
-}
-
-function onMessage(message) {
-    console.log(message);
-    if (message && message.trim()) {
-        let msg = createMessage('chat', this.user, message.trim());
-        this.wss.broadcast(msg);
-    }
-}
-
-function onClose() {
-    let user = this.user;
-    let msg = createMessage('left', user, `${user.name} is left.`);
-    this.wss.broadcast(msg);
-}
-
-function onError(err) {
-    console.log('[WebSocket] error: ' + err);
-};
-
-app.wss = createWebSocketServer(server, wssBroadcast, onConnect, onMessage, onClose, onError);
-console.log('app started at port 3000...');

@@ -1,5 +1,17 @@
 const nunjucks = require('nunjucks');
 
+/*
+var env = nunjucks.configure('/path/to/templates', {
+  tags: {
+    blockStart: '<%',
+    blockEnd: '%>',
+    variableStart: '<$',
+    variableEnd: '$>',
+    commentStart: '<#',
+    commentEnd: '#>'
+  }
+});*/
+
 function createEnv(path, opts) {
     var
         autoescape = opts.autoescape && true,
@@ -13,6 +25,14 @@ function createEnv(path, opts) {
             }), {
                 autoescape: autoescape,
                 throwOnUndefined: throwOnUndefined
+                /*tags: {
+                    blockStart: '<%',
+                    blockEnd: '%>',
+                    variableStart: '<$',
+                    variableEnd: '$>',
+                    commentStart: '<#',
+                    commentEnd: '#>'
+                }*/
             });
     if (opts.filters) {
         for (var f in opts.filters) {
