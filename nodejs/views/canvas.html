@@ -1,0 +1,163 @@
+{% extends "base.html" %} 
+
+
+{% block title %}
+            <h1 style="color:#fff; font-size:60px">Canval API</h1>
+            <p style="font-size:24px; line-height:48px">图形、样式、形变、合成裁剪、动画、优化</p>
+
+{% endblock %}
+{% block main %}
+<div class="container">
+
+    <h3> &lt;canvas&gt; 元素</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">evenodd</div>
+            <canvas id='canvas1' width='200px' height='200px' >
+                在&lt;canvas&gt;标签中提供了替换内容。支持&gt;canvas&lt;的浏览器将会忽略在容器中包含的内容，并且只是正常渲染canvas。
+            </canvas>
+        </div>
+    </div>
+
+ <h3>绘制图形</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">矩形（Rectangular）例子</div>
+            <canvas id='canvas21' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">绘制一个三角形</div>
+            <canvas id='canvas22' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">移动笔触</div>
+            <canvas id='canvas23' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">线</div>
+            <canvas id='canvas24' width='200px' height='200px' ></canvas>
+        </div>       
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">圆弧</div>
+            <canvas id='canvas25' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">贝塞尔曲线</div>
+            <canvas id='canvas26' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">二次贝塞尔曲线</div>
+            <canvas id='canvas27' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">矩形</div>
+            <canvas id='canvas28' width='200px' height='200px' ></canvas>
+        </div>       
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">Path2D 示例</div>
+            <canvas id='canvas29' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">使用 SVG paths</div>
+            <canvas id='canvas2A' width='200px' height='200px' ></canvas>
+        </div>  
+    </div>
+
+
+    <h3>色彩 Colors</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">fillStyle 示例</div>
+            <canvas id='canvas31' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">strokeStyle 示例</div>
+            <canvas id='canvas32' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">globalAlpha 示例</div>
+            <canvas id='canvas33' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">rgba() 示例</div>
+            <canvas id='canvas34' width='200px' height='200px' ></canvas>
+        </div>       
+    </div>
+    <h3>线型 Line styles</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">lineWidth 属性的例子</div>
+            <canvas id='canvas35' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">lineCap 属性的例子</div>
+            <canvas id='canvas36' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">lineJoin 属性的例子</div>
+            <canvas id='canvas37' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">使用虚线</div>
+            <canvas id='canvas38' width='200px' height='200px' ></canvas>
+        </div>       
+    </div>
+    <h3>渐变 Gradients</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">createLinearGradient 的例子</div>
+            <canvas id='canvas39' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">createRadialGradient  的例子</div>
+            <canvas id='canvas3A' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">createPattern 的例子</div>
+            <canvas id='canvas3B' width='200px' height='200px' ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="lh200">文字阴影的例子</div>
+            <canvas id='canvas3C' width='200px' height='200px' ></canvas>
+        </div>
+    </div>
+    <h3>Canvas 填充规则</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">evenodd</div>
+            <canvas id='canvas3D' width='200px' height='200px' ></canvas>
+        </div>
+    </div>
+
+   <h3>绘制文本</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">有样式的文本</div>
+            <canvas id='canvas41' width='200px' height='200px' ></canvas>
+        </div>
+    </div>
+  <h3>应用图像 Using images</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="lh200">绘制图片</div>
+            <canvas id='canvas51' width='200px' height='200px' ></canvas>
+        </div>
+    </div>
+    <h3>变形 Transformations</h3>
+    <h3>组合 Compositing</h3>
+    <h3>基本的动画</h3>
+    <h3>高级动画</h3>
+    <h3>像素操作</h3>
+    <h3>点击区域和无障碍访问</h3>
+    <h3>canvas的优化</h3>
+    <h3>终曲</h3>
+
+
+</div>
+    <script src="/static/js/canvas.js"></script>
+
+{% endblock %}

@@ -6,6 +6,7 @@
     <meta name="description" content="learn javascript by www.liaoxuefeng.com">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/base.css">
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/angular.min.js"></script>
@@ -20,17 +21,18 @@
             </div>
             <nav class="collapse navbar-collapse" id="bs-navbar">
                 <ul class="nav navbar-nav">
-                    <li><a target="_blank" href="http://www.liaoxuefeng.com/">Get Courses</a></li>
-                    <li><a target="_blank" href="https://github.com/michaelliao/learn-javascript">Source Code</a></li>
-                    <li><a target="_blank" href="http://getbootstrap.com/">Resource</a></li>
+                    <li><a target="_blank" href="http://www.XX.com/">Get Courses</a></li>
+                    <li><a target="_blank" href="https://github.com/XX/learn-javascript">Source Code</a></li>
+                    <li><a target="_blank" href="/canvas">Canvas</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <div id="important" style="color:#cdbfe3; background-color:#6f5499; padding:30px 0; margin:-20px 0 20px 0;">
-        <div class="container">
-            <h1 style="color:#fff; font-size:60px">Getting started</h1>
-            <p style="font-size:24px; line-height:48px">Learn JavaScript, Node.js, npm, koa2, nunjucks, babel, etc. at xx.com.</p>
+        <div class="container">            
+            {% block title %} {% endblock %}
+            <!--<h1 style="color:#fff; font-size:60px">Getting started</h1>
+            <p style="font-size:24px; line-height:48px">Learn JavaScript, Node.js, npm, koa2, nunjucks, babel, etc. at xx.com.</p>-->
         </div>
     </div>
     {% block main %} {% endblock %}
