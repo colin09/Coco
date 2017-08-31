@@ -1,0 +1,81 @@
+ INFO  ：2016-08-14 15:22:55,070 [26] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-14 15:22:55,129 [26] <HR /> <BR>
+ INFO  ：2016-08-14 15:22:55,130 [26] 获取用户Cookie失败，跳转到登录。 <BR>
+ INFO  ：2016-08-14 15:24:38,471 [24] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-14 15:24:38,543 [24] <HR /> <BR>
+ INFO  ：2016-08-14 15:24:38,544 [24] 获取用户Cookie失败，跳转到登录。 <BR>
+ INFO  ：2016-08-14 15:24:59,363 [24] {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 15:24:59,379 [23] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 15:24:59,415 [23] <HR /> <BR>
+ INFO  ：2016-08-14 15:25:03,995 [26] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 15:25:03,995 [26] <HR /> <BR>
+ INFO  ：2016-08-14 15:25:08,817 [19] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 15:25:08,817 [19] <HR /> <BR>
+ INFO  ：2016-08-14 15:25:10,570 [26] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 15:25:10,571 [26] <HR /> <BR>
+ INFO  ：2016-08-14 15:25:10,579 [26] System.Data.Entity.Core.EntityCommandExecutionException: 执行命令定义时出错。有关详细信息，请参阅内部异常。 ---> MySql.Data.MySqlClient.MySqlException: Table 'hui.H_PositionConfig' doesn't exist
+   在 MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   在 MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   在 MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   在 MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   在 MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   在 MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 MySql.Data.Entity.EFMySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   在 System.Data.Common.DbCommand.ExecuteReader(CommandBehavior behavior)
+   在 System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.<Reader>b__c(DbCommand t, DbCommandInterceptionContext`1 c)
+   在 System.Data.Entity.Infrastructure.Interception.InternalDispatcher`1.Dispatch[TTarget,TInterceptionContext,TResult](TTarget target, Func`3 operation, TInterceptionContext interceptionContext, Action`3 executing, Action`3 executed)
+   在 System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.Reader(DbCommand command, DbCommandInterceptionContext interceptionContext)
+   在 System.Data.Entity.Internal.InterceptableDbCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   在 System.Data.Common.DbCommand.ExecuteReader(CommandBehavior behavior)
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   在 System.Data.Entity.Core.Objects.Internal.ObjectQueryExecutionPlan.Execute[TResultType](ObjectContext context, ObjectParameterCollection parameterValues)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass7.<GetResults>b__6()
+   在 System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass7.<GetResults>b__5()
+   在 System.Data.Entity.Infrastructure.DefaultExecutionStrategy.Execute[TResult](Func`1 operation)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<System.Collections.Generic.IEnumerable<T>.GetEnumerator>b__0()
+   在 System.Data.Entity.Internal.LazyEnumerator`1.MoveNext()
+   在 System.Linq.Enumerable.Single[TSource](IEnumerable`1 source)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.<GetElementFunction>b__3[TResult](IEnumerable`1 sequence)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.ExecuteSingle[TResult](IEnumerable`1 query, Expression queryRoot)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.System.Linq.IQueryProvider.Execute[TResult](Expression expression)
+   在 System.Data.Entity.Internal.Linq.DbQueryProvider.Execute[TResult](Expression expression)
+   在 System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+   在 com.wx.service.service.PositionConfigService.GetAll() 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.service\service\PositionConfigService.cs:行号 19
+   在 com.wx.web.Areas.mgr.Controllers.SystemController.PositionConfig() 位置 C:\Users\CoCO\Desktop\com.wx\web\com.wx.web\Areas\mgr\Controllers\SystemController.cs:行号 50
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult) <BR>
+ INFO  ：2016-08-14 15:30:04,038 [30] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 15:30:04,095 [30] <HR /> <BR>
+ INFO  ：2016-08-14 16:22:14,144 [118] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 16:22:14,230 [118] <HR /> <BR>
+ INFO  ：2016-08-14 16:22:40,821 [118] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 16:22:40,822 [118] <HR /> <BR>
+ INFO  ：2016-08-14 16:23:58,959 [120] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 16:23:58,959 [120] <HR /> <BR>
+ INFO  ：2016-08-14 16:24:19,776 [105] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-14 16:24:19,777 [105] <HR /> <BR>
+ INFO  ：2016-08-14 17:09:24,403 [65] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-14 17:09:24,413 [65] <HR /> <BR>
+ INFO  ：2016-08-14 17:09:24,414 [65] 获取用户Cookie失败，跳转到登录。 <BR>

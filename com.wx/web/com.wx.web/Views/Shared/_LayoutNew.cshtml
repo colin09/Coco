@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 自由风环球旅拍官方网站，普吉岛旅拍首选，优质服务，品质保障！</title>
+    <meta name="keywords" content="自由风环球旅拍   普吉岛旅拍  旅游跟拍 海外摄影  自由行  婚纱摄影  写真  泰国  蜜月旅行  闺蜜  亲子  海景  寺庙   苏梅岛 清迈  曼谷   芭堤雅" />
+    <meta name="description" content="自由风环球旅拍，专业提供泰国普吉岛旅拍服务，包括婚纱摄影、闺蜜写真、亲子写真、情侣写真、旅游跟拍等，在普吉府拥有自己的摄影基地，全华人摄影团队和化妆团队。同时可提供机票酒店签证等附加项目，为您打造蜜月+婚拍一站式服务平台。自由风环球旅拍以“捕捉平凡人的美丽瞬间”为服务宗旨，为客户量身定制最契合的摄影风格，从服装、造型到后期产品设计，全程最大程度的考虑客户喜好并提供专业建议，以专业的品质、一流的服务竭诚为客户打造别具一格的时尚大片。" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("head", false)
+
+</head>
+<body>
+    <div class="container nav">
+        <ul>
+            <li class="logo"><a><img src="~/Images/logo-1.gif" /></a></li>
+            <li style="width:120px;"><a href="~/Home/Index">首页<br /><span>Home</span></a></li>
+            <li class="split">&nbsp;</li>
+            <li><a href="~/Home/Customer">客片欣赏<br /><span>Customer care</span></a></li>
+            <li class="split">&nbsp;</li>
+            <li><a href="~/Home/Scene">拍摄场景<br /><span>Shooting scene</span></a></li>
+            <li class="split">&nbsp;</li>
+            <li><a href="~/Home/Quotation">摄影报价<br /><span>Photography quotation</span></a></li>
+            <li class="split">&nbsp;</li>
+            <li><a href="~/Home/Technique">拍摄技巧<br /><span>Shooting technique</span></a></li>
+            <li class="split">&nbsp;</li>
+            <li style="width:118px;"><a href="~/Home/About">关于我们<br /><span>About us</span></a></li>
+            <div class="clear"></div>
+        </ul>
+    </div>
+
+    @RenderBody()
+
+
+
+
+    <footer>
+
+        <div class="container content">
+            <ul>
+                <li><img src="~/Images/logo-2.gif" /></li>
+                <li>
+                    <div class="sub">幸福热线</div>
+                    <div class="tel cy">027-8470 4919</div>
+                    <div class="addr">武汉市汉阳区钟家村汉商大厦<br />写字楼1612室</div>
+                </li>
+                <li><img src="~/Images/dyh.jpg" /></li>
+                <li>
+                    <div>
+                        欢迎订阅自由风企业号<br />
+                        微信号：ziyoufeng2020
+                    </div>
+                </li>
+                <li><img src="~/Images/tb.jpg" /></li>
+                <li>
+                    <div>
+                        欢迎关注<br />
+                        淘宝企业店
+                    </div>
+                </li>
+                <div class="clear"></div>
+            </ul>
+
+        </div>
+
+    </footer>
+
+    @Scripts.Render("~/bundles/jq-bs-ng")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

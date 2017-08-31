@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "报价";
+}
+@section head
+{
+    <link rel="stylesheet" href="~/Content/home.css" />
+    <style rel="stylesheet">
+    </style>
+}
+<div ng-app="quotationApp">
+    <div class="container QuoDetail" ng-controller="DetailCtl1">
+
+        <input type="hidden" id="hdCode" value="@ViewBag.Code" />
+        <input type="hidden" id="hdSource" value="@ViewBag.Source" />
+        <input type="hidden" id="hdType" ms-value="pageDetail" value="3" />
+
+        <div class="title">
+            {{body.title}}
+        </div>
+        <div class="contact">
+            咨询电话：<red>027-8470 4919</red>
+        </div>
+
+        <ul>
+            <li class="limg">
+                <img ng-src="{{body.img}}" />
+            </li>
+            <li class="lcontext">
+                <img id="logo3" src="~/Images/logo-3.jpg" /><br />
+                <div id="divPrice">
+                    <red class="fs32">￥</red><red class="fs80">{{body.price}}</red> <img src="~/Images/th.jpg" />
+                </div>
+                <ul id="ulItems">
+                    <li class="item" ng-repeat-start="el in body.items" repeat-finish>[ {{el.key}} ]</li>
+                    <li class="desc" ng-repeat-end  ng-bind-html="el.desc"></li>
+                    <div class="clear"></div>
+                </ul>
+            </li>
+            <div class="clear"></div>
+        </ul>
+        <ul class="remark">
+            <li>备注：</li>
+            <li class="desc" ng-bind-html="body.remark">
+            </li>
+            <div class="clear"></div>
+        </ul>
+        
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/js/customer.js"></script>
+    <script>
+        $(function () {
+            var code = $("#hdCode").val();
+            if (code == 6 || code == 7) {
+                $("#divPrice").css("margin", "0");
+                $("#ulItems li").css("padding", "0 5px");
+            }
+        });
+    </script>
+}
+

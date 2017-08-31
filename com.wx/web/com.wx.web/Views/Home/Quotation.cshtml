@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewBag.Title = "摄影报价";
+}
+@section head
+{
+    <link rel="stylesheet" href="~/Content/home.css" />
+}
+<div class="container-full bc-g">
+    <div class="container">
+
+        <div class="pageTitle">
+            <span class="fs36">摄影报价</span><br />
+            <span class="fs16">Photography quotation</span>
+        </div>
+
+        <ul class="pageMenu">
+            <li data-key="div_dress" class="active">婚 纱 照</li>
+            <li data-key="div_photo">写 真 照</li>
+            <div class="clear"></div>
+        </ul>
+        <div id="div_dress" class="itemBody">
+            <ul class="pageItem">
+                <li class="imgItem"><img src="~/Images/hsbj-01.jpg" /></li>
+                <li class="txtItem">
+                    <a href="QuotationDetail?code=5">
+                        <span class="sp1">婚纱纯拍</span><br />
+                        <span class="sp2">经典系列</span><br />
+                        <span class="sp3">￥4999</span><br />
+                        <span class="sp4">
+                            普吉岛本岛景点任选其四<br />
+                            蜜月 + 婚纱一站式服务
+                        </span>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+            <ul class="pageItem">
+                <li class="imgItem"><img src="~/Images/hsbj-02.jpg" /></li>
+                <li class="txtItem">
+                    <a href="QuotationDetail?code=6">
+                        <span class="sp1">婚纱套系</span><br />
+                        <span class="sp2">倾城系列</span><br />
+                        <span class="sp3 c650">￥6999</span><br />
+                        <span class="sp4">
+                            普吉岛本岛景点任选其四<br />
+                            蜜月 + 婚纱一站式服务
+                        </span>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+
+            <ul class="pageItem">
+                <li class="imgItem"><img src="~/Images/hsbj-03.jpg" /></li>
+                <li class="txtItem">
+                    <a href="QuotationDetail?code=7">
+                        <span class="sp1">婚纱套系</span><br />
+                        <span class="sp2">美爵系列</span><br />
+                        <span class="sp3">￥8999</span><br />
+                        <span class="sp4">
+                            普吉岛本岛景点任选<br />
+                            蜜月 + 婚纱一站式服务
+                        </span>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+        </div>
+
+
+        <div id="div_photo" class="itemBody">
+            <ul class="pageItem">
+                <li class="imgItem"><img src="~/Images/xzbj-01.jpg" /></li>
+                <li class="txtItem">
+                    <a href="QuotationDetail?code=1">
+                        <span class="sp1">写真系列</span><br />
+                        <span class="sp2">个人写真</span><br />
+                        <span class="sp3">￥2500</span><br />
+                        <span class="sp4">
+                            写真套系注重自然<br />
+                            以跟拍为主，不拘泥于景点
+                        </span>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+            <ul class="pageItem">
+                <li class="imgItem"><img src="~/Images/xzbj-02.jpg" /></li>
+                <li class="txtItem">
+                    <a href="QuotationDetail?code=3">
+                        <span class="sp1">写真系列</span><br />
+                        <span class="sp2">情侣写真</span><br />
+                        <span class="sp3 c650">￥3200</span><br />
+                        <span class="sp4">
+                            （2人）<br />
+                            写真套系注重自然<br />
+                            以跟拍为主，不拘泥于景点
+                        </span>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+
+            <ul class="pageItem">
+                <li class="imgItem"><img src="~/Images/xzbj-03.jpg" /></li>
+                <li class="txtItem">
+                    <a href="QuotationDetail?code=2">
+                        <span class="sp1">写真系列</span><br />
+                        <span class="sp2">闺蜜写真</span><br />
+                        <span class="sp3">￥3200</span><br />
+                        <span class="sp4">
+                            （限2人）<br />
+                            写真套系注重自然<br />
+                            以跟拍为主，不拘泥于景点
+                        </span>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+
+            <ul class="pageItem">
+                <li class="imgItem"><img src="~/Images/xzbj-04.jpg" /></li>
+                <li class="txtItem">
+                    <a href="QuotationDetail?code=4">
+                        <span class="sp1">写真系列</span><br />
+                        <span class="sp2">全家福写真</span><br />
+                        <span class="sp3">￥2800</span><br />
+                        <span class="sp4">
+                            （限3人）<br />
+                            写真套系注重自然<br />
+                            以跟拍为主，不拘泥于景点
+                        </span>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+        </div>
+
+        <div class="pageFoot">
+            <span class="fs18">你们只需要负责美美的拍照和愉快的玩耍就可以了，其他的，交给我们 .....</span><br />
+            <span>You only need to reponsible for the United States and United States to take pictures and happy to play on it,tht other,to us ......</span>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script>
+        $(function () {
+            $(".pageMenu li").removeClass("active");
+            $(".pageMenu li").first().addClass("active");
+
+            $(".itemBody").hide();
+            $("#" + $(".pageMenu li").first().data("key")).show();
+
+            $(".pageMenu li").click(function () {
+                $(".pageMenu li").removeClass("active");
+                $(".itemBody").hide();
+
+                $("#" + $(this).data("key")).show();
+                $(this).addClass("active");
+            })
+        });
+    </script>
+}

@@ -16,6 +16,9 @@ namespace com_fs_ng.Controllers
 
         public IActionResult Error()
         {
+            var s = new {s="a",d="d"};
+
+
             ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             return View();
         }

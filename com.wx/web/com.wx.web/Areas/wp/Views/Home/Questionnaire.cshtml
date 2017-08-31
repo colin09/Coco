@@ -1,0 +1,367 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>自由风环球旅拍 - 客户满意度调查表</title>
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/wp-user.css" />
+</head>
+<body id="questionnaire">
+    <div class="container">
+        <form method="post" action="/wp/Home/QuestionnaireAnwser">
+            <div class="bc-b qesTitle">
+                <h1>客户满意度调查表</h1>
+                <hr />
+                <span> &nbsp; 自由风环球旅拍 &nbsp; </span>
+            </div>
+            <div class="imgTop">
+                &nbsp; @*image*@
+            </div>
+            <div class="bc-b">
+                尊敬的客户：
+                <p>
+                    您好！感谢您对自由风环球旅拍的信任和支持，为了提高我们的服务水平，更好的满足您的要求，我们希望能了解到您对我们工作的意见或建议，期待您在百忙之中填好这份表格，我们会认真的参考您的意见，并体现在我们的工作中，在以后的服务中，您会看到我们的进步!
+                </p>
+            </div>
+            <ul class="bc-b">
+                <li>新郎：<input type="text" name="groom" /></li>
+                <li>新娘：<input type="text" name="bride" /></li>
+                <li>拍摄日期：<input type="date" name="pgDate" /></li>
+                <li>拍摄套系：<input type="text" name="pgStyle" /></li>
+                <div class="clear"></div>
+            </ul>
+            <div class="bc-r">您通过以下哪种渠道了解到我们？</div>
+            <div class="bc-b">
+                <ul>
+                    <li><input type="checkbox" name="channel" value="1" /> 大众点评</li>
+                    <li><input type="checkbox" name="channel" value="2" /> 百度搜索</li>
+                    <li><input type="checkbox" name="channel" value="3" /> 婚礼纪</li>
+                    <li><input type="checkbox" name="channel" value="4" /> 亲友推荐</li>
+                    <li><input type="checkbox" name="channel" value="5" /> 微信推广</li>
+                    <li><input type="checkbox" name="channel" value="6" /> 其他</li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <div class="bc-r">
+                满意度 ( A B C D E )
+            </div>
+            <div class="bc-w">
+                <div>1、预约签单客服---接待---签约服务</div>
+                <p>
+                    <span>服务礼仪：</span>
+                    <input type="radio" name="q_1_1" value="10" /> 10分
+                    <input type="radio" name="q_1_1" value="9" /> 9分
+                    <input type="radio" name="q_1_1" value="8" /> 8分
+                    <input type="radio" name="q_1_1" value="7" /> 7分
+                    <input type="radio" name="q_1_1" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>接待沟通：</span>
+                    <input type="radio" name="q_1_2" value="10" /> 10分
+                    <input type="radio" name="q_1_2" value="9" /> 9分
+                    <input type="radio" name="q_1_2" value="8" /> 8分
+                    <input type="radio" name="q_1_2" value="7" /> 7分
+                    <input type="radio" name="q_1_2" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业素养：</span>
+                    <input type="radio" name="q_1_3" value="10" /> 10分
+                    <input type="radio" name="q_1_3" value="9" /> 9分
+                    <input type="radio" name="q_1_3" value="8" /> 8分
+                    <input type="radio" name="q_1_3" value="7" /> 7分
+                    <input type="radio" name="q_1_3" value="3" /> 0-6分
+                </p>
+            </div>
+
+            <div class="bc-b">
+                <div>2、拍摄当天客服---接待---服务</div>
+                <p>
+                    <span>服务礼仪：</span>
+                    <input type="radio" name="q_2_1" value="10" /> 10分
+                    <input type="radio" name="q_2_1" value="9" /> 9分
+                    <input type="radio" name="q_2_1" value="8" /> 8分
+                    <input type="radio" name="q_2_1" value="7" /> 7分
+                    <input type="radio" name="q_2_1" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>接待沟通：</span>
+                    <input type="radio" name="q_2_2" value="10" /> 10分
+                    <input type="radio" name="q_2_2" value="9" /> 9分
+                    <input type="radio" name="q_2_2" value="8" /> 8分
+                    <input type="radio" name="q_2_2" value="7" /> 7分
+                    <input type="radio" name="q_2_2" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业素养：</span>
+                    <input type="radio" name="q_2_3" value="10" /> 10分
+                    <input type="radio" name="q_2_3" value="9" /> 9分
+                    <input type="radio" name="q_2_3" value="8" /> 8分
+                    <input type="radio" name="q_2_3" value="7" /> 7分
+                    <input type="radio" name="q_2_3" value="3" /> 0-6分
+                </p>
+            </div>
+            <div class="bc-w">
+                <div>3、礼服师---搭配---服务</div>
+                <p>
+                    <span>服务礼仪：</span>
+                    <input type="radio" name="q_3_1" value="10" /> 10分
+                    <input type="radio" name="q_3_1" value="9" /> 9分
+                    <input type="radio" name="q_3_1" value="8" /> 8分
+                    <input type="radio" name="q_3_1" value="7" /> 7分
+                    <input type="radio" name="q_3_1" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>接待沟通：</span>
+                    <input type="radio" name="q_3_2" value="10" /> 10分
+                    <input type="radio" name="q_3_2" value="9" /> 9分
+                    <input type="radio" name="q_3_2" value="8" /> 8分
+                    <input type="radio" name="q_3_2" value="7" /> 7分
+                    <input type="radio" name="q_3_2" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业素养：</span>
+                    <input type="radio" name="q_3_3" value="10" /> 10分
+                    <input type="radio" name="q_3_3" value="9" /> 9分
+                    <input type="radio" name="q_3_3" value="8" /> 8分
+                    <input type="radio" name="q_3_3" value="7" /> 7分
+                    <input type="radio" name="q_3_3" value="3" /> 0-6分
+                </p>
+            </div>
+            <div class="bc-b">
+                <div>4、化妆师---服务</div>
+                <p>
+                    <span>服务礼仪：</span>
+                    <input type="radio" name="q_4_1" value="10" /> 10分
+                    <input type="radio" name="q_4_1" value="9" /> 9分
+                    <input type="radio" name="q_4_1" value="8" /> 8分
+                    <input type="radio" name="q_4_1" value="7" /> 7分
+                    <input type="radio" name="q_4_1" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业形象：</span>
+                    <input type="radio" name="q_4_2" value="10" /> 10分
+                    <input type="radio" name="q_4_2" value="9" /> 9分
+                    <input type="radio" name="q_4_2" value="8" /> 8分
+                    <input type="radio" name="q_4_2" value="7" /> 7分
+                    <input type="radio" name="q_4_2" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>接待沟通：</span>
+                    <input type="radio" name="q_4_3" value="10" /> 10分
+                    <input type="radio" name="q_4_3" value="9" /> 9分
+                    <input type="radio" name="q_4_3" value="8" /> 8分
+                    <input type="radio" name="q_4_3" value="7" /> 7分
+                    <input type="radio" name="q_4_3" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>配饰搭配：</span>
+                    <input type="radio" name="q_4_4" value="10" /> 10分
+                    <input type="radio" name="q_4_4" value="9" /> 9分
+                    <input type="radio" name="q_4_4" value="8" /> 8分
+                    <input type="radio" name="q_4_4" value="7" /> 7分
+                    <input type="radio" name="q_4_4" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>整体造型：</span>
+                    <input type="radio" name="q_4_5" value="10" /> 10分
+                    <input type="radio" name="q_4_5" value="9" /> 9分
+                    <input type="radio" name="q_4_5" value="8" /> 8分
+                    <input type="radio" name="q_4_5" value="7" /> 7分
+                    <input type="radio" name="q_4_5" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业素养：</span>
+                    <input type="radio" name="q_4_6" value="10" /> 10分
+                    <input type="radio" name="q_4_6" value="9" /> 9分
+                    <input type="radio" name="q_4_6" value="8" /> 8分
+                    <input type="radio" name="q_4_6" value="7" /> 7分
+                    <input type="radio" name="q_4_6" value="3" /> 0-6分
+                </p>
+            </div>
+
+            <div class="bc-w">
+                <div>5、摄影师---服务</div>
+                <p>
+                    <span>服务礼仪：</span>
+                    <input type="radio" name="q_5_1" value="10" /> 10分
+                    <input type="radio" name="q_5_1" value="9" /> 9分
+                    <input type="radio" name="q_5_1" value="8" /> 8分
+                    <input type="radio" name="q_5_1" value="7" /> 7分
+                    <input type="radio" name="q_5_1" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>接待沟通：</span>
+                    <input type="radio" name="q_5_2" value="10" /> 10分
+                    <input type="radio" name="q_5_2" value="9" /> 9分
+                    <input type="radio" name="q_5_2" value="8" /> 8分
+                    <input type="radio" name="q_5_2" value="7" /> 7分
+                    <input type="radio" name="q_5_2" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>拍摄氛围：</span>
+                    <input type="radio" name="q_5_3" value="10" /> 10分
+                    <input type="radio" name="q_5_3" value="9" /> 9分
+                    <input type="radio" name="q_5_3" value="8" /> 8分
+                    <input type="radio" name="q_5_3" value="7" /> 7分
+                    <input type="radio" name="q_5_3" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业素养：</span>
+                    <input type="radio" name="q_5_4" value="10" /> 10分
+                    <input type="radio" name="q_5_4" value="9" /> 9分
+                    <input type="radio" name="q_5_4" value="8" /> 8分
+                    <input type="radio" name="q_5_4" value="7" /> 7分
+                    <input type="radio" name="q_5_4" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>服务细节：</span>
+                    <input type="radio" name="q_5_5" value="10" /> 10分
+                    <input type="radio" name="q_5_5" value="9" /> 9分
+                    <input type="radio" name="q_5_5" value="8" /> 8分
+                    <input type="radio" name="q_5_5" value="7" /> 7分
+                    <input type="radio" name="q_5_5" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>团队合作：</span>
+                    <input type="radio" name="q_5_6" value="10" /> 10分
+                    <input type="radio" name="q_5_6" value="9" /> 9分
+                    <input type="radio" name="q_5_6" value="8" /> 8分
+                    <input type="radio" name="q_5_6" value="7" /> 7分
+                    <input type="radio" name="q_5_6" value="3" /> 0-6分
+                </p>
+            </div>
+            <div class="bc-b">
+                <div>6、摄影助理---服务</div>
+                <p>
+                    <span>服务礼仪：</span>
+                    <input type="radio" name="q_6_1" value="10" /> 10分
+                    <input type="radio" name="q_6_1" value="9" /> 9分
+                    <input type="radio" name="q_6_1" value="8" /> 8分
+                    <input type="radio" name="q_6_1" value="7" /> 7分
+                    <input type="radio" name="q_6_1" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>接待沟通：</span>
+                    <input type="radio" name="q_6_2" value="10" /> 10分
+                    <input type="radio" name="q_6_2" value="9" /> 9分
+                    <input type="radio" name="q_6_2" value="8" /> 8分
+                    <input type="radio" name="q_6_2" value="7" /> 7分
+                    <input type="radio" name="q_6_2" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>拍摄氛围：</span>
+                    <input type="radio" name="q_6_3" value="10" /> 10分
+                    <input type="radio" name="q_6_3" value="9" /> 9分
+                    <input type="radio" name="q_6_3" value="8" /> 8分
+                    <input type="radio" name="q_6_3" value="7" /> 7分
+                    <input type="radio" name="q_6_3" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业素养：</span>
+                    <input type="radio" name="q_6_4" value="10" /> 10分
+                    <input type="radio" name="q_6_4" value="9" /> 9分
+                    <input type="radio" name="q_6_4" value="8" /> 8分
+                    <input type="radio" name="q_6_4" value="7" /> 7分
+                    <input type="radio" name="q_6_4" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>服务细节：</span>
+                    <input type="radio" name="q_6_5" value="10" /> 10分
+                    <input type="radio" name="q_6_5" value="9" /> 9分
+                    <input type="radio" name="q_6_5" value="8" /> 8分
+                    <input type="radio" name="q_6_5" value="7" /> 7分
+                    <input type="radio" name="q_6_5" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>协作配合：</span>
+                    <input type="radio" name="q_6_6" value="10" /> 10分
+                    <input type="radio" name="q_6_6" value="9" /> 9分
+                    <input type="radio" name="q_6_6" value="8" /> 8分
+                    <input type="radio" name="q_6_6" value="7" /> 7分
+                    <input type="radio" name="q_6_6" value="3" /> 0-6分
+                </p>
+            </div>
+            <div class="bc-w">
+                <div>7、选片---服务</div>
+                <p>
+                    <span>服务礼仪：</span>
+                    <input type="radio" name="q_7_1" value="10" /> 10分
+                    <input type="radio" name="q_7_1" value="9" /> 9分
+                    <input type="radio" name="q_7_1" value="8" /> 8分
+                    <input type="radio" name="q_7_1" value="7" /> 7分
+                    <input type="radio" name="q_7_1" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>接待沟通：</span>
+                    <input type="radio" name="q_7_2" value="10" /> 10分
+                    <input type="radio" name="q_7_2" value="9" /> 9分
+                    <input type="radio" name="q_7_2" value="8" /> 8分
+                    <input type="radio" name="q_7_2" value="7" /> 7分
+                    <input type="radio" name="q_7_2" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>专业建议：</span>
+                    <input type="radio" name="q_7_3" value="10" /> 10分
+                    <input type="radio" name="q_7_3" value="9" /> 9分
+                    <input type="radio" name="q_7_3" value="8" /> 8分
+                    <input type="radio" name="q_7_3" value="7" /> 7分
+                    <input type="radio" name="q_7_3" value="3" /> 0-6分
+                </p>
+                <p>
+                    <span>照片质量：</span>
+                    <input type="radio" name="q_7_4" value="10" /> 10分
+                    <input type="radio" name="q_7_4" value="9" /> 9分
+                    <input type="radio" name="q_7_4" value="8" /> 8分
+                    <input type="radio" name="q_7_4" value="7" /> 7分
+                    <input type="radio" name="q_7_4" value="3" /> 0-6分
+                </p>
+            </div>
+
+
+            <div class="bc-b">
+                <div>8、请给我们提出您宝贵的意见吧！</div>
+                <textarea name="idea" rows="5"></textarea>
+            </div>
+            <div class="bc-w">
+                <ul>
+                    <li>化妆师：<input type="text" name="makeup" /></li>
+                    <li>礼服师：<input type="text" name="dress" /></li>
+                    <li>摄影师：<input type="text" name="photo" /></li>
+                    <li>摄影助理：<input type="text" name="assistant" /></li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <div class="bc-r">
+                <span>
+                    温馨提示：我司将以此表格为依据，评定各阶段工作人员服务水平并督促其不断提高专业水平，感谢您认真填写并签字，祝您生活愉快！
+                </span>
+            </div>
+            <div class="bc-b">
+                <ul>
+                    <li>您的姓名：<input type="text" name="name" /></li>
+                    <li>联系电话：<input type="text" name="phone" /></li>
+                    <li>通讯地址：<input type="text" name="address" /></li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-success btn-lg btn-block"> 提 交 结 果 </button>
+            </div>
+            <div class="imgFoot">
+                &nbsp; @*image*@
+            </div>
+        </form>
+    </div>
+</body>
+</html>
