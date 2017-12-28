@@ -136,7 +136,12 @@ project.lock.json
 ############
 node_modules/
 
-
+############
+## Intellij IDEA
+############
+/.idea
+/.mvn
+/target
 
 
 ############
