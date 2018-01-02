@@ -1,0 +1,78 @@
+﻿
+.pageTitle{width:100%; text-align:center;margin:35px 0;}
+
+.pageMenu{width:100%;}
+.pageMenu li{float:left;font-size:30px;background:#015599;color:#fff;width:50%; height:65px; line-height:65px; text-align:center;}
+.pageMenu .active{background:#00a1ea;}
+
+.pageItem{width:100%; margin:15px 0;}
+.pageItem .imgItem{float:left; width:790px;}
+.pageItem .imgItem img{width:790px; height:420px;}
+.pageItem .txtItem{float:left; width:310px; text-align:center;background:#015599;color:#fff;height:420px; padding-top:50px }
+.pageItem .txtItem .sp1{font-size:24px;line-height:35px;}
+.pageItem .txtItem .sp2{font-size:32px;line-height:60px;}
+.pageItem .txtItem .sp3{font-size:62px;line-height:160px; color:#f6f500;font-weight:600;}
+.pageItem .txtItem .sp4{font-size:18px;line-height:30px;}
+
+.pageFoot{margin:60px 0; line-height:30px;}
+
+.pageItem .txtItem a{color:#fff;}
+
+
+.techContent{}
+.techContent li{float:left; width:540px; height:500px; margin:10px 5px; background:#fff;}
+.techContent li img{width:540px; height:418px;}
+.techContent li div{font-size:22px;  padding:30px; vertical-align:bottom;}
+
+.sceneAd{height:634px;background:url(../Images/cj-1.jpg) no-repeat center;}
+.sceneTitle{width:100%;font-size:48px;color:#0166bd; text-align:center; font-weight:400;height:80px;margin:20px;}
+.sceneDetail{width:100%;font-size:22px; text-align:center;font-weight:500;line-height:45px;margin-bottom:45px;}
+.sceneContent li{float:left; width:540px; height:500px; margin:10px 5px; background:#fff;}
+.sceneContent li img{width:540px; height:418px;}
+.sceneContent li div{font-size:22px;  padding:30px; vertical-align:bottom;}
+
+
+.customerAd{height:601px;background:url(../Images/cz-1.jpg) no-repeat center; margin-bottom:30px;}
+.customerContent li{float:left; width:540px; height:500px; margin:30px 5px; background:#fff;}
+.customerContent li img{width:540px; height:418px;}
+.customerContent li div{font-size:22px;  padding:30px; vertical-align:bottom;}
+
+.about{padding-bottom:50px;}
+.about p{font-size:20px; text-indent:40px;line-height:40px; padding:10px 5px;}
+.about .aboutItem{background:url(../Images/gy-item.jpg) no-repeat left; color:#045499;margin-top:25px;}
+.about .aboutItem div{border-bottom:1px gray solid; margin-left:30px;font-size:24px;}
+.about ul li{float:left; padding:10px;}
+
+
+.pageDetail {}
+.pageDetail .title {height:115px; border-bottom:#333 1px dashed;font-size:40px;text-align:center; padding:35px;}
+.pageDetail .contact{margin:30px;font-size:22px;text-align:center;}
+.pageDetail ul{margin:25px 0;width:100%;}
+.pageDetail ul li{margin:5px 0;width:100%;}
+.pageDetail ul li img{width:95%;margin:0 auto;display:block;}
+.pageDetail ul li .imgDesc{width:95%; font-size:16px;line-height:30px; margin:35px 3%;}
+.pageDetail ul li .imgDesc p{text-indent:25px;}
+
+
+
+.pageList {}
+.pageList .title {height:115px; border-bottom:#333 1px dashed;font-size:40px;text-align:center; padding:35px;}
+.pageList .contact{margin:30px;font-size:22px;text-align:center;}
+.pageList ul{margin:25px 0;width:100%;position:relative;}
+.pageList ul li{margin:5px;width:340px;}
+.pageList ul li img{width:95%;margin:0 auto;display:block;}
+.pageList ul li .imgDesc{}
+
+.QuoDetail {}
+.QuoDetail .title {height:115px; border-bottom:#333 1px dashed;font-size:40px;text-align:center; padding:35px;}
+.QuoDetail .contact{margin:30px;font-size:22px;text-align:center;}
+.QuoDetail ul li {float:left;}
+.QuoDetail ul .limg{width:475px;height:820px; border:#14a9da solid 5px; overflow:hidden;}
+.QuoDetail ul .lcontext{width:615px;height:820px; text-align:center; font-weight:700; vertical-align:top;border:#14a9da solid 5px; border-left:0;padding-top:25px;}
+.QuoDetail ul .lcontext div{margin:20px; }
+.QuoDetail ul .lcontext div img{margin-top:-60px;}
+.QuoDetail ul .lcontext ul .item{width:25%;font-size:20px;color:#14a9da;font-weight:500;vertical-align:middle;padding:15px 5px;}
+.QuoDetail ul .lcontext ul .desc{width:75%;font-size:20px;font-weight:500; text-align:left;padding:15px 5px;line-height:35px;}
+.QuoDetail ul .lcontext ul .desc span{font-size:16px;}
+.QuoDetail .remark{margin:25px 5px; font-size:18px; line-height:35px;}
+.QuoDetail .remark .desc{width:95%;}

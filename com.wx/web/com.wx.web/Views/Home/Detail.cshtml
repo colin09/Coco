@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "详细";
+}
+
+@section head
+{
+    <link rel="stylesheet" href="~/Content/home.css" />
+}
+
+<div ng-app="AppItemList">
+    <div class="container pageDetail" ng-controller="listCtl">
+
+        <input type="hidden" id="hdCode" value="@ViewBag.Code" />
+        <input type="hidden" id="hdSource" value="@ViewBag.Source" />
+        <input type="hidden" id="hdType" ms-value="pageDetail" value="3" />
+
+        <div class="title">
+            {{title}}
+        </div>
+        <div class="contact">
+            咨询电话：<red>027-8470 4919</red>
+        </div>
+        <ul>
+            <li ng-if="top">
+                <div class="imgDesc" ng-bind-html="top">
+                </div>
+            </li>
+            <li ng-repeat="el in list">
+                <img ng-src="{{el.Domain+el.Image}}" />
+                <div class="imgDesc" ng-bind-html="el.Desc">
+                </div>
+            </li>
+            <li ng-if="bottom">
+                <div class="imgDesc" ng-bind-html="bottom">
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/js/customer.js"></script>
+}

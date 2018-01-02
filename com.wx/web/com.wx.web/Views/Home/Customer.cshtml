@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "客片欣赏";
+}
+
+@section head
+{
+    <link rel="stylesheet" href="~/Content/home.css" />
+}
+<div class="container-full customerAd">
+</div>
+<div class="container-full bc-g" ng-app="AppItemList">
+    <div class="container" ng-controller="listCtl">
+
+        <input type="hidden" id="hdCode" value="10" />
+        <input type="hidden" id="hdType" value="2" />
+        <input type="hidden" id="hdSource" value="0" />
+
+        <ul class="pageMenu">
+            <li data-key="div_dress" class="active">婚 纱 照</li>
+            <li data-key="div_photo">写 真 照</li>
+            <div class="clear"></div>
+        </ul>
+
+        <ul class="customerContent">
+            <li ng-repeat="el in list">
+                <img ng-src="{{el.Domain+el.Image}}" />
+                <div>
+                    <a ng-href="List?code={{el.Code}}&source={{el.RelationId}}"><span>{{el.Name}}</span></a>
+                </div>
+            </li>
+
+            <div class="clear"></div>
+        </ul>
+
+        <div class="pageFoot">
+            <span class="fs18">你们只需要负责美美的拍照和愉快的玩耍就可以了，其他的，交给我们 .....</span><br />
+            <span>You only need to reponsible for the United States and United States to take pictures and happy to play on it,tht other,to us ......</span>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/js/customer.js"></script>
+}

@@ -1,0 +1,83 @@
+﻿body {
+    padding-top: 0px;
+    padding-bottom: 20px;
+    font-family: Arial, Verdana,"微软雅黑","宋体";
+    color:#000;
+}
+
+
+a:link,a:visited,a:active{color:#000;}
+a:hover{color:#045499;}
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,select,textarea {max-width: 280px;}
+
+
+li {list-style-type: none;}
+a ,a:hover,a:focus{text-decoration: none;}
+
+div,ul,li,p,span,h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {padding: 0;margin: 0;font-family: Arial, Verdana,"微软雅黑","宋体";}
+
+
+
+.clear { clear: both;width: 0;height: 0;}
+
+.fs10{ font-size: 10px;}
+.fs12{ font-size: 12px;}
+.fs14{ font-size: 14px;}
+.fs16{ font-size: 16px;}
+.fs18{ font-size: 18px;}
+.fs20{ font-size: 20px;}
+.fs22{ font-size: 22px;}
+.fs24{ font-size: 24px;}
+.fs25{ font-size: 25px;}
+.fs25{ font-size: 25px;}
+.fs28{ font-size: 28px;}
+.fs32{ font-size: 32px;}
+.fs36{ font-size: 36px;}
+.fs48{ font-size: 48px;}
+.fs60{ font-size: 60px;}
+.fs80{ font-size: 80px;}
+
+.lh25{line-height:25px;}
+
+.fw{ font-weight: bold;}
+
+.f-cg{ font-family: Century Gothic;}
+
+.pt5{ padding-top: 5px;}
+.pt10{ padding-top: 10px;}
+.pt25{ padding-top: 25px;}
+.pt35{ padding-top: 35px;}
+.pl10{ padding-left: 10px;}
+.plt10{ padding-top: 10px;padding-left: 10px;}
+.ptb25{ padding-top: 25px;padding-bottom: 25px;}
+.pb15{ padding-bottom: 15px;}
+.mt25{ margin-top: 25px;}
+.ml25{ margin-left: 25px;}
+
+.cf{ color: #fff;}
+.c3{ color: #333;}
+.c6{ color: #666;}
+.c9{ color: #999;}
+.cr{ color: #f00;}
+.cy{ color: #f2fc00;}
+.c650{color:#f6f5f0;}
+
+red{color:#fe0200;}
+
+.bc-b{ background: #1E326D;}
+.bc-r{ background: #E83B63;}
+.bc-y{ background: #febb36;}
+.bc-g{ background: #f2f3f0;}
+
+.w320{width:320px;}
+.w220{width:220px;}
+.w320h{width:320px; height:230px;}
+.w600{width:600px;}

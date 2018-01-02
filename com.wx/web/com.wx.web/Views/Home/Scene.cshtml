@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "拍摄场景";
+}
+
+
+@section head
+{
+    <link rel="stylesheet" href="~/Content/home.css" />
+}
+
+<div class="container-full sceneAd">
+</div>
+
+<div class="container-full bc-g" ng-app="AppItemList">
+
+    <div class="container" ng-controller="listCtl">
+
+        <input type="hidden" id="hdCode" value="3" />
+        <input type="hidden" id="hdType" value="2" />
+        <input type="hidden" id="hdSource" value="0" />
+
+        <div class="sceneTitle">“普吉岛”专属摄影基地</div>
+        <div class="sceneDetail">
+            浪 漫 海 滩 / 皇 家 寺 庙 &nbsp;  / &nbsp; 海 滨 礁 石 &nbsp; / &nbsp; 无 边 泳 池 &nbsp; / &nbsp; 海 边 小 象 <br />
+            醉 美 夕 阳 &nbsp; / &nbsp; 普 吉 街 景  &nbsp; / &nbsp; 泰 国 长 尾 船
+        </div>
+        <ul class="sceneContent">
+            <li ng-repeat="el in list">
+                <img ng-src="{{el.Domain}}{{el.Image}}" />
+                <div>
+                    <a ng-href="Detail?code={{el.Code}}&source={{el.RelationId}}"><span>{{el.Name}}</span></a>
+                </div>
+            </li>
+            <div class="clear"></div>
+        </ul>
+
+
+        <div class="pageFoot">
+            <span class="fs18">你们只需要负责美美的拍照和愉快的玩耍就可以了，其他的，交给我们 .....</span><br />
+            <span>You only need to reponsible for the United States and United States to take pictures and happy to play on it,tht other,to us ......</span>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/js/customer.js"></script>
+}
