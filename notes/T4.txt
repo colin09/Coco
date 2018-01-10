@@ -1,0 +1,89 @@
+
+
+http://www.cnblogs.com/heyuquan/archive/2012/07/26/2610959.html#bianyi
+
+
+
+(二)T4基本结构 : T4模板可以分为：指令块、文本块、控制块。
+	1.指令块 - 向文本模板化引擎提供关于如何生成转换代码和输出文件的一般指令。
+	2.文本块 - 直接复制到输出的内容。
+	3.控制块 - 向文本插入可变值并控制文本的条件或重复部件的程序代码，不能在控制块中嵌套控制块。
+
+指令块 >>
+	6个指令<#@ template #>、<#@ parameter#>、<#@ assembly #>、<#@ import #>、<#@ include #>、<#@ output #>、
+	其中， output 和 assembly 只能用在设计时模板。
+
+	a、T4模板指令
+		<#@ template [language="C#"] [hostspecific="true"] [debug="true"] [culture="code"] [inherits="templateBaseClass"] [compilerOptions="options"] #>
+
+		inherits：指定模板的程序代码继承自另一个类，该基类可以是由其他模板生成。
+		1)运行时（预处理过的）文本模板中的继承
+			如果不指定 inherits 特性，则会从您的文本模板生成基类和派生类。
+			指定 inherits 特性时，仅生成派生类。
+		2)设计时文本模板中的继承
+			设计时模板会生成任何类型的“文本文件”，此文件将组成 Visual Studio 项目的一部分。
+			T4 模板引擎首先要将模板转换为中间程序代码文件，中间代码文件将写入您的 %TEMP% (环境变量) 目录。
+			默认该生成的中间代码继承自 Microsoft.VisualStudio.TextTemplating.TextTransformation 类，
+			但你也可根据需求使用 inherits 特性指定派生于 TextTransformation 类的任何基类。
+	
+	b、T4参数指令
+		<#@ parameter type="Full.TypeName" name="ParameterName" #>
+		在 Visual Studio 文本模板中，parameter 指令声明模板代码中从自外部上下文传入的值初始化的属性。
+		可以声明任何远程类型的参数。也就是说，类型必须使用SerializableAttribute进行声明，或者必须从MarshalByRefObject派生。
+		这样可以将参数值传递到在其中处理模板的AppDomain中。
+
+	c、T4导入指令
+		<#@ import namespace="namespace" #>
+		
+	d、T4包含指令
+		<#@ include file="filePath" #>
+		1)为了增加代码的可维护性，将公用函数做为类功能块（<#+ 类功能控制块 #>）存放在单独的文件中，该文件可以被 <#@include#> 到一个或多个模板文件中。
+		2)对于包含文件，文件扩展名使用 .ttinclude可读性更好。（以区分后缀为 .tt的运行时或设计时文本模板）
+	
+	e、T4输出指令
+		<#@ output extension=".fileNameExtension" [encoding="encoding"] #>
+		运行时（预处理）文本模板中不需要 output 指令。应用程序通过调用TextTransform() 来获取已生成的字符串。
+	
+	f、T4程序集指令
+		<#@ assembly name="[assembly strong name|assembly file name]" #>
+		在预处理文本模板中，assembly 指令无效。改为在 Visual Studio 项目中直接“添加引用”。
+
+控制块 >>
+	有三种类型的控制块，根据其左括号对它们进行区分：
+	1.<# 标准控制块 #>可以包含语句。
+	2.<#= 表达式控制块 #>将一个可以计算为字符串的表达式括起来,用于提供要写入“输出”文件的字符串的代码。
+	3.<#+ 类功能控制块 #>可以使用类功能控制块向文本模板添加方法、属性、字段甚至是嵌套类。必须作为文件中的最后一个块显示，或者用<#@ include #>引入外部文件。
+	
+	注意：
+	1)始终使用 {...}花括号来包含内嵌的嵌套语句，否则会报错。（哪怕花括号中只有一句代码）
+	2)控制块不能互相嵌套。必须先终止之前的控制块，然后才能打开另一个。
+
+	
+(三)设计时模板和运行时模板 : T4文本模板分为：设计时模板和运行时模板
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

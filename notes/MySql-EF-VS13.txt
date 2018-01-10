@@ -1,0 +1,16 @@
+MySql Entityframework VS2013
+
+1、安装MySQL  for VisualStudio，用于在VS中可以在数据源中引用MySQL
+	下载地址：http://dev.mysql.com/downloads/windows/visualstudio/
+	
+	
+2、安装MySql Connector - 提供MySql数据库的驱动程序。
+	下载地址：http://dev.mysql.com/downloads/connector/net/
+	
+3、在项目中安装EF6
+	程序包管理器控制台 > 
+	Install-Package EntityFramework
+	Install-Package MySql.Data.Entity
+
+4、之后就不用讲了～～
+项目里右键-》添加-》新建项-》 数据-》ADO.NET 实体数据模型-》来自数据库的EF设计器

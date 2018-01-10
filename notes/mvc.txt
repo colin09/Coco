@@ -1,0 +1,290 @@
+MVC 
+
+Razor:
+
+1.基础语法：以"@"符号+"{代码块}"，或以"@"符号开头。
+2.字符串拼接
+3.文本使用
+4.注释
+5.循环
+	@{
+		 for (int i = 0; i < 10; i++)
+		 {
+		 @:@i
+		 }
+	 }
+6.特殊符号  -- 输出双引号时，前面要多加一个双引号转义
+	@{
+		var Password = @"""123456!@#$%^\""";
+	}
+/**************************************************************************************/
+
+
+
+
+HtmlHelper:
+
+@Html.TextBox("txtUserName")
+@Html.Password("txtPassword")
+@Html.Label("txtUserName", "显示值")
+ @Html.RadioButton("rdo", "男")
+ @Html.CheckBox("chk")
+ @Html.ActionLink("链接首页", "Login")
+/**************************************************************************************/
+
+路由：
+
+//路由的作用就相当于把/Home/Index根据“定制的规则(如当前的Home和Control应该对应什么)”
+  解释给MVC框架，以便处理相应的程序文件
+
+//通常，我们在Global.asax文件中的Application_Start事件中添加routes，
+  这确保routes在程序启动的时候就可用，而且也允许在你进行单元测试的时候直接调用该方法。
+  如果你想在单元测试的时候直接调用它，注册该routes的方法必需是静态的同时有一个RouteCollection参数。
+
+public static void RegisterRoutes(RouteCollection routes)
+{
+    //忽略对.axd文件的Route，也就是和WebForm一样直接去访问.axd文件
+    routes.IgnoreRoute("{resource}.axd/{*pathInfo}"); 
+
+    routes.MapRoute(
+        "Category",                                              // Route 的名称
+        "Category/{action}/{categoryName}",                           // 带有参数的URL
+        new { controller = "Category", action = "Index", categoryName = "4mvc" }  // 设置默认的参数
+    ); 
+	
+	添加约束条件，支持正则表达式。例如我们需要对id参数添加一个必须为数字的条件：
+	routes.MapRoute(
+		"Default",                                              
+		"{controller}/{action}/{id}",                           
+		new { controller = "Home", action = "Index", id = "" },  
+		new { id = @"[\d]*" } //id必须为数字
+	); 
+} 
+
+使用星号(*)匹配不确定个数的参数，这会匹配URL后面所有的剩余的参数。例如：
+query/{queryname}/{*queryvalues}
+
+protected void Application_Start()
+{
+    //在程序启动的时候注册我们前面定义的Route规则
+    RegisterRoutes(RouteTable.Routes);
+}
+
+
+url匹配Route是根据Route的定义顺序来自上而下匹配的，所以，在定义Route的时候，要将一些特别的Route放到前面
+
+/**************************************************************************************/
+
+
+母板页_Layout.cshtml
+  母板页的命名可以随意，但建议以"_"下划线开头,
+	<title>@ViewBag.Title</title>
+	<body>
+		@* 主要部分*@
+		@RenderBody()
+		@*其他部份内容*@
+		@RenderSection("MasterPart", false)
+	 </body>
+	 
+	 //子页面引用
+	@{
+		Layout = "~/Views/Shared/_Layout.cshtml";
+	}
+	//@section+空格+名称{内容}来实现母板页内容的替换
+	@section MasterPart{
+		这里是母板页的第二部分
+	}
+
+用户自定义控件
+   创建时选中Create as a patial view
+   使用时代码如下：
+	@Html.Partial("~/Views/Shared/_UserControl.cshtml")
+
+默认Layout引用的使用(_ViewStart.cshtml)
+  当我们的页面未指定Layout的时候，如果项目在全局或在同文件夹内存在_ViewStart.cshtml时该页面的Layout会自动继承自_ViewStart.cshtml，
+  如果不同的文件夹层级都存在_ViewStart.cshtml，则继承离该页面最近的一个。_ViewStart.cshtml是一个特殊的文件
+	全局_ViewStart.cshtml  (views/_ViewStart.cshtml)
+	
+如果不想页面使用任何母板页和布局页，则需要设置Layout = null
+	@{
+		Layout = null;
+	}
+
+MVC中数据校验规则
+	1、MVC提供的常用上下文
+		[Display(Name = "特殊数字")]
+        [Required(ErrorMessage = "请输入{0}")]
+        [StringLength(20, ErrorMessage = "{0}在{2}位至{1}位之间", MinimumLength = 1)]
+        public string InputNumber { get; set; }
+
+		<div>
+			@Html.LabelFor(model => model.InputNumber)
+			@Html.TextBoxFor(model => model.InputNumber)
+			@Html.ValidationMessageFor(model => model.InputNumber)
+		</div>
+
+		public ActionResult Validation(Models.ValidationModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var inputNumber = model.InputNumber;
+			}
+			return View();
+		}
+
+
+	2、自定义正则表达式验证
+		【常规方式】
+		public class ValidationModel
+		{
+			[RegularExpression(@"^[0-5]*$", ErrorMessage = "只能输入0-5间的数字")]
+			public string InputNumber { get; set; }
+		}
+		【继承方式】
+		public class SpecialValidation : RegularExpressionAttribute
+		{
+			public SpecialValidation() : base(@"^[0-5]*$") { }
+
+			public override string FormatErrorMessage(string name)
+			{
+				return String.Format("{0}在0-5之间", name);
+			}
+		}
+
+		public class ValidationModel
+		{
+			[SpecialValidation]
+			public string InputNumber { get; set; }
+		}
+
+
+过滤器 Filter
+
+  namespace System.Web.Mvc
+	public abstract class ActionFilterAttribute : FilterAttribute, IActionFilter, IResultFilter
+		protected ActionFilterAttribute();
+		public virtual void OnActionExecuted(ActionExecutedContext filterContext);  	//在Action执行之前执行该方法
+		public virtual void OnActionExecuting(ActionExecutingContext filterContext); 	//在Action执行之后执行该方法
+		public virtual void OnResultExecuted(ResultExecutedContext filterContext);  	//OnResultExecuting：在Result执行之前执行该方法
+		public virtual void OnResultExecuting(ResultExecutingContext filterContext);	//在Result执行之后执行该方法
+
+  在MVC框架基础上实现自定义Attribute只需实现ActionFilterAttribute中的虚方法即可
+	public class LogActionFilter : ActionFilterAttribute
+		public override void OnActionExecuting(ActionExecutingContext filterContext)
+			filterContext.HttpContext.Response.Write(@"在Action执行之前执行" + LogMessage + "<br />");
+			base.OnActionExecuting(filterContext);
+  使用
+		[LogActionFilter(LogMessage = "日志写入：Validation方法")]
+		public ActionResult Validation()
+			return View();
+  
+  
+  
+  
+缓存
+	//1、Controller 缓存
+	[OutputCache(Duration = 10)]
+	public class ControlController : Controller
+	{
+		//2、Action缓存 - 该Index的Action加缓存 
+		[OutputCache(Duration = 10)]
+		public ActionResult Index()
+		{
+			ViewBag.CurrentTime = System.DateTime.Now;
+			return View();
+		}
+		//3、配置文件缓存 - TestConfigCache为在配置文件中配置的缓存节
+		[OutputCache(CacheProfile = "TestConfigCache")]
+		public ActionResult Index()
+		{
+			ViewBag.CurrentTime = System.DateTime.Now;
+			return View();
+		}
+	｝
+  
+  <system.web>
+	<!--配置缓存-->
+	<caching>
+		<outputCacheSettings>
+			<outputCacheProfiles>
+				<add name="TestConfigCache" duration="10"/>
+			</outputCacheProfiles>
+		</outputCacheSettings>
+	</caching>
+  
+  注：当Control与Action都应用了缓存时，以Action的缓存为主。
+  
+  
+  
+  OutputCache参数简介
+  常用属性：
+	1）CacheProfile：缓存使用的配置文件的缓存名称。
+	2）Duration：缓存时间，以秒为单位，这个除非你的Location=None，可以不添加此属性，其余时候都是必须的。
+	3）OutputCacheLocation：枚举类型，缓存的位置。当设置成None时，所有缓存将失效，默认为Any。
+		Any：页面被缓存在浏览器、代理服务器端和web服务器端；
+		Client：缓存在浏览器；
+		DownStream：页面被缓存在浏览器和任何的代理服务器端；
+		Server：页面被缓存在Web服务器端；
+		None：页面不缓存；
+		ServerAndClient：页面被缓存在浏览器和web服务器端；
+	4）VaryByParam：用于多个输出缓存的字符串列表，并以分号进行分隔。默认时，该字符串与GET方法传递的参数或与POST方法传递的变量相对应。当被设置为多个参数时，输出缓存将会为每个参数都准备一个与之相对应的文档版本。可能值包括none，*，以及任何有效的查询串或POST参数名称。
+	如果您不想要为不同的已缓存内容指定参数，可以将其设置为none。如果想要指定所有的已缓存内容参数，可以设置为*。
+	  
+
+缓存依赖
+
+	SqlDependency：一个值，用于标识操作的输出缓存所依赖的一组数据库名称和表名称对。SqlCacheDependency 类在所有受支持的 SQL Server 版本 (7.0, 2000, 2005) 上监视特定的 SQL Server 数据库表，数据库表发生更改时，将自动删除缓存项，并向 Cache 中添加新版本的项。
+	概念理解起来很简单，主要是如何应用。下面为应用实例。示例说明：数据库为本地数据库，库名：wcfDemo（写wcf教程时用的库，懒了，直接用了），监听表名：user。缓存时间为：3600秒即一小时。数据库依赖周期为500毫秒，即每0.5秒监听下数据库是否有变化，如果有变化则立即更新缓存。
+	第一步：建立Control，测试代码如下：
+	
+	public class SqlDependencyController : Controller
+		[OutputCache(CacheProfile = "SqlDependencyCache")]
+		public ActionResult Index()
+			ViewBag.CurrentTime = System.DateTime.Now;
+			return View();
+
+	第二步，在配置文件中配置CacheProfile为SqlDependencyCache的节，并且配置缓存对数据库的依赖。
+	<system.web>
+     <!--配置缓存-->
+		<caching>
+			<sqlCacheDependency><!--缓存的数据库依赖节-->
+				<databases>
+					<add name="UserCacheDependency" connectionStringName="Conn" pollTime="500"/><!--Conn：数据库连接字符串的名称，name随便启名，缓存节会用到-->
+				</databases>
+			</sqlCacheDependency>
+		<outputCacheSettings>
+			<outputCacheProfiles>
+				<add name="SqlDependencyCache" duration="3600" sqlDependency="UserCacheDependency:user"/><!--UserCacheDependency：数据库依赖配置节的名称，user：数据库中需要监听的表名称-->
+			</outputCacheProfiles>
+		</outputCacheSettings>
+    </caching>
+    <!--配置缓存-->
+
+	注意：
+	1）由于是缓存对数据库的依赖，此外必须包含connectionStrings的节。
+	2）<add name="UserCacheDependency" connectionStringName="Conn" pollTime="500"/>
+		 connectionStringName：数据库连接字符串的名称
+		 pollTime：监听数据库变化的周期，以毫秒为单位。即每500毫秒查看下数据库是否有变化。
+	3）<add name="SqlDependencyCache" duration="3600" sqlDependency="UserCacheDependency:user"/>
+		sqlDependency：数据依赖的节的名称+冒号+数据表名称（小写）。如果这个依赖会用到多个表，则用分号间隔开，如下所示UserCacheDependency:user;UserCacheDependency:user1
+
+	第三步：启用该数据库表的缓存依赖通知功能
+
+	打开vs命令工具行，输入：aspnet_regsql -S localhost -U sa -P 123456 -ed -d wcfDemo -et -t user
+
+      -S localhost：数据库地址
+
+      -U sa：数据库登录名
+
+      -P 123456：数据库登录密码
+
+      -d wcfDemo：数据库的名称
+
+      -t user：表名称(小写)
+
+	第四步：测试程序，
+	上面的例子只打印了当前时间，如果不加入缓存依赖的情况下，1小时之内都应该运行出的结果都是当前时间，每次Ctrl+F5强制刷新浏览器时不发生任务变化。
+	当加入缓存依赖后，只要对数据库的数据进行任意修改都会更新缓存的时间，即更改数据后再刷新浏览器时会看到时间在变化。
+
+
+
