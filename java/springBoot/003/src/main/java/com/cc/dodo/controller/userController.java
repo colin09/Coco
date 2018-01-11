@@ -1,6 +1,8 @@
 package com.cc.dodo.controller;
 
 import com.cc.dodo.entity.User;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -35,6 +37,8 @@ public class userController {
         return "success";
     }
 
+    @ApiOperation(value="删除用户", notes="根据url的id来指定删除对象")
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long")
     @DeleteMapping(value = "/{id}")
     public String deleteUser(@PathVariable Long id){
         if(users.containsKey(id)){
