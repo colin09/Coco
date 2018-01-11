@@ -12,8 +12,16 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace com.fs.api
 {
-    public class Startup
+    public class Startup //: IStartup
     {
+        //构造 -> configureService -> configure
+
+        public Startup(IHostingEnvironment env, ILoggerFactory logger)
+        {
+            var log = logger.CreateLogger(nameof(Startup));
+            logger.AddProvider();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
