@@ -53,5 +53,6 @@ namespace com.fs.api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "my api v1");
             });
         }
+        
     }
 }
