@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    restart: always
+    ports: 
+      - 6379:6379
+  db:
+    image: mysql
+    restart: always
+    ports: 
+      - 3306:3306
+    environment: 
+      MYSQL_ROOT_PASSWORD: root-1234
+      MYSQL_DATABASE: hui
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: sa-1234
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
