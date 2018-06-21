@@ -131,6 +131,11 @@ project.lock.json
 /.vscode
 
 
+#################
+## docker
+#################
+/docker/LocalService/local-data
+
 ############
 ## nodejs
 ############
