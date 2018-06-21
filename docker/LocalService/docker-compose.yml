@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 services:
   redis:
@@ -18,4 +18,5 @@ services:
       MYSQL_PASSWORD: sa-1234
     volumes:
       - ./local-data/mysql:/var/lib/mysql
-      - ./mysql.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./init-db-sql/grant.sql:/docker-entrypoint-initdb.d/1-init.sql
+      #- ./mysql.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
