@@ -154,9 +154,38 @@ Func<NorthwindDataContext, IEnumerable<Category>> func =
  CompiledQuery.Compile<NorthwindDataContext, IEnumerable<Category>>((NorthwindDataContext context) => context.Categories.Where<Category>(cat => cat.Products.Count > 5));
 
 
+/********************************************************************************************************/
+SQL Server中获取所有数据库名、所有表名、所有字段名的SQL语句
+
+--1.获取所有数据库名：
+Select Name FROM Master.dbo.SysDatabases orDER BY Name;
 
 
+--2.获取所有表名：
+Select * FROM SysObjects Where XType='U' orDER BY Name;
+
+SELECT name FROM sysobjects WHERE type = 'U' AND sysstat = '83'
+
+--3.获取所有字段名：
+Select * FROM SysColumns Where id=Object_Id('AllocationNotes');
+
+SELECT 
+	syscolumns.name,systypes.name,syscolumns.isnullable,syscolumns.length
+FROM syscolumns, systypes 
+	WHERE syscolumns.xusertype = systypes.xusertype AND syscolumns.id = object_id('AllocationNotes');
+	
+--4、得到表中主键所包含的列名：
+SELECT syscolumns.name 
+FROM syscolumns,sysobjects,sysindexes,sysindexkeys
+WHERE syscolumns.id = object_id('AllocationNotes') AND sysobjects.xtype = 'PK' 
+	AND sysobjects.parent_obj = syscolumns.id AND sysindexes.id = syscolumns.id AND sysobjects.name = sysindexes.name 
+	AND sysindexkeys.id = syscolumns.id AND sysindexkeys.indid = sysindexes.indid AND syscolumns.colid = sysindexkeys.colid;
 
 
+--5、得到表中列的描述内容：
+select a.name,g.value 
+from syscolumns as a    
+left join sysproperties g  on a.id=g.id AND a.colid = g.smallid    
+where a.id='表id';
 
 
