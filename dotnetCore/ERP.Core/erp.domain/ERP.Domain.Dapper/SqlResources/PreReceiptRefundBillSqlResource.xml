@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PreReceiptRefundBillSqlResource>
+  <Select>
+    SELECT Id,RefundAmount,AuditState,AuditTime,IsDeleted,CreateTime,LastUpdateTime,City_Id,PreReceiptBill_Id,BillNo,PreReceiptBillNo FROM  dbo.PreReceiptRefundBills WITH(NOLOCK)
+  </Select>
+  <SelectIncludeCity>
+    SELECT [PreReceiptRefundBills].Id,RefundAmount,AuditState,AuditTime,IsDeleted,[PreReceiptRefundBills].CreateTime,[PreReceiptRefundBills].LastUpdateTime,City_Id,PreReceiptBill_Id,BillNo,PreReceiptBillNo,[City].Id Id,[City].NewId NewId,[City].Name Name FROM  dbo.PreReceiptRefundBills WITH(NOLOCK) INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City_Id=City.Id
+  </SelectIncludeCity>
+  <Insert>
+    INSERT INTO dbo.PreReceiptRefundBills
+    (Id,RefundAmount,AuditState,AuditTime,IsDeleted,CreateTime,LastUpdateTime,City_Id,PreReceiptBill_Id,BillNo,PreReceiptBillNo)
+    VALUES  (@Id,@RefundAmount,@AuditState,@AuditTime,@IsDeleted,GETDATE(),GETDATE(),@City_Id,@PreReceiptBill_Id,@BillNo,@PreReceiptBillNo)
+  </Insert>
+  <Update>
+    UPDATE dbo.PreReceiptRefundBills SET RefundAmount=@RefundAmount,AuditState=@AuditState,AuditTime=@AuditTime,IsDeleted=@IsDeleted,LastUpdateTime=GETDATE(),City_Id=@City_Id,PreReceiptBill_Id=@PreReceiptBill_Id,BillNo=@BillNo,PreReceiptBillNo=@PreReceiptBillNo WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.PreReceiptRefundBills SET IsDeleted=1 WHERE Id=@Id
+  </Delete>
+</PreReceiptRefundBillSqlResource>

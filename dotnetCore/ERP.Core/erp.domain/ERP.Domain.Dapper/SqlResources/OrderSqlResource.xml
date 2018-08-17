@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[HasCreateNote],[OrderNo],[OrderType],[Bonus],[Coupons],[ProductAmount],[OrderAmount],[PayableAmount]
+    ,[ReduceAmount],[CreateTime],[LastUpdateTime],[BrokerUser_Id],[City_Id],[User_Id],[OddAmount],[IsAgencySaleOrder]
+    ,[ToStoreHouseId],[BigGoodsMode],[AdditionalProfit],[CashMarkAmount],[BankMarkAmount],[WeiXinMarkAmount],[AlipayMarkAmount]
+    ,[Shop_Id],[UseRewardBonusAmount],[SaleCity_Id],[CompleteTime],[StoreHouse_Id]
+    FROM [dbo].[Orders] WITH(NOLOCK)
+  </Select>
+  <SelectItems>
+    SELECT [Id],[ProductName],[OriginalPrice],[Price],[CostAmount],[ReducePrice],[PriceUnit],[SaleMode],[ERPSaleMode]
+    ,[Specifications],[PackageUnit],[PackageQuantity],[Count],[SaleUnit],[UseBonus],[UseCoupon],[AdditionalProfit],[UseRewardBonusAmount]
+    ,[Product_Id],[Order_Id],[CreateTime],[LastUpdateTime],[SaleProduct_Id]
+    FROM [dbo].[OrderItem] WITH(NOLOCK)
+  </SelectItems>
+  <SelectItemIncludeProductInfo>
+    SELECT [OrderItem].[Id],[OrderItem].[ProductName],[OrderItem].[OriginalPrice],[OrderItem].[Price],[OrderItem].[CostAmount],[OrderItem].[ReducePrice],
+    [OrderItem].[PriceUnit],[OrderItem].[SaleMode],[OrderItem].[ERPSaleMode],[OrderItem].[Specifications],[OrderItem].[PackageUnit],[OrderItem].[PackageQuantity],
+    [OrderItem].[Count],[OrderItem].[SaleUnit],[OrderItem].[UseBonus],[OrderItem].[UseCoupon],[OrderItem].[AdditionalProfit],[OrderItem].[UseRewardBonusAmount]
+    ,[OrderItem].[Product_Id],[OrderItem].[SaleProduct_Id],[OrderItem].[Order_Id],[OrderItem].[CreateTime],[OrderItem].[LastUpdateTime],
+    [Product].ProductType,[Product].[State],[Product].NewId,[Product].Id,
+    [ProductInfo].MonthOfShelfLife,[ProductInfo].Id,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_Specifications Specifications,[ProductInfo].Desc_PackageUnit PackageUnit
+    ,[ProductInfo].Desc_PackageQuantity PackageQuantity
+    FROM [dbo].[OrderItem] WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = OrderItem.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectItemIncludeProductInfo>
+  <Insert>
+    INSERT INTO [dbo].[Orders]
+    ([Id],[HasCreateNote],[IsAgencySaleOrder],[ToStoreHouseId],[OrderNo],[OrderType],[BigGoodsMode],[Bonus],[Coupons],[ProductAmount],[AdditionalProfit],[OrderAmount]
+    ,[PayableAmount],[CashMarkAmount],[BankMarkAmount],[WeiXinMarkAmount],[AlipayMarkAmount],[ReduceAmount],[UseRewardBonusAmount],[OddAmount],[CompleteTime],[User_Id],[BrokerUser_Id]
+    ,[City_Id],[Shop_Id],[StoreHouse_Id],[CreateTime],[LastUpdateTime],SaleCity_Id)
+    VALUES
+    (@Id,@HasCreateNote,@IsAgencySaleOrder,@ToStoreHouseId,@OrderNo,@OrderType,@BigGoodsMode,@Bonus,@Coupons,@ProductAmount,@AdditionalProfit,@OrderAmount,@PayableAmount,@CashMarkAmount
+    ,@BankMarkAmount,@WeiXinMarkAmount,@AlipayMarkAmount,@ReduceAmount,@UseRewardBonusAmount,@OddAmount,@CompleteTime,@User_Id,@BrokerUser_Id,@City_Id,@Shop_Id,@StoreHouse_Id,GETDATE(),GETDATE(),@SaleCity_Id)
+  </Insert>
+  <InsertItems>
+    INSERT INTO [dbo].[OrderItem]
+    ([Id],[ProductName],[OriginalPrice],[Price],[CostAmount],[ReducePrice],[PriceUnit],[SaleMode],[ERPSaleMode],[Specifications],[PackageUnit],[PackageQuantity],[Count]
+    ,[SaleUnit],[UseBonus],[UseCoupon],[AdditionalProfit],[UseRewardBonusAmount],[Product_Id],[Order_Id],[CreateTime],[LastUpdateTime],[SaleProduct_Id])
+    VALUES
+    (@Id,@ProductName,@OriginalPrice,@Price,@CostAmount,@ReducePrice,@PriceUnit,@SaleMode,@ERPSaleMode,@Specifications,@PackageUnit,@PackageQuantity,@COUNT,@SaleUnit
+    ,@UseBonus,@UseCoupon,@AdditionalProfit,@UseRewardBonusAmount,@Product_Id,@Order_Id,GETDATE(),GETDATE(),@SaleProduct_Id)
+  </InsertItems>
+  <Update>
+    UPDATE [dbo].[Orders]
+    SET [IsAgencySaleOrder] = @IsAgencySaleOrder,[ToStoreHouseId] = @ToStoreHouseId,[OrderNo] = @OrderNo,[OrderType] = @OrderType,[BigGoodsMode] = @BigGoodsMode,[Bonus] = @Bonus
+    ,[Coupons] = @Coupons,[ProductAmount] = @ProductAmount,[AdditionalProfit] = @AdditionalProfit,[OrderAmount] = @OrderAmount,[PayableAmount] = @PayableAmount,[CashMarkAmount] = @CashMarkAmount
+    ,[BankMarkAmount] = @BankMarkAmount,[WeiXinMarkAmount] = @WeiXinMarkAmount,[AlipayMarkAmount] = @AlipayMarkAmount,[ReduceAmount] = @ReduceAmount,[UseRewardBonusAmount] = @UseRewardBonusAmount,[OddAmount] = @OddAmount
+    ,[CompleteTime] = @CompleteTime,[User_Id] = @User_Id,[BrokerUser_Id] = @BrokerUser_Id,[City_Id] = @City_Id,[Shop_Id] = @Shop_Id,[StoreHouse_Id] = @StoreHouse_Id,[LastUpdateTime] = GETDATE(),[SaleCity_Id]=@SaleCity_Id
+    WHERE Id=@Id
+  </Update>
+  <UpdateHasCreateNote>
+    UPDATE [dbo].[Orders]
+    SET [HasCreateNote] = @HasCreateNote,[LastUpdateTime] = GETDATE()
+    WHERE Id=@Id
+  </UpdateHasCreateNote>
+  <QueryPagedSaleProfitByMonth>
+    SELECT t1.Count,t1.DiscountAmount,t1.PayableAmount,t1.CostAmount,t1.AdditionalProfit,t1.UseRewardBonusAmount,City.Name City,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_OldCategory Category,[ProductInfo].Desc_PackageQuantity,[ProductInfo].Desc_PackageUnit,[ProductInfo].Desc_Specifications FROM
+    (SELECT t.CityId,t.Product_Id,ISNULL(SUM(t.Count),0) AS Count,ISNULL(SUM(t.DiscountAmount),0) AS DiscountAmount,ISNULL(SUM(t.PayableAmount),0) AS PayableAmount,ISNULL(SUM(t.CostAmount),0) AS CostAmount,ISNULL(SUM(t.AdditionalProfit),0) AS AdditionalProfit,ISNULL(SUM(t.UseRewardBonusAmount),0) AS UseRewardBonusAmount,ROW_NUMBER() OVER (ORDER BY t.CityId) AS RowNumber FROM (
+    SELECT ni.Num AS Count,ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount,ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit AS AdditionalProfit,ni.UseRewardBonusAmount AS UseRewardBonusAmount,o.City_Id AS CityId,ni.Product_Id
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.City_Id=@CityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    UNION ALL
+    SELECT 0-ni.Num AS Count,0-ni.DiscountAmount AS DiscountAmount,0-ni.AdValoremAmount	AS PayableAmount,0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,0 AS UseRewardBonusAmount,o.City_Id AS CityId,ni.Product_Id
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id AND o.City_Id=@CityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND ni.SaleMode IN (1,3,9)) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    ) AS  t GROUP BY t.Product_Id,t.CityId) t1
+    INNER JOIN dbo.Orgs City WITH(NOLOCK)  ON City.Id=t1.CityId
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=t1.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=[Product].Info_Id
+    WHERE @PageSize &lt;=0 OR (RowNumber >= @PageSize * @PageIndex+1 AND RowNumber &lt;= @PageSize * (@PageIndex+1))
+  </QueryPagedSaleProfitByMonth>
+  <QuerySaleProfitByMonth>
+    SELECT t1.Count,t1.DiscountAmount,t1.PayableAmount,t1.CostAmount,t1.AdditionalProfit,t1.UseRewardBonusAmount,City.Name City,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_OldCategory Category,[ProductInfo].Desc_PackageQuantity,[ProductInfo].Desc_PackageUnit,[ProductInfo].Desc_Specifications FROM
+    (SELECT t.CityId,t.Product_Id,ISNULL(SUM(t.Count),0) AS Count,ISNULL(SUM(t.DiscountAmount),0) AS DiscountAmount,ISNULL(SUM(t.PayableAmount),0) AS PayableAmount,ISNULL(SUM(t.CostAmount),0) AS CostAmount,ISNULL(SUM(t.AdditionalProfit),0) AS AdditionalProfit,ISNULL(SUM(t.UseRewardBonusAmount),0) AS UseRewardBonusAmount FROM (
+    SELECT ni.Num AS Count,ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount,ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit AS AdditionalProfit,ni.UseRewardBonusAmount AS UseRewardBonusAmount,o.City_Id AS CityId,ni.Product_Id
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.City_Id=@CityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    UNION ALL
+    SELECT 0-ni.Num AS Count,0-ni.DiscountAmount AS DiscountAmount,0-ni.AdValoremAmount	AS PayableAmount,0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,0 AS UseRewardBonusAmount,o.City_Id AS CityId,
+    ni.Product_Id
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id AND o.City_Id=@CityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND ni.SaleMode IN (1,3,9)) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    ) AS  t GROUP BY t.Product_Id,t.CityId) t1
+    INNER JOIN dbo.Orgs City WITH(NOLOCK)  ON City.Id=t1.CityId
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=t1.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=[Product].Info_Id
+  </QuerySaleProfitByMonth>
+  <QuerySumSaleProfitByMonth>
+    SELECT t1.DiscountAmount,t1.PayableAmount,t1.CostAmount,t1.AdditionalProfit,t1.UseRewardBonusAmount FROM
+    (SELECT t.CityId,t.Product_Id,ISNULL(SUM(t.DiscountAmount),0) AS DiscountAmount,ISNULL(SUM(t.PayableAmount),0) AS PayableAmount,ISNULL(SUM(t.CostAmount),0) AS CostAmount,ISNULL(SUM(t.AdditionalProfit),0) AS AdditionalProfit , ISNULL(SUM(t.UseRewardBonusAmount),0) UseRewardBonusAmount FROM (
+    SELECT ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount,ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit AS AdditionalProfit,o.City_Id AS CityId,ni.Product_Id,ni.UseRewardBonusAmount
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.City_Id=@CityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    UNION ALL
+    SELECT 0-ni.DiscountAmount AS DiscountAmount,0-ni.AdValoremAmount	AS PayableAmount,0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,o.City_Id AS CityId,ni.Product_Id,0 UseRewardBonusAmount
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id AND o.City_Id=@CityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND ni.SaleMode IN (1,3,9)) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    ) AS  t GROUP BY t.Product_Id,t.CityId) t1
+  </QuerySumSaleProfitByMonth>
+  <QueryPagedSaleProfit>
+    SELECT t.Id,t.NoteId,t.NoteNo,t.City,t.SaleCity,t.BusinessTime,t.CompanyUserName,t.ProductName,t.Category,
+    t.Desc_PackageQuantity,t.Unit,t.Desc_PackageUnit,t.Desc_Specifications,t.Count,
+    t.DiscountAmount,t.PayableAmount,t.CostAmount,t.AdditionalProfit,UseRewardBonusAmount FROM (
+    SELECT
+    t.Id,t.NoteId,t.NoteNo,t.City,t.SaleCity,t.BusinessTime,t.CompanyUserName,t.ProductName,t.Category,
+    t.Desc_PackageQuantity,t.Unit,t.Desc_PackageUnit,t.Desc_Specifications,t.Count,
+    t.DiscountAmount,t.PayableAmount,t.CostAmount,t.AdditionalProfit,UseRewardBonusAmount,
+    ROW_NUMBER() OVER (ORDER BY  BusinessTime DESC,Id) RowNumber
+    FROM (
+    SELECT ni.Id,o.Id NoteId,o.NoteNo,c.Name City,sc.Name SaleCity,o.BusinessTime,
+    (CASE o.IsInternal WHEN 1 THEN org.Name ELSE ISNULL(u.CompanyName,'')+'-'+u.MobileNO END) AS CompanyUserName,
+    (CASE WHEN p.ProductName IS NULL OR p.ProductName = '' THEN	[pi].Desc_ProductName
+    ELSE p.ProductName END) AS ProductName,pi.Desc_OldCategory AS Category,pi.Desc_PackageQuantity,ni.Unit,pi.Desc_PackageUnit,pi.Desc_Specifications,ni.Num AS Count,ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount,ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit,ni.UseRewardBonusAmount AS UseRewardBonusAmount
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o  WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.City_Id=@CityId AND (@SaleCityId IS NULL OR @SaleCityId=o.SaleCity_Id)
+    AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    and o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    AND (@IsInternal IS NULL OR o.IsInternal = @IsInternal)
+    INNER JOIN dbo.Orgs c ON o.City_Id=c.Id
+    LEFT JOIN dbo.Orgs sc WITH(NOLOCK) ON o.SaleCity_Id=sc.Id
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi]  WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON o.CompanyUserCity_Id=org.Id
+    LEFT JOIN dbo.[User] u WITH(NOLOCK) ON o.User_Id=u.Id
+    UNION ALL
+    SELECT ni.Id,o.Id NoteId,o.NoteNo,c.Name City,sc.Name SaleCity, o.BusinessTime,
+    (CASE o.IsInternal WHEN 1 THEN org.Name ELSE ISNULL(u.CompanyName,'')+'-'+u.MobileNO END) AS CompanyUserName,(CASE WHEN p.ProductName IS NULL OR p.ProductName = '' THEN	[pi].Desc_ProductName ELSE p.ProductName END) AS ProductName,
+    pi.Desc_OldCategory AS Category,pi.Desc_PackageQuantity,ni.Unit,pi.Desc_PackageUnit,pi.Desc_Specifications,0-ni.Num AS Count,0-ni.DiscountAmount,0-ni.AdValoremAmount	AS PayableAmount,0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,0 AS UseRewardBonusAmount
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK)  ON ni.ReturnOrderInStockNote_Id = o.Id AND o.City_Id=@CityId AND (@SaleCityId IS NULL OR @SaleCityId=o.SaleCity_Id)
+    AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    AND (@IsInternal IS NULL OR o.IsInternal = @IsInternal)
+    INNER JOIN dbo.Orgs c WITH(NOLOCK) ON o.City_Id=c.Id
+    LEFT JOIN dbo.Orgs sc WITH(NOLOCK) ON o.SaleCity_Id=sc.Id
+    INNER JOIN dbo.Product p WITH(NOLOCK)  ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK)  ON [pi].Id = p.Info_Id
+    AND  (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON o.CompanyUserCity_Id=org.Id
+    LEFT JOIN dbo.[User] u WITH(NOLOCK) ON o.User_Id=u.Id
+    ) t
+    ) t
+    WHERE @PageSize &lt;=0 OR (RowNumber >= @PageSize * @PageIndex + 1 AND RowNumber &lt;= @PageSize * (@PageIndex+1))
+  </QueryPagedSaleProfit>
+  <QuerySaleProfit>
+    SELECT t.Id,t.NoteId,t.NoteNo,t.City,t.SaleCity,t.BusinessTime,t.CompanyUserName,t.ProductName,t.Category,
+    t.Desc_PackageQuantity,t.Unit,t.Desc_PackageUnit,t.Desc_Specifications,t.Count,
+    t.DiscountAmount,t.PayableAmount,t.CostAmount,t.AdditionalProfit,UseRewardBonusAmount FROM (
+    SELECT
+    t.Id,t.NoteId,t.NoteNo,t.City,t.SaleCity,t.BusinessTime,t.CompanyUserName,t.ProductName,t.Category,
+    t.Desc_PackageQuantity,t.Unit,t.Desc_PackageUnit,t.Desc_Specifications,t.Count,
+    t.DiscountAmount,t.PayableAmount,t.CostAmount,t.AdditionalProfit,UseRewardBonusAmount,
+    ROW_NUMBER() OVER (ORDER BY  BusinessTime DESC,Id) RowNumber
+    FROM (
+    SELECT ni.Id,o.Id NoteId,o.NoteNo,c.Name City,sc.Name SaleCity,o.BusinessTime,
+    (CASE o.IsInternal WHEN 1 THEN org.Name ELSE ISNULL(u.CompanyName,'')+'-'+u.MobileNO END) AS CompanyUserName,
+    [pi].Desc_ProductName AS ProductName,pi.Desc_OldCategory AS Category,pi.Desc_PackageQuantity,ni.Unit,pi.Desc_PackageUnit,pi.Desc_Specifications,ni.Num AS Count,ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount,ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit,ni.UseRewardBonusAmount AS UseRewardBonusAmount
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o  WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.City_Id=@CityId AND (@SaleCityId IS NULL OR @SaleCityId=o.SaleCity_Id)
+    AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    and o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    AND (@IsInternal IS NULL OR o.IsInternal = @IsInternal)
+    INNER JOIN dbo.Orgs c ON o.City_Id=c.Id
+    LEFT JOIN dbo.Orgs sc WITH(NOLOCK) ON o.SaleCity_Id=sc.Id
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi]  WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON o.CompanyUserCity_Id=org.Id
+    LEFT JOIN dbo.[User] u WITH(NOLOCK) ON o.User_Id=u.Id
+    UNION ALL
+    SELECT ni.Id,o.Id NoteId,o.NoteNo,c.Name City,sc.Name SaleCity,o.BusinessTime,
+    (CASE o.IsInternal WHEN 1 THEN org.Name ELSE ISNULL(u.CompanyName,'')+'-'+u.MobileNO END) AS CompanyUserName,
+    [pi].Desc_ProductName AS ProductName,pi.Desc_OldCategory AS Category,pi.Desc_PackageQuantity,ni.Unit,pi.Desc_PackageUnit,pi.Desc_Specifications,0-ni.Num AS Count,0-ni.DiscountAmount,0-ni.AdValoremAmount	AS PayableAmount,0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,0 AS UseRewardBonusAmount
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK)  ON ni.ReturnOrderInStockNote_Id = o.Id AND o.City_Id=@CityId AND (@SaleCityId IS NULL OR @SaleCityId=o.SaleCity_Id)
+    AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    AND (@IsInternal IS NULL OR o.IsInternal = @IsInternal)
+    INNER JOIN dbo.Orgs c WITH(NOLOCK) ON o.City_Id=c.Id
+    LEFT JOIN dbo.Orgs sc WITH(NOLOCK) ON o.SaleCity_Id=sc.Id
+    INNER JOIN dbo.Product p WITH(NOLOCK)  ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK)  ON [pi].Id = p.Info_Id
+    AND  (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON o.CompanyUserCity_Id=org.Id
+    LEFT JOIN dbo.[User] u WITH(NOLOCK) ON o.User_Id=u.Id
+    ) t ) t
+  </QuerySaleProfit>
+  <QuerySumSaleProfit>
+    SELECT
+    ISNULL(t.DiscountAmount,0) DiscountAmount,ISNULL(t.AdValoremAmount,0) AdValoremAmount,ISNULL(t.costAmount,0) CostAmount,ISNULL(t.AdditionalProfit,0) AdditionalProfit,ISNULL(t.UseRewardBonusAmount,0) UseRewardBonusAmount
+    FROM
+    (SELECT
+    ni.DiscountAmount,ni.AdValoremAmount,ni.CostPrice*ni.Num costAmount,ni.AdditionalProfit,ni.UseRewardBonusAmount
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o  WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id
+    AND o.City_Id=@CityId AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    AND o.AuditState=9 AND (@SaleCityId IS NULL OR @SaleCityId=o.SaleCity_Id)   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0  AND (@IsInternal IS NULL OR o.IsInternal = @IsInternal)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi]  WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    UNION ALL
+    SELECT
+    0-ni.DiscountAmount,0-ni.AdValoremAmount,0-ni.CostPrice*ni.Num costAmount,0-ni.AdditionalProfit,0 UseRewardBonusAmount
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK)  ON ni.ReturnOrderInStockNote_Id = o.Id AND o.City_Id=@CityId  AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    AND (@SaleCityId IS NULL OR @SaleCityId=o.SaleCity_Id) AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode IN (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    AND (@IsInternal IS NULL OR o.IsInternal = @IsInternal)
+    INNER JOIN dbo.Product p WITH(NOLOCK)  ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK)  ON [pi].Id = p.Info_Id AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')) t
+  </QuerySumSaleProfit>
+  <QueryPagedMergeSaleProfitByMonth>
+    SELECT @Year AS Year,@Month AS Month,o.Name AS SaleCity,info.Desc_ProductName AS ProductName,info.Desc_OldCategory AS Category,
+    info.Desc_SubCategory AS SubCategory,info.Desc_PackageQuantity,info.Desc_PackageUnit AS Unit,info.Desc_Specifications,
+    t1.Count,t1.PayableAmount,t1.DiscountAmount,t1.CostAmount,t1.AdditionalProfit,t1.UseRewardBonusAmount
+    FROM (
+    SELECT t.Product_Id,t.SaleCityId,ISNULL(SUM([Count]),0) AS COUNT,ISNULL(SUM(PayableAmount),0) AS PayableAmount,ISNULL(SUM(DiscountAmount),0) AS DiscountAmount,ISNULL(SUM(CostAmount),0) AS CostAmount,ISNULL(SUM(AdditionalProfit),0) AS AdditionalProfit,ISNULL(SUM(UseRewardBonusAmount),0) AS UseRewardBonusAmount,ROW_NUMBER()OVER (ORDER BY SaleCityId) AS RowNumber FROM  (SELECT ni.Num AS Count,ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount, ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit AS AdditionalProfit,ni.UseRewardBonusAmount AS UseRewardBonusAmount,o.SaleCity_Id AS SaleCityId,ni.SaleProduct_Id Product_Id
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.SaleCity_Id=@SaleCityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode in (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    UNION ALL
+    SELECT
+    0-ni.Num AS Count,0-ni.DiscountAmount AS DiscountAmount,0-ni.AdValoremAmount	AS PayableAmount, 0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,0 AS UseRewardBonusAmount,o.SaleCity_Id AS SaleCityId,ni.SaleProduct_Id
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id AND o.SaleCity_Id=@SaleCityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND ni.SaleMode in (1,3,9)) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')) t GROUP BY t.Product_Id,t.SaleCityId
+    ) t1
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON t1.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON p.Info_Id = info.Id
+    INNER JOIN dbo.Orgs o WITH(NOLOCK) ON t1.SaleCityId = o.Id
+    WHERE @PageSize &lt;=0 OR (RowNumber >= @PageSize * @PageIndex + 1 AND RowNumber &lt;= @PageSize * (@PageIndex+1))
+  </QueryPagedMergeSaleProfitByMonth>
+  <QueryMergeSaleProfitByMonth>
+    SELECT @Year AS Year,@Month AS Month,o.Name AS SaleCity,info.Desc_ProductName AS ProductName,info.Desc_OldCategory AS Category,
+    info.Desc_SubCategory AS SubCategory,info.Desc_PackageQuantity,info.Desc_PackageUnit AS Unit,info.Desc_Specifications,
+    t1.Count,t1.PayableAmount,t1.DiscountAmount,t1.CostAmount,t1.AdditionalProfit,t1.UseRewardBonusAmount
+    FROM (
+    SELECT t.Product_Id,t.SaleCityId,ISNULL(SUM([Count]),0) AS COUNT,ISNULL(SUM(PayableAmount),0) AS PayableAmount,ISNULL(SUM(DiscountAmount),0) AS DiscountAmount,ISNULL(SUM(CostAmount),0) AS CostAmount,ISNULL(SUM(AdditionalProfit),0) AS AdditionalProfit,ISNULL(SUM(UseRewardBonusAmount),0) AS UseRewardBonusAmount,ROW_NUMBER()OVER (ORDER BY SaleCityId) AS RowNumber FROM  (SELECT ni.Num AS Count,ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount, ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit AS AdditionalProfit,ni.UseRewardBonusAmount AS UseRewardBonusAmount,o.SaleCity_Id AS SaleCityId,ni.SaleProduct_Id Product_Id
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.SaleCity_Id=@SaleCityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode in (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    UNION ALL
+    SELECT
+    0-ni.Num AS Count,0-ni.DiscountAmount AS DiscountAmount,0-ni.AdValoremAmount	AS PayableAmount, 0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,0 AS UseRewardBonusAmount,o.SaleCity_Id AS SaleCityId,ni.SaleProduct_Id
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id AND o.SaleCity_Id=@SaleCityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND ni.SaleMode in (1,3,9)) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')) t GROUP BY t.Product_Id,t.SaleCityId
+    ) t1
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON t1.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON p.Info_Id = info.Id
+    INNER JOIN dbo.Orgs o WITH(NOLOCK) ON t1.SaleCityId = o.Id
+  </QueryMergeSaleProfitByMonth>
+  <QuerySumMergeSaleProfitByMonth>
+    SELECT t1.PayableAmount,t1.DiscountAmount,t1.CostAmount,t1.AdditionalProfit FROM (
+    SELECT ISNULL(SUM(PayableAmount),0) AS PayableAmount,ISNULL(SUM(DiscountAmount),0) AS DiscountAmount,ISNULL(SUM(CostAmount),0) AS CostAmount,ISNULL(SUM(AdditionalProfit),0) AS AdditionalProfit,t.Product_Id,t.SaleCityId FROM  (SELECT ni.DiscountAmount,ni.AdValoremAmount	AS PayableAmount, ni.CostPrice*ni.Num AS CostAmount,ni.AdditionalProfit AS AdditionalProfit,ni.Product_Id,o.SaleCity_Id SaleCityId
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id AND o.SaleCity_Id=@SaleCityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsHidden = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND (ni.SaleMode in (1,3,9))) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')
+    UNION ALL
+    SELECT 0-ni.DiscountAmount AS DiscountAmount,0-ni.AdValoremAmount AS PayableAmount, 0-ni.CostPrice*ni.Num AS CostAmount,0-ni.AdditionalProfit AS AdditionalProfit,o.SaleCity_Id AS SaleCityId,ni.SaleProduct_Id
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id AND o.SaleCity_Id=@SaleCityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+    AND (@SaleMode IS NULL OR (@SaleMode = 99 AND ni.SaleMode in (1,3,9)) OR (@SaleMode=ni.SaleMode))
+    INNER JOIN dbo.Product p  WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo [pi] WITH(NOLOCK) ON [pi].Id = p.Info_Id
+    AND (@ProductName IS NULL OR [pi].Desc_ProductName LIKE '%'+@ProductName+'%')
+    AND (@Category IS NULL OR pi.Desc_OldCategory LIKE '%'+@Category+'%')) t GROUP BY t.Product_Id,t.SaleCityId) t1
+  </QuerySumMergeSaleProfitByMonth>
+  <QueryPagedPackageGrossProfit>
+    SELECT c.Id,c.Name,t1.City_Id,t1.Category,ISNULL(t1.PackageNum,0) PackageNum,ISNULL(t1.TotalAmount,0) TotalAmount,ISNULL(t1.DiscountAmount,0) DiscountAmount,ISNULL(t1.CostAmount,0) CostAmount FROM ((SELECT Id,Name FROM dbo.Orgs WITH(NOLOCK) WHERE Id=@CityId) c LEFT JOIN
+    (SELECT t.City_Id,t.Desc_OldCategory Category,ISNULL(SUM(PackageNum),0) PackageNum,ISNULL(SUM(t.TotalAmount),0) TotalAmount
+    ,ISNULL(SUM(t.DiscountAmount),0) DiscountAmount,ISNULL(SUM(t.CostAmount),0) CostAmount
+    FROM (
+    SELECT
+    ni.Num *1.0 * info.DistributionPercent/info.Desc_PackageQuantity PackageNum,ni.AdValoremAmount TotalAmount,ni.DiscountAmount DiscountAmount,ni.CostPrice * ni.Num CostAmount,o.City_Id,Desc_OldCategory FROM dbo.NoteItems ni WITH(NOLOCK)
+    inner JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id and o.City_id=@CityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.Order_Id IS NOT NULL
+    AND o.IsDeleted =0 AND o.IsHidden = 0 AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON info.Id = p.Info_Id
+    AND ((@ProductInfoType=0 AND ni.SaleMode in (6,8)) or (@ProductInfoType>0 and info.Desc_OwnProductType =@ProductInfoType and ni.SaleMode in (1,3,9)))
+    UNION ALL
+    SELECT
+    0-ni.Num *1.0 * info.DistributionPercent/info.Desc_PackageQuantity PackageNum,0-ni.AdValoremAmount TotalAmount,0-ni.DiscountAmount DiscountAmount,0-ni.CostPrice * ni.Num CostAmount,o.City_Id,Desc_OldCategory
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id and o.City_Id=@CityId
+    AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime AND
+    o.AuditState=9   --统计已核算单据
+    AND o.ReturnOrder_Id IS NOT NULL
+    AND o.IsDeleted =0
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON ni.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON info.Id = p.Info_Id
+    AND ((@ProductInfoType=0 AND ni.SaleMode in (6,8)) or (@ProductInfoType>0 and info.Desc_OwnProductType =@ProductInfoType and ni.SaleMode in (1,3,9)))
+    ) t GROUP BY t.City_Id,t.Desc_OldCategory) t1 ON t1.City_Id=c.Id)
+  </QueryPagedPackageGrossProfit>
+  <QueryPagedMergePackageGrossProfit>
+    SELECT c.Id,c.Name,t.SaleCity_Id,t.Category,ISNULL(t.PackageNum,0) PackageNum,ISNULL(t.TotalAmount,0) TotalAmount,ISNULL(t.DiscountAmount,0) DiscountAmount,ISNULL(t.CostAmount,0) CostAmount
+    FROM  ((SELECT Id,Name FROM dbo.Orgs WITH(NOLOCK) WHERE Id=@SaleCityId) c
+    LEFT JOIN (
+    SELECT t.SaleCity_Id,t.Desc_OldCategory Category,ISNULL(SUM(PackageNum),0) PackageNum,ISNULL(SUM(t.TotalAmount),0) TotalAmount,ISNULL(SUM(t.DiscountAmount),0) DiscountAmount,ISNULL(SUM(t.CostAmount),0) CostAmount
+    FROM (
+    SELECT
+    ni.Num *1.0 * info.DistributionPercent/info.Desc_PackageQuantity PackageNum,ni.AdValoremAmount TotalAmount,ni.DiscountAmount DiscountAmount,ni.CostPrice * ni.Num CostAmount,o.SaleCity_Id,info.Desc_OldCategory
+    FROM dbo.NoteItems ni WITH(NOLOCK)
+    inner JOIN dbo.OrderOutStockNote o WITH(NOLOCK) ON ni.OrderOutStockNote_Id = o.Id And o.SaleCity_Id=@SaleCityId
+    AND o.AuditState=9   --统计已核算单据
+    AND o.Order_Id IS NOT NULL
+    AND o.IsDeleted =0 AND o.IsHidden = 0 AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON info.Id = p.Info_Id
+    AND ((@ProductInfoType=0 AND ni.SaleMode in (6,8)) or (@ProductInfoType>0 and info.Desc_OwnProductType =@ProductInfoType and ni.SaleMode in (1,3,9)))
+    UNION ALL
+    SELECT 0-ni.Num *1.0 * info.DistributionPercent/info.Desc_PackageQuantity PackageNum,0-ni.AdValoremAmount TotalAmount,0-ni.DiscountAmount DiscountAmount,0-ni.CostPrice * ni.Num CostAmount,o.SaleCity_Id,info.Desc_OldCategory
+    FROM dbo.ReturnNoteItems ni WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrderInStockNotes o WITH(NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id And o.SaleCity_Id=@SaleCityId
+    AND o.BusinessTime BETWEEN @BeginOrderTime AND @EndOrderTime AND
+    o.AuditState=9   --统计已核算单据
+    AND o.ReturnOrder_Id IS NOT NULL
+    AND o.IsDeleted =0
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON ni.SaleProduct_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON info.Id = p.Info_Id
+    AND ((@ProductInfoType=0 AND ni.SaleMode in (6,8)) or (@ProductInfoType>0 and info.Desc_OwnProductType =@ProductInfoType and ni.SaleMode in (1,3,9)))
+    ) t GROUP BY t.SaleCity_Id,t.Desc_OldCategory) t ON t.SaleCity_Id=c.Id)
+  </QueryPagedMergePackageGrossProfit>
+</SqlResource>

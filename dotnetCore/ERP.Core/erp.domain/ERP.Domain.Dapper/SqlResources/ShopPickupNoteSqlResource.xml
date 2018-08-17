@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<ShopPickupNoteSqlResource>
+  <Select>SELECT [Id]
+      ,[State]
+      ,[PickupTime]
+      ,[NoteNo]
+      ,[SpecificationsCount]
+      ,[UnitCount]
+      ,[CreateUserId]
+      ,[CreateUserMobileNo]
+      ,[CreateUserName]
+      ,[Remark]
+      ,[CreateTime]
+      ,[LastUpdateTime]
+      ,[City_Id]
+      ,[Shop_Id]
+      ,[StoreHouse_Id]
+  FROM [dbo].[ShopPickupNotes] WITH(NOLOCK)</Select>
+  <SelectItem>
+    SELECT [Id]
+      ,[Unit]
+      ,[Count]
+      ,[PickupCount]
+      ,[CreateTime]
+      ,[LastUpdateTime]
+      ,[Product_Id]
+      ,[ShopPickupNote_Id]
+  FROM [dbo].[ShopPickupNoteItems] WITH(NOLOCK)
+  </SelectItem>
+  <Insert>
+INSERT INTO [dbo].[ShopPickupNotes]
+           ([Id]
+           ,[State]
+           ,[PickupTime]
+           ,[NoteNo]
+           ,[SpecificationsCount]
+           ,[UnitCount]
+           ,[CreateUserId]
+           ,[CreateUserMobileNo]
+           ,[CreateUserName]
+           ,[Remark]
+           ,[CreateTime]
+           ,[LastUpdateTime]
+           ,[City_Id]
+           ,[Shop_Id]
+           ,[StoreHouse_Id])
+     VALUES
+           (@Id
+           ,@State
+           ,@PickupTime
+           ,@NoteNo
+           ,@SpecificationsCount
+           ,@UnitCount
+           ,@CreateUserId
+           ,@CreateUserMobileNo
+           ,@CreateUserName
+           ,@Remark
+           ,GETDATE()
+           ,GETDATE()
+           ,@City_Id
+           ,@Shop_Id
+           ,@StoreHouse_Id)</Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[ShopPickupNoteItems]
+           ([Id]
+           ,[Unit]
+           ,[Count]
+           ,[PickupCount]
+           ,[CreateTime]
+           ,[LastUpdateTime]
+           ,[Product_Id]
+           ,[ShopPickupNote_Id])
+     VALUES
+           (@Id
+           ,@Unit
+           ,@Count
+           ,@PickupCount
+           ,GETDATE()
+           ,GETDATE()
+           ,@Product_Id
+           ,@ShopPickupNote_Id)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[ShopPickupNotes]
+   SET [State] = @State
+      ,[PickupTime] = @PickupTime
+      ,[NoteNo] = @NoteNo
+      ,[SpecificationsCount] = @SpecificationsCount
+      ,[UnitCount] = @UnitCount
+      ,[CreateUserId] = @CreateUserId
+      ,[CreateUserMobileNo] = @CreateUserMobileNo
+      ,[CreateUserName] = @CreateUserName
+      ,[Remark] = @Remark
+      ,[LastUpdateTime] = GETDATE()
+      ,[City_Id] = @City_Id
+      ,[Shop_Id] = @Shop_Id
+      ,[StoreHouse_Id] = @StoreHouse_Id
+ WHERE [Id] = @Id
+</Update>
+  <UpdateItem>
+    UPDATE [dbo].[ShopPickupNoteItems]
+   SET [Unit] = @Unit
+      ,[Count] = @Count
+      ,[PickupCount] = @PickupCount
+      ,[LastUpdateTime] = GETDATE()
+      ,[Product_Id] = @Product_Id
+      ,[ShopPickupNote_Id] = @ShopPickupNote_Id
+ WHERE [Id] = @Id
+  </UpdateItem>
+  <Delete>
+    DELETE FROM [dbo].[ShopPickupNotes]
+      WHERE Id =@Id
+  </Delete>
+  <DeleteItem>
+    DELETE FROM [dbo].[ShopPickupNoteItems]
+      WHERE Id =@Id
+  </DeleteItem>
+</ShopPickupNoteSqlResource>

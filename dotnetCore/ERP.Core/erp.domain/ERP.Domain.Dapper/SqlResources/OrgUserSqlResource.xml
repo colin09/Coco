@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[UserName],[Password],[MobileNO],[TrueName],[LastLoginTime]
+    ,[Enable],[CreateTime],[LastUpdateTime],[City_Id],[NewId]
+    FROM [dbo].[OrgUser] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[OrgUser]
+    ([Id],[UserName],[Password],[MobileNO],[TrueName],[LastLoginTime],[Enable]
+    ,[CreateTime],[LastUpdateTime],[City_Id],[NewId])
+    VALUES (@Id,@UserName,@Password,@MobileNO,@TrueName,@LastLoginTime,
+    @Enable,GETDATE(),GETDATE(),@City_Id,@NewId)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[OrgUser] SET [UserName] = @UserName,[Password] = @Password,[MobileNO] = @MobileNO,[TrueName] = @TrueName
+    ,[LastLoginTime] = GETDATE(),[Enable] = @Enable,[LastUpdateTime] =GETDATE()
+    ,[City_Id] = @City_Id WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.OrgUser WHERE Id=@Id
+  </Delete>
+  <DeleteOrgUserAuthByOrgUserId>
+    DELETE FROM dbo.OrgUserAuths WHERE OrgUser_Id=@Id
+  </DeleteOrgUserAuthByOrgUserId>
+  <GetAllOrgUserAuthByOrgUserId>
+    SELECT [Id],[AuthType],[OrgId],[OrgType],[OrgUser_Id]
+    FROM [dbo].[OrgUserAuths]  WITH(NOLOCK) where OrgUser_Id=@OrgUserId
+  </GetAllOrgUserAuthByOrgUserId>
+  <InsertOrgUserAuth>
+    INSERT INTO [dbo].[OrgUserAuths] ([Id],[AuthType],[OrgId],[OrgType],[CreateTime],[LastUpdateTime],[OrgUser_Id])
+     VALUES (@Id,@AuthType,@OrgId,@OrgType,GETDATE(),GETDATE(),@OrgUser_Id)
+  </InsertOrgUserAuth>
+  <DeleteOrgUserAuth>
+    DELETE FROM dbo.OrgUserAuths WHERE Id=@Id
+  </DeleteOrgUserAuth>
+  <Login>
+    SELECT top 1 [Id],[UserName],[Password],[MobileNO],[TrueName],[LastLoginTime]
+    ,[Enable],[CreateTime],[LastUpdateTime],[City_Id],[NewId]
+    FROM [dbo].[OrgUser]  WITH(NOLOCK) WHERE username=@MobileNo or MobileNo=@MobileNo order by createTime
+  </Login>
+  <QueryUserByMobileNo>
+    SELECT [Id],[UserName],[Password],[MobileNO],[TrueName],[LastLoginTime]
+    ,[Enable],[CreateTime],[LastUpdateTime],[City_Id],[NewId]
+    FROM [dbo].[OrgUser]  WITH(NOLOCK) WHERE MobileNO=@MobileNo
+  </QueryUserByMobileNo>
+  <QueryUserAuthOrg>
+    SELECT
+    [OrgUser].[Id]
+    ,[OrgUser].[NewId]
+    ,[OrgUserAuths].[AuthType]
+    ,[OrgUserAuths].[OrgId]
+    From [dbo].[OrgUser] WITH(NOLOCK)
+    INNER JOIN [dbo].[OrgUserAuths] WITH(NOLOCK) ON [OrgUserAuths].[OrgUser_Id] = [OrgUser].[Id]
+  </QueryUserAuthOrg>
+</SqlResource>

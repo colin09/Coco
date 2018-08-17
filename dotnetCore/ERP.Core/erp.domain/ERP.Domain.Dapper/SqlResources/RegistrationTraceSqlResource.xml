@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[RegistrationType],[BusinessTime],[Address],[ContactName],[ContactUserName],[ContactMobileNo],[Remark],[CreateTime],[LastUpdateTime]
+    ,[Provider_Id],[City_Id],[IsNewProvider],[PurchaseUserId],[PurchaseName],[PurchaseMobileNo]  FROM [dbo].[RegistrationTraces] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [RegistrationTraces].[Id],[RegistrationType],[BusinessTime],[Address],[ContactName],[ContactUserName],[ContactMobileNo],[RegistrationTraces].[Remark]
+    ,[RegistrationTraces].[CreateTime],[RegistrationTraces].[LastUpdateTime],[Provider_Id],[RegistrationTraces].[City_Id],[IsNewProvider],[PurchaseUserId],[PurchaseName],[PurchaseMobileNo]
+    ,[Orgs].[Name],[Providers].[Name]
+    FROM [dbo].[RegistrationTraces] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = RegistrationTraces.City_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id=RegistrationTraces.Provider_Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT dbo.RegistrationTraces(Id,RegistrationType,BusinessTime,Address,ContactName,ContactUserName,ContactMobileNo,Remark,CreateTime,LastUpdateTime,Provider_Id,City_Id,IsNewProvider,PurchaseUserId,PurchaseName,PurchaseMobileNo)
+    VALUES  (@Id,@RegistrationType,@BusinessTime,@Address,@ContactName,@ContactUserName,@ContactMobileNo,@Remark,GETDATE(),GETDATE(),@Provider_Id,@City_Id,@IsNewProvider,@PurchaseUserId,@PurchaseName,@PurchaseMobileNo)
+  </Insert>
+  <Delete>
+    DELETE FROM dbo.[RegistrationTraces] WHERE Id=@Id
+  </Delete>
+</SqlResource>

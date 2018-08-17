@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<RaffleOutTicketSqlResource>
+    <Select>
+    SELECT [Id]
+      ,[TicketNo]
+      ,[OrderNo]
+      ,[OutCount]
+      ,[OutAmount]
+      ,[InCount]
+      ,[ExpireTime]
+      ,[State]
+      ,[IsParticularProduct]
+      ,[CreateTime]
+      ,[LastUpdateTime]
+      ,[City_Id]
+      ,[Product_Id]
+      ,[StoreHouse_Id]
+  FROM [dbo].[RaffleOutTickets] WITH(NOLOCK)
+  </Select>
+  <Insert>
+   INSERT INTO [dbo].[RaffleOutTickets]
+           ([Id]
+           ,[TicketNo]
+           ,[OrderNo]
+           ,[OutCount]
+           ,[OutAmount]
+           ,[InCount]
+           ,[ExpireTime]
+           ,[State]
+           ,[IsParticularProduct]
+           ,[CreateTime]
+           ,[LastUpdateTime]
+           ,[City_Id]
+           ,[Product_Id]
+           ,[StoreHouse_Id])
+     VALUES
+           (@Id
+           ,@TicketNo
+           ,@OrderNo
+           ,@OutCount
+           ,@OutAmount
+           ,@InCount
+           ,@ExpireTime
+           ,@STATE
+           ,@IsParticularProduct
+           ,@CreateTime
+           ,@LastUpdateTime
+           ,@City_Id
+           ,@Product_Id
+           ,@StoreHouse_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[RaffleOutTickets]
+    SET [TicketNo] = @TicketNo
+      ,[OrderNo] = @OrderNo
+      ,[OutCount] = @OutCount
+      ,[OutAmount] = @OutAmount
+      ,[InCount] = @InCount
+      ,[ExpireTime] = @ExpireTime
+      ,[State] = @STATE
+      ,[IsParticularProduct] = @IsParticularProduct
+      ,[LastUpdateTime] = GETDATE()
+      ,[City_Id] = @City_Id
+      ,[Product_Id] = @Product_Id
+      ,[StoreHouse_Id] = @StoreHouse_Id
+    WHERE [Id]=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.RaffleOutTickets WHERE Id=@Id
+  </Delete>
+
+
+  <SelectList>
+    SELECT [RaffleOutTickets].[Id]
+    ,[OrderNo]
+    ,[TicketNo]
+    ,[OutCount]
+    ,[OutAmount]
+    ,[InCount]
+    ,[ExpireTime]
+    ,[IsParticularProduct]
+    ,[RaffleOutTickets].[State]
+    ,[RaffleOutTickets].[CreateTime]
+    ,[Product_Id]
+    ,[StoreHouse_Id]
+    ,[Orgs].[Id]
+    ,[Orgs].[NewId]
+    ,[Product_Id] Id
+    ,[ProductInfo].[Desc_Specifications] Specifications
+    ,[ProductInfo].[Desc_PackageUnit] PackageUnit
+    ,[ProductInfo].[Desc_PackageQuantity] PackageQuantity
+    FROM [dbo].[RaffleOutTickets] WITH(NOLOCK)
+    INNER JOIN [dbo].[Product] WITH(NOLOCK) ON [RaffleOutTickets].[Product_Id] = [Product].[Id]
+    INNER JOIN [dbo].[ProductInfo] WITH(NOLOCK) ON [ProductInfo].[Id] = [Product].[Info_Id]
+    INNER JOIN [dbo].[Orgs] WITH(NOLOCK) ON [Orgs].[Id] = [RaffleOutTickets].[StoreHouse_Id]
+  </SelectList>
+  <SelectWaitForIn>
+    SELECT  ID,TicketNo, OrderNo, OutCount, OutAmount, InCount, ExpireTime, State, IsParticularProduct, CreateTime, LastUpdateTime, City_Id, Product_Id, StoreHouse_Id
+    FROM dbo.RaffleOutTickets WITH(NOLOCK)
+    WHERE Product_Id = @productId AND StoreHouse_Id =@storeHouseId
+    AND OutCount > 0  AND State IN (0,1) ORDER BY CreateTime
+  </SelectWaitForIn>
+</RaffleOutTicketSqlResource>

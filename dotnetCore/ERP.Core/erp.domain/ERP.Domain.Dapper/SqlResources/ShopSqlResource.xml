@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT Id,Name,ShopName,State,LeadUserName,LeadUserMobileNo,CreateTime,LastUpdateTime,City_Id,Address_Province Province,Address_City City,Address_County County,Address_DetailAddress DetailAddress FROM dbo.Shops WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO dbo.Shops
+    (Id,Name,ShopName,Address_Province,Address_City,Address_County,Address_DetailAddress,State,LeadUserName,LeadUserMobileNo,CreateTime,LastUpdateTime,City_Id)
+    VALUES  (@Id,@Name,@ShopName,@Address_Province,@Address_City,@Address_County,@Address_DetailAddress,@State,@LeadUserName,@LeadUserMobileNo,GETDATE(),GETDATE(),@City_Id)
+  </Insert>
+  <Update>
+    UPDATE dbo.Shops SET Name=@Name,ShopName=@ShopName,Address_Province=@Address_Province,Address_City=@Address_City,Address_County=@Address_County,Address_DetailAddress=@Address_DetailAddress,State=@State,LeadUserName=@LeadUserName,LeadUserMobileNo=@LeadUserMobileNo,LastUpdateTime=GETDATE(),City_Id=@City_Id WHERE Id=@Id
+  </Update>
+</SqlResource>

@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[Count],[OutCount],[AuditState],[AuditTime],[Remark],[CreateTime],[LastUpdateTime],[City_Id],[Product_Id]
+    ,[StoreHouse_Id],[DisposedInNoteInfo_Id],[NoteNo],[BusinessTime]
+    FROM [dbo].[DisposedInNotes] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [DisposedInNotes].[Id],[DisposedInNotes].[Count],[DisposedInNotes].[OutCount],[DisposedInNotes].[AuditState],[DisposedInNotes].[AuditTime],
+    [DisposedInNotes].[Remark],[DisposedInNotes].[CreateTime],[DisposedInNotes].[LastUpdateTime],[DisposedInNotes].[City_Id],[DisposedInNotes].[Product_Id]
+    ,[DisposedInNotes].[StoreHouse_Id],[DisposedInNotes].[DisposedInNoteInfo_Id],[DisposedInNotes].[NoteNo],[DisposedInNotes].[BusinessTime],
+    [Product].ProductType,[Product].Id,[Product].NewId,ProductInfo.MonthOfShelfLife,ProductInfo.Id,ProductInfo.Desc_ProductName ProductName,ProductInfo.Desc_OldCategory OldCategory,ProductInfo.Desc_Specifications Specifications,
+    ProductInfo.Desc_PackageUnit PackageUnit,ProductInfo.Desc_PackageQuantity PackageQuantity
+    FROM [dbo].[DisposedInNotes] WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = DisposedInNotes.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectIncludeAll>
+  <SelectSummary>
+    SELECT DisposedInNoteSummary.City_Id,DisposedInNoteSummary.StoreHouse_Id,DisposedInNoteSummary.Product_Id,DisposedInNoteSummary.StockCount,
+    ProductInfo.Desc_ProductName ProductName,ProductInfo.Desc_Specifications Specifications,
+    ProductInfo.Desc_PackageUnit Unit,ProductInfo.Desc_PackageQuantity PackageQuantity
+    FROM (
+    SELECT City_Id,StoreHouse_Id,Product_Id,SUM(Count - OutCount) StockCount  FROM dbo.DisposedInNotes WITH(NOLOCK)
+    WHERE AuditState = 2--审核通过
+    GROUP BY City_Id,StoreHouse_Id,Product_Id
+    ) DisposedInNoteSummary
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = DisposedInNoteSummary.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectSummary>
+  <Insert>
+    INSERT INTO [dbo].[DisposedInNotes]
+    ([Id],[Count],[OutCount],[AuditState],[AuditTime],[Remark],[CreateTime],[LastUpdateTime],[City_Id],[Product_Id]
+    ,[StoreHouse_Id],[DisposedInNoteInfo_Id],[NoteNo],[BusinessTime])
+    VALUES
+    (@Id,@Count,@OutCount,@AuditState,@AuditTime,@Remark,GETDATE(),GETDATE(),@City_Id,@Product_Id,@StoreHouse_Id,@DisposedInNoteInfo_Id
+    ,@NoteNo,@BusinessTime)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[DisposedInNotes]
+    SET [Count] = @Count
+    ,[OutCount] = @OutCount
+    ,[AuditState] = @AuditState
+    ,[AuditTime] = @AuditTime
+    ,[Remark] = @Remark
+    ,[LastUpdateTime] = GETDATE()
+    ,[BusinessTime] = @BusinessTime
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.DisposedInNotes WHERE Id=@Id
+  </Delete>
+  <SelectForSCM>
+    Select di.id noteId,di.NoteNo,di.AuditState,c.Id cityId,c.[NewId] cityNewId,c.[Name] cityName,s.Id storeHouseId,
+    s.[NewId] storeHouseNewId,s.[Name] storeHouseName,di.Product_Id productId,p.newid productSkuId,pf.Desc_ProductName productName,pf.Desc_PackageQuantity packageQuantity,
+    pf.Desc_Specifications specifications,pf.Desc_PackageUnit unit,di.[Count],di.[Count]-di.OutCount stockCount,di.Remark,di.BusinessTime
+    from DisposedInNotes di WITH(NOLOCK)
+    LEFT join Orgs c WITH(NOLOCK) on di.City_Id=c.Id
+    LEFT join Orgs s WITH(NOLOCK) on di.StoreHouse_Id=s.Id
+    inner join Product p WITH(NOLOCK) on p.id=di.Product_Id
+    inner join ProductInfo pf WITH(NOLOCK) on pf.id=p.Info_Id
+  </SelectForSCM>
+</SqlResource>

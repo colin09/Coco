@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Amoeba Simple Info";
+}
+
+@using ERP.Domain.Contract.AmoebaModule.AmoebaReportModule
+@model List<AmoebaReportSimpleVO>
+
+<table>
+    
+@if (Model != null && Model != null && Model.Count() > 0)
+{
+    foreach (var m in Model)
+    {
+        <tr role="row" class="odd">
+            <td class="sorting_1">@m.DataMonth</td>
+            <td>@m.CityName</td>
+            <td>@m.Area_jinglirun</td>
+            <td>@m.Area_Feixiaobi</td>
+            <td>@m.Area_Feijianbi</td>
+            <td>@m.Area_Zhankuanlixi</td>
+            <td>@m.Area_Chuzhankuan_jinglirun</td>
+            <td>@m.Area_Zhouzhuanlv</td>
+            <td>@m.Area_Jingxianjinliu</td>
+            <td>@m.Area_WaibuZhankuanlv</td>
+        </tr>
+    }
+}
+</table>

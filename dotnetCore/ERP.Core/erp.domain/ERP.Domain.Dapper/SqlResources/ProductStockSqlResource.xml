@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[StockNum],[StockUnit],[CostPrice],[PriceUnit],[CreateTime],[LastUpdateTime],[Product_Id]
+    ,[StoreHouse_Id],[PrizeNoteCount],[PrizeNoteProductNum],[PrizeNoteAmount],[AgencySaleCount],[DisposedOutCount],[City_Id]
+    FROM [dbo].[ProductStocks] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeProduct>
+    SELECT [ProductStocks].[Id],[ProductStocks].[StockNum],[ProductStocks].[StockUnit],[ProductStocks].[CostPrice],
+    [ProductStocks].[PriceUnit],[ProductStocks].[CreateTime],[ProductStocks].[LastUpdateTime],[ProductStocks].[Product_Id]
+    ,[ProductStocks].[StoreHouse_Id],[ProductStocks].[PrizeNoteCount],[ProductStocks].[PrizeNoteProductNum],
+    [ProductStocks].[PrizeNoteAmount],[ProductStocks].[AgencySaleCount],[ProductStocks].[DisposedOutCount],[ProductStocks].[City_Id],
+    [Product].ProductType,[Product].ProductName,[Product].State,
+    ProductInfo.Id,Productinfo.Desc_OldCategory OldCategory,productinfo.Desc_PackageQuantity PackageQuantity,productinfo.Desc_Specifications Specifications,productinfo.Desc_PackageUnit PackageUnit
+    FROM [dbo].[ProductStocks] WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = ProductStocks.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectIncludeProduct>
+  <SelectIncludeProductAndStoreHouse>
+    SELECT [ProductStocks].[Id],[ProductStocks].[StockNum],[ProductStocks].[StockUnit],[ProductStocks].[CostPrice],
+    [ProductStocks].[PriceUnit],[ProductStocks].[CreateTime],[ProductStocks].[LastUpdateTime],[ProductStocks].[Product_Id]
+    ,[ProductStocks].[StoreHouse_Id],[ProductStocks].[PrizeNoteCount],[ProductStocks].[PrizeNoteProductNum],
+    [ProductStocks].[PrizeNoteAmount],[ProductStocks].[AgencySaleCount],[ProductStocks].[DisposedOutCount],[ProductStocks].[City_Id],
+    [Product].ProductType,[Product].ProductName,[Product].State,
+    ProductInfo.Id,Productinfo.Desc_OldCategory OldCategory,productinfo.Desc_PackageQuantity PackageQuantity,productinfo.Desc_Specifications Specifications,productinfo.Desc_PackageUnit PackageUnit,
+    StoreHouse.Name
+    FROM [dbo].[ProductStocks] WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = ProductStocks.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id = ProductStocks.StoreHouse_Id
+  </SelectIncludeProductAndStoreHouse>
+  <SelectIncludeProductAndCityAndStoreHouseAndShop>
+    SELECT [ProductStocks].[Id],[ProductStocks].[StockNum],[ProductStocks].[StockUnit],[ProductStocks].[CostPrice],
+    [ProductStocks].[PriceUnit],[ProductStocks].[CreateTime],[ProductStocks].[LastUpdateTime],[ProductStocks].[Product_Id]
+    ,[ProductStocks].[StoreHouse_Id],[ProductStocks].[PrizeNoteCount],[ProductStocks].[PrizeNoteProductNum],
+    [ProductStocks].[PrizeNoteAmount],[ProductStocks].[AgencySaleCount],[ProductStocks].[DisposedOutCount],[ProductStocks].[City_Id],
+    [Product].ProductType,[Product].ProductName,[Product].State,[Product].NewId,
+    ProductInfo.Id,Productinfo.Desc_OldCategory OldCategory,productinfo.Desc_PackageQuantity PackageQuantity,productinfo.Desc_Specifications Specifications,
+    productinfo.Desc_PackageUnit PackageUnit,ProductInfo.Desc_ProductName ProductName,
+    City.Name,City.NewId,StoreHouse.Name,StoreHouse.NewId,Shops.Name
+    FROM [dbo].[ProductStocks] WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = ProductStocks.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id = ProductStocks.StoreHouse_Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=ProductStocks.City_Id
+    LEFT JOIN dbo.Shops WITH(NOLOCK) ON Shops.Id = Product.Shop_Id
+  </SelectIncludeProductAndCityAndStoreHouseAndShop>
+  <Insert>
+    INSERT INTO [dbo].[ProductStocks]
+    ([Id],[StockNum],[StockUnit],[CostPrice],[PriceUnit],[CreateTime],[LastUpdateTime]
+    ,[Product_Id],[StoreHouse_Id],[PrizeNoteCount],[PrizeNoteProductNum],[PrizeNoteAmount],[AgencySaleCount],[DisposedOutCount],[City_Id])
+    VALUES
+    (@Id,@StockNum,@StockUnit,@CostPrice,@PriceUnit,GETDATE(),GETDATE(),@Product_Id,@StoreHouse_Id,@PrizeNoteCount
+    ,@PrizeNoteProductNum,@PrizeNoteAmount,@AgencySaleCount,@DisposedOutCount,@City_Id)
+  </Insert>
+  <ChangeStock>
+    UPDATE dbo.ProductStocks SET StockNum = StockNum+@ChangeCount
+    ,LastUpdateTime=GETDATE() WHERE Id =@Id
+  </ChangeStock>
+  <ChangePrizeNoteInfo>
+    DECLARE @changePrizeNoteCount INT
+    IF @ChangeCount>0
+    BEGIN
+    SET @changePrizeNoteCount = 1
+    END
+    ELSE
+    BEGIN
+    SET @changePrizeNoteCount = -1
+    END
+
+    UPDATE dbo.ProductStocks SET  StockNum=StockNum-@ChangeCount, PrizeNoteProductNum = PrizeNoteProductNum+@ChangeCount,PrizeNoteCount=PrizeNoteCount+@changePrizeNoteCount,
+    PrizeNoteAmount = PrizeNoteAmount+@ChangeCount*@Price ,LastUpdateTime=GETDATE() WHERE Id =@Id
+  </ChangePrizeNoteInfo>
+  <ChangeAgencySaleInfo>
+    UPDATE dbo.ProductStocks SET AgencySaleCount=AgencySaleCount+@ChangeCount
+    ,StockNum = StockNum-@ChangeCount,LastUpdateTime=GETDATE() WHERE Id =@Id
+  </ChangeAgencySaleInfo>
+  <ChangeDisposedInfo>
+    UPDATE dbo.ProductStocks SET DisposedOutCount=DisposedOutCount+@ChangeCount
+    ,StockNum = StockNum-@ChangeCount,LastUpdateTime=GETDATE() WHERE Id =@Id
+  </ChangeDisposedInfo>
+  <UpdateCostPrice>
+    UPDATE dbo.ProductStocks SET CostPrice=@CostPrice,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </UpdateCostPrice>
+  <GetERPProductStore>
+    DECLARE @ERPCityId NVARCHAR(64)
+
+    SELECT TOP 1 @ERPCityId = Id FROM dbo.Orgs WHERE NewId= @CityId
+
+    select  p.newid as productSkuId
+    ,shOrg.newid warehouseId
+    ,ISNULL( ps.StockNum,0) as erpDisplayCount
+    ,ISNULL(ps.DisposedOutCount,0) DisposedOutCount
+    ,(select ISNULL(SUM((CASE WHEN i.SaleUnit=i.PackageUnit THEN i.Count ELSE i.count * i.PackageQuantity end)),0) from dbo.OrderItem i WITH(NOLOCK)
+    INNER JOIN dbo.orders o WITH(NOLOCK)  ON i.order_id=o.id
+    WHERE o.City_Id=@ERPCityId AND o.StoreHouse_Id=ps.StoreHouse_Id AND i.Product_Id = p.id AND o.HasCreateNote=0) AS UnCreateNoteSaleCount,
+
+    (select ISNULL(SUM((CASE WHEN ii.SaleUnit=ii.PackageUnit THEN i.ReturnCount ELSE i.ReturnCount * ii.PackageQuantity end)),0)
+    FROM dbo.ReturnOrderItem i WITH(NOLOCK)
+    INNER JOIN dbo.ReturnOrders o WITH(NOLOCK)  ON i.ReturnOrder_Id=o.id
+    INNER JOIN dbo.orders oo WITH(NOLOCK)  ON o.Order_Id=oo.Id
+    INNER JOIN dbo.OrderItem ii WITH(NOLOCK)  ON oo.id=ii.Order_Id AND i.OrderItem_Id = ii.Id
+    WHERE o.City_Id=@ERPCityId AND oo.StoreHouse_Id=ps.StoreHouse_Id AND ii.Product_Id = p.id AND o.HasCreateReturnNote=0) AS UnCreateNoteSaleReturnCount,
+
+    (select isnull(sum(Num),0) from NoteItems ni  WITH(NOLOCK)
+    inner join OrderOutStockNote n WITH(NOLOCK)  on ni.OrderOutStockNote_Id=n.id
+    WHERE n.City_Id=@ERPCityId AND n.StoreHouse_Id=ps.StoreHouse_Id AND Product_Id=p.id  and n.IsDeleted = 0  and AuditState&lt;&gt;9) as saleCount,
+
+    (select isnull(sum(Num),0) from ReturnNoteItems ni  WITH(NOLOCK)
+    left join ReturnOrderInStockNotes n  WITH(NOLOCK) on ni.ReturnOrderInStockNote_Id=n.id
+    WHERE  n.City_Id=@ERPCityId AND n.StoreHouse_Id=ps.StoreHouse_Id AND product_id=p.id and n.IsDeleted=0 and AuditState&lt;&gt;9) as saleReturnCount,
+
+    (select isnull(sum(Num),0) from InStockItems ni  WITH(NOLOCK)
+    LEFT join PurchaseInStockNotes n WITH(NOLOCK)  on ni.Note_Id=n.id
+    WHERE  n.City_Id=@ERPCityId AND n.StoreHouse_Id=ps.StoreHouse_Id AND Product_Id=p.id  and n.IsNotSyncStock=0  and n.IsDeleted = 0 and ((n.NeedPurchaseAudit=1 and n.AuditState=2 )or (n.NeedPurchaseAudit=0 and AuditState&lt;&gt;9))) as buyCount,
+
+    (select isnull(sum(Num),0) from OutStockItems ni  WITH(NOLOCK)
+    LEFT join PurchaseOutStockNotes n WITH(NOLOCK)  on ni.Note_Id=n.id
+    WHERE  n.City_Id=@ERPCityId AND n.StoreHouse_Id=ps.StoreHouse_Id AND Product_Id=p.id  and n.IsDeleted = 0 and AuditState&lt;&gt;9) as buyReturnCount
+    ,
+    (select isnull(sum(Num),0) from BaseNotes  n WITH(NOLOCK)
+    where Product_Id=p.id and n.StoreHouse_Id=ps.StoreHouse_Id  and n.IsDeleted = 0 and AuditState&lt;&gt;9
+    and OperationType &lt;&gt; 4 AND n.NoteType =1) as otherOutCount
+    ,
+    (select isnull(sum(Num),0) from BaseNotes  n WITH(NOLOCK)
+    where Product_Id=p.id and n.StoreHouse_Id=ps.StoreHouse_Id  and n.IsDeleted = 0 and AuditState&lt;&gt;9
+    and OperationType &lt;&gt; 4  AND n.NoteType =0) as otherInCount
+    ,   (
+    SELECT ISNULL(SUM(i.Count),0) FROM dbo.ProductAllocationItems i WITH(NOLOCK)
+    INNER JOIN dbo.ProductAllocations n  WITH(NOLOCK) ON i.ProductAllocation_Id=n.Id AND n.IsDeleted=0
+    WHERE n.From_Id = ps.StoreHouse_Id AND i.Product_Id = p.Id AND  n.AuditState&lt;&gt;9
+    ) storeHouseAllocationOutCount,--仓库物料调出
+    (
+    SELECT ISNULL(SUM(i.Count),0) FROM dbo.ProductAllocationItems i WITH(NOLOCK)
+    INNER JOIN dbo.ProductAllocations n WITH(NOLOCK)  ON i.ProductAllocation_Id=n.Id AND n.IsDeleted=0
+    WHERE n.To_Id = ps.StoreHouse_Id AND i.Product_Id = p.Id AND  n.AuditState&lt;&gt; 9
+    ) storeHouseAllocationInCount,--仓库物料调入
+    info.Desc_PackageQuantity packageQuantity
+    from Product p WITH(NOLOCK)
+    inner join productinfo info WITH(NOLOCK)  on p.info_id = info.id AND p.City_Id=@ERPCityId AND p.NewId IS NOT NULL
+    AND   p.ProductType NOT IN (7,9)   --非合作商、入驻产品
+    INNER join ProductStocks ps  WITH(NOLOCK) on p.id=ps.Product_Id
+    INNER join StoreHouse sh WITH(NOLOCK)  on ps.StoreHouse_Id=sh.id AND sh.City_Id = p.City_Id
+    inner join Orgs shOrg WITH(NOLOCK) ON sh.id=shOrg.id
+  </GetERPProductStore>
+</SqlResource>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SendoutDailySqlResource>
+  <Select>
+    SELECT Id,DiscountAmount,CreateTime,LastUpdateTime,City_Id,Product_Id,Year,Month,Day,DailyType,PaymentAmount,PayableAmount,IsSupplier FROM dbo.SendoutDailies WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [SendoutDailies].Id,[SendoutDailies].DiscountAmount,[SendoutDailies].CreateTime,[SendoutDailies].LastUpdateTime,[SendoutDailies].City_Id,Product_Id,Year,Month,Day,DailyType,PaymentAmount,PayableAmount,IsSupplier,[City].Id Id,[City].NewId NewId,[City].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_OldCategory OldCategory
+    FROM dbo.SendoutDailies WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City_Id=City.Id
+    LEFT JOIN dbo.Product WITH(NOLOCK) ON Product_Id=[Product].Id
+    LEFT JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id=[Product].Info_Id
+  </SelectIncludeAll>
+  <SelectByMonth>
+    SELECT PaymentAmount,PayableAmount,DiscountAmount,City_Id,Product_Id ProductId,ProductName,Category,Year,Month,DailyType Settlement FROM dbo.View_SendoutDailyByMonth WITH(NOLOCK) WHERE
+    (@Year IS NULL OR @Year='' OR Year=@Year) AND
+    (@Month IS NULL OR @Month='' OR Month=@Month) AND
+    (@Category IS NULL OR @Category='' OR Category=@Category) AND
+    (@CityId IS NULL OR @CityId='' OR City_Id IN @CityId)
+  </SelectByMonth>
+  <SelectPagedByMonth>
+    SELECT PaymentAmount,PayableAmount,DiscountAmount,City_Id,Product_Id ProductId,ProductName,Category,Year,Month,DailyType Settlement FROM dbo.View_SendoutDailyByMonth WITH(NOLOCK)
+  </SelectPagedByMonth>
+  <Insert>
+    INSERT dbo.SendoutDailies
+    (Id,DiscountAmount,City_Id,Product_Id,Year,Month,Day,DailyType,PaymentAmount,PayableAmount,IsSupplier,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@DiscountAmount,@City_Id,@Product_Id,@Year,@Month,@Day,@DailyType,@PaymentAmount,@PayableAmount,@IsSupplier,GETDATE(),GETDATE())
+  </Insert>
+  <Update>
+    UPDATE dbo.SendoutDailies SET DiscountAmount=@DiscountAmount,LastUpdateTime=GETDATE(),PaymentAmount=@PaymentAmount,PayableAmount=@PayableAmount where Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.SendoutDailies WHERE Id=@Id
+  </Delete>
+</SendoutDailySqlResource>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProviderSqlResource>
+  <Select>
+    SELECT [Id],[Name],[Remark],[Enable],[CreateTime],[LastUpdateTime],[City_Id],[AuditState],[AuditRemark],[DepositBank],[BankName],[AccountNumber]
+    ,[BusinessLicense],[ProviderType],[HasCreateYJXAccount],[ProviderProperty],[AgreementBeginTime],[AgreementEndTime],[RequiredAgreement],[DonotTakeupMoney]
+    ,[Head_MobileNO] MobileNO,[Head_Name] Name,[Head_Gender] Gender,[Head_CardNO] CardNo,[Head_PhoneNO] PhoneNO,[Head_Email] Email
+    ,[Address_Province] Province,[Address_City] City ,[Address_County] County,[Address_DetailAddress] DetailAddress,[Address_Latitude] Latitude,[Address_Longitude] Longitude
+    FROM [dbo].[Providers] WITH(NOLOCK)
+  </Select>
+  <Count>
+    SELECT COUNT(*) FROM [dbo].[Providers] WITH(NOLOCK) WHERE Id=@id
+  </Count>
+  <Insert>
+    INSERT INTO dbo.Providers ( Id,Name,Remark,Head_Name,Head_Gender,Head_CardNO,Head_MobileNO,Head_PhoneNO,Head_Email,Address_Province,Address_City,Address_County,Address_DetailAddress,CreateTime,LastUpdateTime,City_Id,AuditRemark,DepositBank,BankName,AccountNumber,BusinessLicense,ProviderType,ProviderProperty,AuditState,Enable
+    )
+    VALUES  (@Id,@Name,@Remark,@Head_Name,@Head_Gender,@Head_CardNO,@Head_MobileNO,@Head_PhoneNO,@Head_Email,@Address_Province,@Address_City,@Address_County,@Address_DetailAddress,GETDATE(),GETDATE(),@City_Id,@AuditRemark,@DepositBank,@BankName,@AccountNumber,@BusinessLicense,@ProviderType,@ProviderProperty,@AuditState,@Enable
+    )
+  </Insert>
+  <Update>
+    UPDATE dbo.Providers SET Name=@Name,Remark=@Remark,Enable=@Enable,City_Id=@City_Id,Head_Name=@Head_Name,Head_Gender=@Head_Gender,Head_CardNO=@Head_CardNO,Head_MobileNO=@Head_MobileNO,Head_PhoneNO=@Head_PhoneNO,Head_Email=@Head_Email,Address_Province=@Address_Province,Address_City=@Address_City,Address_County=@Address_County,Address_DetailAddress=@Address_DetailAddress,AuditState=@AuditState,AuditRemark=@AuditRemark,DepositBank=@DepositBank,BankName=@BankName,AccountNumber=@AccountNumber,BusinessLicense=@BusinessLicense,ProviderType=@ProviderType,HasCreateYJXAccount=@HasCreateYJXAccount,ProviderProperty=@ProviderProperty,AgreementBeginTime=@AgreementBeginTime,AgreementEndTime=@AgreementEndTime,RequiredAgreement=@RequiredAgreement,DonotTakeupMoney=@DonotTakeupMoney,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.Providers WHERE Id=@Id
+  </Delete>
+</ProviderSqlResource>

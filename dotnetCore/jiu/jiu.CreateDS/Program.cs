@@ -28,6 +28,12 @@ namespace jiu.CreateDS
 
         static void execute(string key,string[] args){
 
+            /*
+                dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories FDBSetting
+                dotnet run CreateService LDTech.ERP.Domain.SettingServices FDBSetting
+            
+             */
+
             var exe = assembly.CreateInstance($"jiu.CreateDS.executer.{key}") as iExecuter;
             exe.Execute(args);
 

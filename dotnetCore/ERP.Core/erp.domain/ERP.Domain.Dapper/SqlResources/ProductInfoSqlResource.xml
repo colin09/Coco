@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[CreateTime],[LastUpdateTime],[NewVersionInfoId],[NewId]
+    ,[ProductBusinessClass],[ProductInfoState],[DistributionPercent],[MonthOfShelfLife]
+    ,[Desc_OwnProductType] OwnProductType,[Desc_ProductNo] ProductNo,[Desc_BrandName] BrandName,[Desc_ProductName] ProductName,[Desc_Specifications] Specifications
+    ,[Desc_Category] Category,[Desc_PackageQuantity] PackageQuantity,[Desc_PackageUnit] PackageUnit,[Desc_SubCategory] SubCategory,[Desc_OldCategory] OldCategory
+    FROM [dbo].[ProductInfo] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO dbo.ProductInfo
+    ( Id ,Desc_ProductNo ,Desc_BrandName  ,Desc_ProductName ,Desc_Specifications ,
+    CreateTime ,LastUpdateTime ,Desc_Category ,Desc_PackageQuantity ,Desc_PackageUnit  ,
+    Desc_SubCategory ,NewVersionInfoId ,NewId ,Desc_OwnProductType ,ProductBusinessClass ,
+    ProductInfoState ,DistributionPercent ,Desc_OldCategory ,MonthOfShelfLife )
+    VALUES (@Id ,@Desc_ProductNo ,@Desc_BrandName  ,@Desc_ProductName ,@Desc_Specifications ,
+    GETDATE() ,GETDATE() ,@Desc_Category ,@Desc_PackageQuantity ,@Desc_PackageUnit  ,
+    @Desc_SubCategory ,@NewVersionInfoId ,@NewId ,@Desc_OwnProductType ,@ProductBusinessClass ,
+    @ProductInfoState ,@DistributionPercent ,@Desc_OldCategory ,@MonthOfShelfLife)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[ProductInfo]
+    SET [Desc_ProductNo] = @Desc_ProductNo,[Desc_BrandName] = @Desc_BrandName
+    ,[Desc_ProductName] = @Desc_ProductName,[Desc_Specifications] = @Desc_Specifications,[LastUpdateTime] = GETDATE(),[Desc_Category] = @Desc_Category
+    ,[Desc_PackageQuantity] = @Desc_PackageQuantity,[Desc_PackageUnit] = @Desc_PackageUnit
+    ,[Desc_SubCategory] = @Desc_SubCategory,[Desc_OwnProductType] = @Desc_OwnProductType
+    ,[ProductBusinessClass] = @ProductBusinessClass,[ProductInfoState] = @ProductInfoState,[DistributionPercent] = @DistributionPercent
+    ,[Desc_OldCategory] = @Desc_OldCategory,[MonthOfShelfLife] = @MonthOfShelfLife
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.ProductInfo WHERE Id=@Id
+  </Delete>
+</SqlResource>

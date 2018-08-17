@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[Type],[Year],[Month],[BusinessId],[BusinessTime],[IncomeNum],[IncomePrice],[IncomeAmount],[SendoutNum]
+    ,[SendoutPrice],[SendoutAmount],[BalanceNum],[BalancePrice],[BalanceAmount],[CreateTime],[LastUpdateTime],[City_Id]
+    ,[Product_Id],[StoreHouse_Id],[BusinessItemId],[Sequence]
+    FROM [dbo].[FinancialStocks] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT FinancialStocks.[Id],FinancialStocks.[Type],FinancialStocks.[Year],FinancialStocks.[Month],FinancialStocks.[BusinessId],FinancialStocks.[BusinessTime],FinancialStocks.[IncomeNum],FinancialStocks.[IncomePrice],FinancialStocks.[IncomeAmount],FinancialStocks.[SendoutNum],FinancialStocks.[SendoutPrice],FinancialStocks.[SendoutAmount]
+    ,FinancialStocks.[BalanceNum],FinancialStocks.[BalancePrice],FinancialStocks.[BalanceAmount],FinancialStocks.[CreateTime],FinancialStocks.[LastUpdateTime],FinancialStocks.[City_Id],FinancialStocks.[Product_Id],FinancialStocks.[StoreHouse_Id]
+    ,FinancialStocks.[BusinessItemId],FinancialStocks.[Sequence],Product.Id,Product.ProductType,Product.ProductName,ProductInfo.Id,ProductInfo.Desc_OldCategory OldCategory,ProductInfo.Desc_ProductName ProductName,StoreHouse.Id,StoreHouse.Name
+    FROM dbo.FinancialStocks WITH(NOLOCK)
+    LEFT JOIN dbo.Product WITH(NOLOCK) ON Product.Id = FinancialStocks.Product_Id
+    LEFT JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    LEFT JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id = FinancialStocks.StoreHouse_Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[FinancialStocks]
+    ([Id],[Type],[Year],[Month],[BusinessId],[BusinessTime],[IncomeNum],[IncomePrice],[IncomeAmount],[SendoutNum],[SendoutPrice],[SendoutAmount]
+    ,[BalanceNum],[BalancePrice],[BalanceAmount],[CreateTime],[LastUpdateTime],[City_Id],[Product_Id],[StoreHouse_Id],[BusinessItemId],[Sequence])
+    VALUES
+    (@Id,@TYPE,@YEAR,@MONTH,@BusinessId,@BusinessTime,@IncomeNum,@IncomePrice,@IncomeAmount,@SendoutNum,@SendoutPrice,
+    @SendoutAmount,@BalanceNum,@BalancePrice,@BalanceAmount,GETDATE(),GETDATE(),@City_Id,@Product_Id,@StoreHouse_Id,@BusinessItemId,@Sequence)
+  </Insert>
+  <Delete>
+    DELETE FROM dbo.FinancialStocks WHERE Id=@Id
+  </Delete>
+  <Update>
+    UPDATE [dbo].[FinancialStocks]
+    SET
+    [BalanceNum] = @BalanceNum
+    ,[BalancePrice] = @BalancePrice
+    ,[BalanceAmount] = @BalanceAmount
+    ,[LastUpdateTime] = GETDATE()
+    WHERE id=@Id
+  </Update>
+  <UpdateBalanceData>
+    UPDATE dbo.FinancialStocks SET BalanceNum=BalanceNum+@ChangeNum,BalanceAmount=BalanceAmount+@ChangeAmount,
+    BalancePrice = (CASE WHEN BalanceNum+@ChangeNum=0 THEN BalancePrice ELSE (BalanceAmount+@ChangeAmount)/(BalanceNum+@ChangeNum) END),
+    LastUpdateTime =GETDATE()
+    WHERE City_Id=@City_Id AND StoreHouse_Id=@StoreHouse_Id AND Product_Id=@Product_Id AND (BusinessTime > @BusinessTime or (BusinessTime = @BusinessTime and Sequence > @Sequence))
+  </UpdateBalanceData>
+  <CrossMonthUpdateBalanceData>
+    UPDATE dbo.FinancialStocks SET BalanceNum=BalanceNum+@ChangeNum,BalanceAmount=BalanceAmount+@ChangeAmount,
+    BalancePrice = (CASE WHEN BalanceNum+@ChangeNum=0 THEN BalancePrice ELSE (BalanceAmount+@ChangeAmount)/(BalanceNum+@ChangeNum) END),
+    LastUpdateTime =GETDATE()
+    WHERE City_Id=@City_Id AND StoreHouse_Id=@StoreHouse_Id AND Product_Id=@Product_Id AND BusinessTime > @BusinessTime
+  </CrossMonthUpdateBalanceData>
+  <UpdateProductStockCostPrice>
+    UPDATE dbo.ProductStocks
+    SET CostPrice = (SELECT TOP 1 ISNULL(BalancePrice,0) FROM dbo.FinancialStocks WITH(NOLOCK)
+    WHERE City_Id=@City_Id AND StoreHouse_Id=@StoreHouse_Id AND Product_Id=@Product_Id
+    AND [Type]=9 AND BusinessTime > GETDATE()) WHERE Id =
+    (SELECT TOP 1 Id FROM dbo.ProductStocks WITH(NOLOCK) WHERE City_Id=@City_Id AND StoreHouse_Id=@StoreHouse_Id AND Product_Id=@Product_Id)
+  </UpdateProductStockCostPrice>
+  <SummaryCommon>
+    SELECT NEWID() AS Id,
+    [Year],
+    [Month],
+    Product_Id,
+    Product_Id AS DisplayProduct_Id,
+    @CityId City_Id,
+    StoreHouse_Id,
+    p.ProductType,
+    info.Desc_ProductName AS ProductName,
+    info.Desc_OldCategory  Category,
+    info.Desc_PackageQuantity as PackageQuantity,
+    OpeningBalanceNum,
+    OpeningBalancePrice,
+    OpeningBalanceAmount,
+    IncomeNum,
+    [IncomePrice],
+    IncomeAmount,
+    [SendoutNum],
+    [SendoutPrice],
+    [SendoutAmount],
+    EndingBalanceNum,
+    EndingBalancePrice,
+    EndingBalanceAmount,
+    Type
+    FROM
+    (
+    SELECT
+    [Year],
+    [Month],
+    Product_Id,
+    StoreHouse_Id,
+    SUM(OpeningBalanceNum) AS OpeningBalanceNum,
+    SUM(OpeningBalanceAmount)/ISNULL(NULLIF(SUM(OpeningBalanceNum),0),1) AS OpeningBalancePrice,
+    SUM(OpeningBalanceAmount) OpeningBalanceAmount,
+    SUM(IncomeNum) AS IncomeNum,
+    SUM(IncomeAmount)/ISNULL(NULLIF(SUM(IncomeNum),0),1) AS [IncomePrice],
+    SUM(IncomeAmount) AS IncomeAmount,
+    SUM([SendoutNum]) AS [SendoutNum],
+    SUM([SendoutAmount])/ISNULL(NULLIF(SUM([SendoutNum]),0),1) AS [SendoutPrice],
+    SUM([SendoutAmount]) AS [SendoutAmount],
+    SUM(EndingBalanceNum) AS EndingBalanceNum,
+    SUM(EndingBalanceAmount)/ISNULL(NULLIF(SUM(EndingBalanceNum),0),1) AS EndingBalancePrice,
+    SUM(EndingBalanceAmount) AS EndingBalanceAmount,
+    0 as Type FROM (SELECT
+    [Year],[Month],Product_Id,StoreHouse_Id,0 OpeningBalanceNum,0 OpeningBalancePrice,0 OpeningBalanceAmount,SUM(IncomeNum) AS IncomeNum,
+    SUM([IncomeAmount])/ISNULL(NULLIF(SUM([IncomeNum]),0),1) AS [IncomePrice],SUM(IncomeAmount) AS IncomeAmount,SUM([SendoutNum]) AS [SendoutNum],
+    SUM([SendoutAmount])/ISNULL(NULLIF(SUM([SendoutNum]),0),1) AS [SendoutPrice],SUM([SendoutAmount]) AS [SendoutAmount],0 EndingBalanceNum,
+    0 EndingBalancePrice,0 EndingBalanceAmount,1  as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type] NOT IN (0,9)
+    GROUP BY Product_Id,StoreHouse_Id,[Year],[Month]
+
+    UNION ALL
+
+    SELECT
+    [Year],[Month],Product_Id,StoreHouse_Id,BalanceNum OpeningBalanceNum,BalancePrice OpeningBalancePrice,BalanceAmount OpeningBalanceAmount,
+    0 AS IncomeNum,0 AS [IncomePrice],0 AS IncomeAmount,0 AS [SendoutNume],0 AS [SendoutPrice],0 AS [SendoutAmount],0 EndingBalanceNum,0 EndingBalancePrice,
+    0 EndingBalanceAmount,0  as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type]=0
+
+    UNION ALL
+
+    SELECT
+    [Year],[Month],Product_Id,StoreHouse_Id,0 OpeningBalanceNum,0 OpeningBalancePrice,0 OpeningBalanceAmount,0 AS IncomeNum,0 AS [IncomePrice],0 AS IncomeAmount,
+    0 AS [SendoutNume],0 AS [SendoutPrice],0 AS [SendoutAmount],BalanceNum EndingBalanceNum,BalancePrice  EndingBalancePrice,BalanceAmount EndingBalanceAmount,9 as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type]=9
+    ) t
+    GROUP BY t.Product_id,t.StoreHouse_Id,t.[Year],t.[Month]
+    ) t
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON t.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON p.Info_Id = info.Id
+    ORDER BY Product_Id,StoreHouse_Id,Year,MONTH
+  </SummaryCommon>
+  <SummaryByProductId>
+    SELECT NEWID() AS Id,
+    [Year],
+    [Month],
+    @ProductId Product_Id,
+    @ProductId AS DisplayProduct_Id,
+    @CityId City_Id,
+    StoreHouse_Id,
+    p.ProductType,
+    info.Desc_ProductName AS ProductName,
+    info.Desc_OldCategory  Category,
+    info.Desc_PackageQuantity as PackageQuantity,
+    OpeningBalanceNum,
+    OpeningBalancePrice,
+    OpeningBalanceAmount,
+    IncomeNum,
+    [IncomePrice],
+    IncomeAmount,
+    [SendoutNum],
+    [SendoutPrice],
+    [SendoutAmount],
+    EndingBalanceNum,
+    EndingBalancePrice,
+    EndingBalanceAmount,
+    Type
+    FROM
+    (
+    SELECT
+    [Year],
+    [Month],
+    @ProductId Product_Id,
+    StoreHouse_Id,
+    SUM(OpeningBalanceNum) AS OpeningBalanceNum,
+    SUM(OpeningBalanceAmount)/ISNULL(NULLIF(SUM(OpeningBalanceNum),0),1) AS OpeningBalancePrice,
+    SUM(OpeningBalanceAmount) OpeningBalanceAmount,
+    SUM(IncomeNum) AS IncomeNum,
+    SUM(IncomeAmount)/ISNULL(NULLIF(SUM(IncomeNum),0),1) AS [IncomePrice],
+    SUM(IncomeAmount) AS IncomeAmount,
+    SUM([SendoutNum]) AS [SendoutNum],
+    SUM([SendoutAmount])/ISNULL(NULLIF(SUM([SendoutNum]),0),1) AS [SendoutPrice],
+    SUM([SendoutAmount]) AS [SendoutAmount],
+    SUM(EndingBalanceNum) AS EndingBalanceNum,
+    SUM(EndingBalanceAmount)/ISNULL(NULLIF(SUM(EndingBalanceNum),0),1) AS EndingBalancePrice,
+    SUM(EndingBalanceAmount) AS EndingBalanceAmount,
+    0 as Type FROM (SELECT
+    [Year],[Month],StoreHouse_Id,0 OpeningBalanceNum,0 OpeningBalancePrice,0 OpeningBalanceAmount,SUM(IncomeNum) AS IncomeNum,
+    SUM([IncomeAmount])/ISNULL(NULLIF(SUM([IncomeNum]),0),1) AS [IncomePrice],SUM(IncomeAmount) AS IncomeAmount,SUM([SendoutNum]) AS [SendoutNum],
+    SUM([SendoutAmount])/ISNULL(NULLIF(SUM([SendoutNum]),0),1) AS [SendoutPrice],SUM([SendoutAmount]) AS [SendoutAmount],0 EndingBalanceNum,
+    0 EndingBalancePrice,0 EndingBalanceAmount,1  as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId AND Product_Id=@ProductId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type] NOT IN (0,9)
+    GROUP BY StoreHouse_Id,[Year],[Month]
+
+    UNION ALL
+
+    SELECT
+    [Year],[Month],StoreHouse_Id,BalanceNum OpeningBalanceNum,BalancePrice OpeningBalancePrice,BalanceAmount OpeningBalanceAmount,
+    0 AS IncomeNum,0 AS [IncomePrice],0 AS IncomeAmount,0 AS [SendoutNume],0 AS [SendoutPrice],0 AS [SendoutAmount],0 EndingBalanceNum,0 EndingBalancePrice,
+    0 EndingBalanceAmount,0  as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId AND Product_Id=@ProductId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type]=0
+
+    UNION ALL
+
+    SELECT
+    [Year],[Month],StoreHouse_Id,0 OpeningBalanceNum,0 OpeningBalancePrice,0 OpeningBalanceAmount,0 AS IncomeNum,0 AS [IncomePrice],0 AS IncomeAmount,
+    0 AS [SendoutNume],0 AS [SendoutPrice],0 AS [SendoutAmount],BalanceNum EndingBalanceNum,BalancePrice  EndingBalancePrice,BalanceAmount EndingBalanceAmount,9 as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId AND Product_Id=@ProductId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type]=9
+    ) t
+    GROUP BY t.StoreHouse_Id,t.[Year],t.[Month]
+    ) t
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON t.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON p.Info_Id = info.Id
+    ORDER BY StoreHouse_Id,Year,MONTH
+  </SummaryByProductId>
+  <SummaryByCategoryOrProductName>
+    SELECT NEWID() AS Id,
+    [Year],
+    [Month],
+    Product_Id,
+    Product_Id AS DisplayProduct_Id,
+    @CityId City_Id,
+    StoreHouse_Id,
+    p.ProductType,
+    info.Desc_ProductName AS ProductName,
+    info.Desc_OldCategory  Category,
+    info.Desc_PackageQuantity as PackageQuantity,
+    OpeningBalanceNum,
+    OpeningBalancePrice,
+    OpeningBalanceAmount,
+    IncomeNum,
+    [IncomePrice],
+    IncomeAmount,
+    [SendoutNum],
+    [SendoutPrice],
+    [SendoutAmount],
+    EndingBalanceNum,
+    EndingBalancePrice,
+    EndingBalanceAmount,
+    Type
+    FROM
+    (
+    SELECT
+    [Year],
+    [Month],
+    Product_Id,
+    StoreHouse_Id,
+    SUM(OpeningBalanceNum) AS OpeningBalanceNum,
+    SUM(OpeningBalanceAmount)/ISNULL(NULLIF(SUM(OpeningBalanceNum),0),1) AS OpeningBalancePrice,
+    SUM(OpeningBalanceAmount) OpeningBalanceAmount,
+    SUM(IncomeNum) AS IncomeNum,
+    SUM(IncomeAmount)/ISNULL(NULLIF(SUM(IncomeNum),0),1) AS [IncomePrice],
+    SUM(IncomeAmount) AS IncomeAmount,
+    SUM([SendoutNum]) AS [SendoutNum],
+    SUM([SendoutAmount])/ISNULL(NULLIF(SUM([SendoutNum]),0),1) AS [SendoutPrice],
+    SUM([SendoutAmount]) AS [SendoutAmount],
+    SUM(EndingBalanceNum) AS EndingBalanceNum,
+    SUM(EndingBalanceAmount)/ISNULL(NULLIF(SUM(EndingBalanceNum),0),1) AS EndingBalancePrice,
+    SUM(EndingBalanceAmount) AS EndingBalanceAmount,
+    0 as Type FROM (SELECT
+    [Year],[Month],Product_Id,StoreHouse_Id,0 OpeningBalanceNum,0 OpeningBalancePrice,0 OpeningBalanceAmount,SUM(IncomeNum) AS IncomeNum,
+    SUM([IncomeAmount])/ISNULL(NULLIF(SUM([IncomeNum]),0),1) AS [IncomePrice],SUM(IncomeAmount) AS IncomeAmount,SUM([SendoutNum]) AS [SendoutNum],
+    SUM([SendoutAmount])/ISNULL(NULLIF(SUM([SendoutNum]),0),1) AS [SendoutPrice],SUM([SendoutAmount]) AS [SendoutAmount],0 EndingBalanceNum,
+    0 EndingBalancePrice,0 EndingBalanceAmount,1  as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type] NOT IN (0,9)
+    GROUP BY Product_Id,StoreHouse_Id,[Year],[Month]
+
+    UNION ALL
+
+    SELECT
+    [Year],[Month],Product_Id,StoreHouse_Id,BalanceNum OpeningBalanceNum,BalancePrice OpeningBalancePrice,BalanceAmount OpeningBalanceAmount,
+    0 AS IncomeNum,0 AS [IncomePrice],0 AS IncomeAmount,0 AS [SendoutNume],0 AS [SendoutPrice],0 AS [SendoutAmount],0 EndingBalanceNum,0 EndingBalancePrice,
+    0 EndingBalanceAmount,0  as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type]=0
+
+    UNION ALL
+
+    SELECT
+    [Year],[Month],Product_Id,StoreHouse_Id,0 OpeningBalanceNum,0 OpeningBalancePrice,0 OpeningBalanceAmount,0 AS IncomeNum,0 AS [IncomePrice],0 AS IncomeAmount,
+    0 AS [SendoutNume],0 AS [SendoutPrice],0 AS [SendoutAmount],BalanceNum EndingBalanceNum,BalancePrice  EndingBalancePrice,BalanceAmount EndingBalanceAmount,9 as [Type]
+    FROM
+    [dbo].[FinancialStocks] WITH(NOLOCK)
+    WHERE City_Id=@CityId
+    AND (Year &gt;@BeginYear OR (Year=@BeginYear AND Month &gt;=@BeginMonth))
+    AND (YEAR &lt; @EndYear OR (Year=@EndYear AND MONTH&lt;=@EndMonth)) AND [Type]=9
+    ) t
+    GROUP BY t.Product_id,t.StoreHouse_Id,t.[Year],t.[Month]
+    ) t
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON t.Product_Id = p.Id
+    INNER JOIN dbo.ProductInfo info WITH(NOLOCK) ON p.Info_Id = info.Id
+    WHERE (@Category IS NULL OR @Category = ''  OR info.Desc_OldCategory=@Category)
+    AND (@ProductName IS NULL OR @ProductName = '' OR (info.Desc_ProductName like '%'+@ProductName+'%'))
+    ORDER BY Product_Id,StoreHouse_Id,Year,MONTH
+  </SummaryByCategoryOrProductName>
+</SqlResource>

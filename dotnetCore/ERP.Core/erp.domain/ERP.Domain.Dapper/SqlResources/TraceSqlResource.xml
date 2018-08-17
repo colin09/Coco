@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TraceSqlResource>
+  <Select>
+    SELECT Id,BusinessId,TraceType,TraceAction,Message,CreateTime,User_Id FROM dbo.Trace WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [Trace].Id,BusinessId,TraceType,TraceAction,Message,[Trace].CreateTime,User_Id,TrueName User_Name FROM dbo.Trace WITH(NOLOCK)
+    INNER JOIN dbo.OrgUser WITH(NOLOCK) ON OrgUser.Id = Trace.User_Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT INTO dbo.Trace
+    (Id,BusinessId,TraceType,TraceAction,Message,Remark,User_Id,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@BusinessId,@TraceType,@TraceAction,@Message,@Remark,@User_Id,GETDATE(),GETDATE())
+  </Insert>
+  <Update>
+    UPDATE [dbo].[Trace]
+   SET [Id] = @Id
+      ,[BusinessId] = @BusinessId
+      ,[TraceType] = @TraceType
+      ,[TraceAction] = @TraceAction
+      ,[Message] = @MESSAGE
+      ,[Remark] = @Remark
+      ,[LastUpdateTime] =GETDATE()
+      ,[User_Id] = @USER_ID
+ WHERE [Id]=@Id</Update>
+  <Delete>
+    DELETE FROM [dbo].[Trace]
+    WHERE [Id]=@Id
+  </Delete>
+    
+
+
+</TraceSqlResource>

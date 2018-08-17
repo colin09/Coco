@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ShopPurchaseInStockNoteSqlResource>
+  <Select>
+    SELECT Id,NoteNo,InStockTime,State,Remark,SpecificationsCount,UnitCount,InStockSpecificationsCount,InStockUnitCount,ExpiredDays,AuditTime,AuditRemark,IsDeleted,CreateTime,LastUpdateTime,City_Id,Shop_Id,StoreHouse_Id,CreateUserId,CreateUserMobileNo,CreateUserName FROM dbo.ShopPurchaseInStockNotes WITH(NOLOCK)
+  </Select>
+  <SelectShopActualInStockItemsIncludeAll>
+    SELECT
+    [ShopActualInStockItems].Id,[ShopActualInStockItems].BatchNo,[ShopActualInStockItems].NoteNo,[ShopActualInStockItems].Num,[ShopActualInStockItems].CreateTime,[ShopPurchaseInStockNotes].Id Id,[ShopPurchaseInStockNotes].City_Id City_Id,[ShopPurchaseInStockNotes].Shop_Id Shop_Id,[ShopPurchaseInStockNotes].StoreHouse_Id StoreHouse_Id,[ShopPurchaseInStockNotes].InStockTime InStockTime,[ShopPurchaseInStockNotes].NoteNo NoteNo,[City].Id Id,[City].NewId NewId,[City].Name Name,[Shops].Id Id,[Shops].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_PackageQuantity PackageQuantity
+    FROM dbo.ShopActualInStockItems WITH(NOLOCK)
+    INNER JOIN dbo.ShopInStockItems WITH(NOLOCK) ON ShopInStockItems.Id = ShopActualInStockItems.ShopInStockItem_Id
+    INNER JOIN dbo.ShopPurchaseInStockNotes WITH(NOLOCK) ON ShopPurchaseInStockNotes.Id=[ShopInStockItems].ShopPurchaseInStockNote_Id
+    INNER JOIN dbo.Shops WITH(NOLOCK) ON [ShopPurchaseInStockNotes].Shop_Id=[Shops].Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON [City].Id = [ShopPurchaseInStockNotes].City_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product_Id=[Product].Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON Info_Id=[ProductInfo].Id
+  </SelectShopActualInStockItemsIncludeAll>
+  <FirstOrDefaultShopActualInStockItems>
+    SELECT TOP 1
+    [ShopActualInStockItems].Id,[ShopActualInStockItems].BatchNo,[ShopActualInStockItems].NoteNo,[ShopActualInStockItems].Num,[ShopActualInStockItems].CreateTime,[ShopPurchaseInStockNotes].Id Id,[ShopPurchaseInStockNotes].City_Id City_Id,[ShopPurchaseInStockNotes].Shop_Id Shop_Id,[ShopPurchaseInStockNotes].StoreHouse_Id StoreHouse_Id,[ShopPurchaseInStockNotes].InStockTime InStockTime,[ShopPurchaseInStockNotes].NoteNo NoteNo,[City].Id Id,[City].NewId NewId,[City].Name Name,[Shops].Id Id,[Shops].Name Name,[StoreHouse].Id Id,[StoreHouse].NewId NewId,[StoreHouse].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_OldCategory OldCategory,[ProductInfo].Desc_PackageUnit PackageUnit,[ProductInfo].Desc_Specifications Specifications,[ProductInfo].Desc_BrandName BrandName
+    FROM dbo.ShopActualInStockItems WITH(NOLOCK)
+    INNER JOIN dbo.ShopInStockItems WITH(NOLOCK) ON ShopInStockItems.Id = ShopActualInStockItems.ShopInStockItem_Id
+    INNER JOIN dbo.ShopPurchaseInStockNotes WITH(NOLOCK) ON ShopPurchaseInStockNotes.Id=[ShopInStockItems].ShopPurchaseInStockNote_Id
+    INNER JOIN dbo.Shops WITH(NOLOCK) ON [ShopPurchaseInStockNotes].Shop_Id=[Shops].Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON [City].Id = [ShopPurchaseInStockNotes].City_Id
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id = ShopPurchaseInStockNotes.StoreHouse_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product_Id=[Product].Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON Info_Id=[ProductInfo].Id
+    WHERE [ShopActualInStockItems].Id=@Id
+  </FirstOrDefaultShopActualInStockItems>
+  <Insert>
+    INSERT INTO dbo.ShopPurchaseInStockNotes(Id,NoteNo,InStockTime,State,Remark,SpecificationsCount,UnitCount,InStockSpecificationsCount,InStockUnitCount,ExpiredDays,AuditTime,AuditRemark,IsDeleted,CreateTime,LastUpdateTime,City_Id,Shop_Id,StoreHouse_Id,CreateUserId,CreateUserMobileNo,CreateUserName)
+    VALUES  (@Id,@NoteNo,@InStockTime,@State,@Remark,@SpecificationsCount,@UnitCount,@InStockSpecificationsCount,@InStockUnitCount,@ExpiredDays,@AuditTime,@AuditRemark,@IsDeleted,GETDATE(),GETDATE(),@City_Id,@Shop_Id,@StoreHouse_Id,@CreateUserId,@CreateUserMobileNo,@CreateUserName)
+  </Insert>
+  <Update>
+    UPDATE dbo.ShopPurchaseInStockNotes SET
+    NoteNo=@NoteNo,InStockTime=@InStockTime,State=@State,Remark=@Remark,SpecificationsCount=@SpecificationsCount,UnitCount=@UnitCount,InStockSpecificationsCount=@InStockSpecificationsCount,InStockUnitCount=@InStockUnitCount,ExpiredDays=@ExpiredDays,AuditTime=@AuditTime,AuditRemark=@AuditRemark,IsDeleted=@IsDeleted,LastUpdateTime=GETDATE(),City_Id=@City_Id,Shop_Id=@Shop_Id,StoreHouse_Id=@StoreHouse_Id
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.ShopPurchaseInStockNotes SET IsDeleted=1 WHERE Id=@Id
+  </Delete>
+  <SelectShopActualInStockItem>
+    SELECT Id,Num,CreateTime,LastUpdateTime,ShopInStockItem_Id,Remark,BatchNo,NoteNo,ProductionDate,ExpirationDate,GoodsPosition FROM dbo.ShopActualInStockItems WITH(NOLOCK)
+  </SelectShopActualInStockItem>
+  <DeleteShopActualInStockItem>
+    DELETE FROM dbo.ShopActualInStockItems WHERE Id=@Id
+  </DeleteShopActualInStockItem>
+  <InsertShopActualInStockItem>
+    INSERT INTO dbo.ShopActualInStockItems
+    (Id,Num,CreateTime,LastUpdateTime,ShopInStockItem_Id,Remark,BatchNo,NoteNo,ProductionDate,ExpirationDate,GoodsPosition)
+    VALUES  (@Id,@Num,GETDATE(),GETDATE(),@ShopInStockItem_Id,@Remark,@BatchNo,@NoteNo,@ProductionDate,@ExpirationDate,@GoodsPosition)
+  </InsertShopActualInStockItem>
+  <DeleteShopInStockItem>
+    DELETE FROM dbo.ShopInStockItems WHERE Id=@Id
+  </DeleteShopInStockItem>
+
+  <SelectShopInStockItem>
+    SELECT [Id]
+    ,[Num]
+    ,[InStockNum]
+    ,[Unit]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[Product_Id]
+    ,[ShopPurchaseInStockNote_Id]
+    FROM [dbo].[ShopInStockItems] WITH(NOLOCK)
+  </SelectShopInStockItem>
+  <InsertShopInStockItem>
+    INSERT INTO [dbo].[ShopInStockItems]
+    ([Id]
+    ,[Num]
+    ,[InStockNum]
+    ,[Unit]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[Product_Id]
+    ,[ShopPurchaseInStockNote_Id])
+    VALUES
+    (@Id
+    ,@Num
+    ,@InStockNum
+    ,@Unit
+    ,GETDATE()
+    ,GETDATE()
+    ,@Product_Id
+    ,@ShopPurchaseInStockNote_Id)
+  </InsertShopInStockItem>
+  <UpdateShopInStockItem>
+    UPDATE [dbo].[ShopInStockItems]
+    SET [Num] = @Num
+    ,[InStockNum] = @InStockNum
+    ,[Unit] = @Unit
+    ,[LastUpdateTime] = GETDATE()
+    ,[Product_Id] = @Product_Id
+    ,[ShopPurchaseInStockNote_Id] = @ShopPurchaseInStockNote_Id
+    WHERE Id =@Id
+  </UpdateShopInStockItem>
+  <UpdateShopActualInStockItem>
+    UPDATE [dbo].[ShopActualInStockItems]
+    SET [Num] = @Num
+    ,[LastUpdateTime] = GETDATE()
+    ,[ShopInStockItem_Id] = @ShopInStockItem_Id
+    ,[NoteNo] = @NoteNo
+    ,[Remark] = @Remark
+    ,[ProductionDate] = @ProductionDate
+    ,[ExpirationDate] = @ExpirationDate
+    ,[BatchNo] = @BatchNo
+    ,[GoodsPosition] = @GoodsPosition
+    WHERE Id=@Id
+  </UpdateShopActualInStockItem>
+</ShopPurchaseInStockNoteSqlResource>

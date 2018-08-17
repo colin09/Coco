@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ReturnOrderSqlResource>
+  <FirstOrDefault>
+    SELECT TOP 1 Id,ReturnOrderNo,HasCreateReturnNote,ReturnProductAmount,ReturnAmount,ReturnState,CreateTime,LastUpdateTime,Order_Id,City_Id,AdditionalProfit,ReturnOrderTime_CompleteTime CompleteTime,ReturnOrderTime_CreateTime CreateTime FROM dbo.ReturnOrders WITH(NOLOCK)
+  </FirstOrDefault>
+  <Select>
+    SELECT [Id],[ReturnOrderNo],[HasCreateReturnNote],[ReturnProductAmount],[ReturnAmount],[ReturnState],[CreateTime]
+    ,[LastUpdateTime],[Order_Id],[City_Id],[AdditionalProfit],[ReturnOrderTime_CreateTime],[ReturnOrderTime_CompleteTime]
+    FROM [dbo].[ReturnOrders] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO dbo.ReturnOrders(Id,ReturnOrderNo,HasCreateReturnNote,ReturnProductAmount,ReturnAmount,ReturnState,Order_Id,AdditionalProfit,ReturnOrderTime_CreateTime,ReturnOrderTime_CompleteTime,CreateTime,LastUpdateTime,City_Id)
+    VALUES  (@Id,@ReturnOrderNo,@HasCreateReturnNote,@ReturnProductAmount,@ReturnAmount,@ReturnState,@Order_Id,@AdditionalProfit,@ReturnOrderTime_CreateTime,@ReturnOrderTime_CompleteTime,GETDATE(),GETDATE(),@City_Id)
+  </Insert>
+  <Update>
+    --不更新HasCreateReturnNote
+    UPDATE dbo.ReturnOrders SET ReturnOrderNo=@ReturnOrderNo,ReturnProductAmount=@ReturnProductAmount,ReturnAmount=@ReturnAmount,ReturnState=@ReturnState,ReturnOrderTime_CreateTime=@ReturnOrderTime_CreateTime,ReturnOrderTime_CompleteTime=@ReturnOrderTime_CompleteTime,LastUpdateTime=GETDATE(),Order_Id=@Order_Id,City_Id=@City_Id,AdditionalProfit=@AdditionalProfit
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.ReturnOrders WHERE Id=@Id
+  </Delete>
+  <SelectIncludeBrokerUser>
+    SELECT [ReturnOrders].Id,[ReturnOrders].ReturnOrderNo,[ReturnOrders].HasCreateReturnNote,[ReturnOrders].ReturnProductAmount,[ReturnOrders].ReturnAmount,[ReturnOrders].ReturnState,[ReturnOrders].CreateTime,[ReturnOrders].LastUpdateTime,[ReturnOrders].Order_Id,[ReturnOrders].City_Id,[ReturnOrders].AdditionalProfit,[ReturnOrders].ReturnOrderTime_CreateTime CreateTime,[ReturnOrders].ReturnOrderTime_CompleteTime CompleteTime,[Orders].Id,[dbo].[OrgUser].Id,[dbo].[OrgUser].TrueName,[dbo].[OrgUser].MobileNO FROM dbo.ReturnOrders WITH(NOLOCK)
+    INNER JOIN dbo.Orders WITH(NOLOCK) ON Order_Id=[Orders].Id
+    LEFT JOIN dbo.OrgUser WITH(NOLOCK) ON OrgUser.Id = Orders.BrokerUser_Id
+  </SelectIncludeBrokerUser>
+  <SelectItems>
+    SELECT [Id],[ReturnCount],[ConstAmount],[CreateTime],[LastUpdateTime],[OrderItem_Id],[ReturnOrder_Id],[AdditionalProfit]  FROM [dbo].[ReturnOrderItem] WITH(NOLOCK)
+  </SelectItems>
+  <UpdateItem>
+    UPDATE dbo.ReturnOrderItem SET ReturnCount=@ReturnCount,ConstAmount=@ConstAmount,LastUpdateTime=GETDATE(),OrderItem_Id=@OrderItem_Id,ReturnOrder_Id=@ReturnOrder_Id,AdditionalProfit=@AdditionalProfit WHERE Id=@Id
+  </UpdateItem>
+  <DeleteItems>
+    DELETE FROM dbo.ReturnOrderItem WHERE Id=@Id
+  </DeleteItems>
+  <DeleteItemsByReturnOrderId>
+    DELETE FROM dbo.ReturnOrderItem WHERE ReturnOrder_Id=@Id
+  </DeleteItemsByReturnOrderId>
+  <InsertItem>
+    INSERT INTO dbo.ReturnOrderItem
+    (Id,ReturnCount,ConstAmount,OrderItem_Id,ReturnOrder_Id,AdditionalProfit,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@ReturnCount,@ConstAmount,@OrderItem_Id,@ReturnOrder_Id,@AdditionalProfit,GETDATE(),GETDATE())
+  </InsertItem>
+  <UpdateHasCreateReturnNote>
+    UPDATE [dbo].[ReturnOrders]
+    SET [HasCreateReturnNote] = @HasCreateReturnNote,[LastUpdateTime] = GETDATE()
+    WHERE Id=@Id
+  </UpdateHasCreateReturnNote>
+</ReturnOrderSqlResource>

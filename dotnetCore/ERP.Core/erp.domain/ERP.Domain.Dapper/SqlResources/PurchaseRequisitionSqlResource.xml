@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[State],[AuditTime],[RequisitionNo],[TotalAmount],[PayType],[PrepayAmount],[HasCreatePrepayBill],[HasPaymentAmount],[PurchaseUserId],[PurchaseName],[PurchaseMobileNo]
+    ,[ExpiredDays],[NeedAuditUserRole],[IsNewProvider],[Remark],[CheckInfoJsonString],[CreateTime],[LastUpdateTime],[City_Id],[Provider_Id],[StoreHouse_Id],[RequistitionTime],[PurchaseUserRoleName]
+    ,[NotSkuGiftString],[NeedAuditUserRoleName],[RequisitionType],[SpecificationsCount],[UnitCount],[ProviderState],[BatchNo],[AuditSetting_Id],[SeparateBillType],[CCOrgUserIds],[CallGoodsState]
+    ,[WhetherRebate]
+    ,[VerificationDate]
+    ,[RebateTotalAmount]
+    ,[PurchaseReason]
+    ,[PickupAmount]
+    ,[UnWriteOffAmount]
+    ,[WriteOffDays]
+    ,[PayDays]
+    FROM [dbo].[PurchaseRequisitions] WITH(NOLOCK)
+  </Select>
+  <SelectJoinProvider>
+    SELECT [PurchaseRequisitions].[Id],[PurchaseRequisitions].[State],[PurchaseRequisitions].[AuditTime],[PurchaseRequisitions].[RequisitionNo],[PurchaseRequisitions].[TotalAmount],[PurchaseRequisitions].[PayType],[PurchaseRequisitions].[PrepayAmount],[PurchaseRequisitions].[HasCreatePrepayBill],[PurchaseRequisitions].[HasPaymentAmount],[PurchaseRequisitions].[PurchaseUserId],[PurchaseRequisitions].[PurchaseName],[PurchaseRequisitions].[PurchaseMobileNo]
+    ,[PurchaseRequisitions].[ExpiredDays],[PurchaseRequisitions].[NeedAuditUserRole],[PurchaseRequisitions].[IsNewProvider],[PurchaseRequisitions].[Remark],[PurchaseRequisitions].[CheckInfoJsonString],[PurchaseRequisitions].[CreateTime],[PurchaseRequisitions].[LastUpdateTime],[PurchaseRequisitions].[City_Id],[PurchaseRequisitions].[Provider_Id],[PurchaseRequisitions].[StoreHouse_Id],[PurchaseRequisitions].[RequistitionTime],[PurchaseRequisitions].[PurchaseUserRoleName]
+    ,[PurchaseRequisitions].[NotSkuGiftString],[PurchaseRequisitions].[NeedAuditUserRoleName],[PurchaseRequisitions].[RequisitionType],[PurchaseRequisitions].[SpecificationsCount],[PurchaseRequisitions].[UnitCount],[PurchaseRequisitions].[ProviderState],[PurchaseRequisitions].[BatchNo],[PurchaseRequisitions].[AuditSetting_Id],[PurchaseRequisitions].[SeparateBillType],[PurchaseRequisitions].[CCOrgUserIds]
+    ,[PurchaseRequisitions].[CCOrgUserIds]
+    ,[PurchaseRequisitions].[CallGoodsState]
+    ,[PurchaseRequisitions].[WhetherRebate]
+    ,[PurchaseRequisitions].[VerificationDate]
+    ,[PurchaseRequisitions].[RebateTotalAmount]
+    ,[PurchaseRequisitions].[PurchaseReason]
+    ,[PurchaseRequisitions].[PickupAmount]
+    ,[PurchaseRequisitions].[UnWriteOffAmount]
+    ,[PurchaseRequisitions].[WriteOffDays]
+    ,[PurchaseRequisitions].[PayDays],
+    Providers.ProviderType,Providers.Name,Providers.City_Id,Providers.ProviderProperty,Providers.Head_MobileNO MobileNO,Providers.Head_Name Name
+    FROM [dbo].[PurchaseRequisitions] WITH(NOLOCK)
+    INNER JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = PurchaseRequisitions.Provider_Id
+  </SelectJoinProvider>
+  <SelectIncludeAll>
+    SELECT  PurchaseRequisitions.ID,RequisitionNo,RequisitionType,RequisitionNo,
+    PurchaseRequisitions.CreateTime,
+    PayType,
+    TotalAmount,
+    State,PurchaseName,
+    PurchaseRequisitions.State,PurchaseRequisitions.PurchaseName,PayType,
+    HasCreatePrepayBill,NeedAuditUserRoleName,WhetherRebate,VerificationDate,
+    orgs.name City,
+    orgs.Id CityId,
+    Providers.name ProviderName
+    FROM PurchaseRequisitions WITH(NOLOCK)
+    LEFT JOIN dbo.orgs  WITH(NOLOCK) ON  orgs.Id = PurchaseRequisitions.City_Id
+    LEFT JOIN dbo.Providers  WITH(NOLOCK) ON  Providers.Id = PurchaseRequisitions.Provider_Id
+  </SelectIncludeAll>
+  <SelectItem>
+    SELECT [Id],[Price],[Unit],[PurchaseRequisitionCount],[PurchaseCount],[AuditPurchaseCount],[TotalAmount],[SaleType],[SaleCities]
+    ,[WhetherRebate],[IsGiveaway],[RelatedProductIds],[CreateTime],[LastUpdateTime],[Product_Id],[PurchaseRequisition_Id],[ProviderConfirmPrice]
+    ,[ProviderConfirmCount],[HasCallGoods],[AuditState],[OrdinaryStockCount],[BulkProductStockCount],[AdviceRetailPrice],[RebateType]
+    ,[BarePrice],[SingleRebate],[RebatePolicy],[RebateTotalAmount]
+    ,[CheckData_RegionAveragePurchasePrice] RegionAveragePurchasePrice
+    ,[CheckData_IsNewProduct] IsNewProduct
+    ,[CheckData_SalePrice] SalePrice
+    ,[CheckData_LastPurchasePrice] LastPurchasePrice
+    ,[CheckData_StoreCount] StoreCount
+    ,[CheckData_SaleCount_15] SaleCount_15
+    ,[CheckData_SaleCount_30] SaleCount_30
+    ,[CheckData_SaleCount_60] SaleCount_60
+    ,[CheckData_MaxPurchasePrice] MaxPurchasePrice
+    FROM [dbo].[PurchaseRequisitionItems] WITH(NOLOCK)
+  </SelectItem>
+  <SelectItemForOP>
+    SELECT
+    PurchaseRequisitionItems.Id,
+    Product.Id ProductId,
+    ProductInfo.Desc_ProductName ProductName ,
+    ProductInfo.Desc_Category Category ,
+    ProductInfo.Desc_Specifications Specifications ,
+    Desc_PackageUnit Unit ,
+    convert(varchar(20),Desc_PackageQuantity)+Desc_PackageUnit+'/'+Desc_Specifications Specification ,
+    Desc_PackageQuantity PackageQuantity ,
+    PurchaseRequisitionCount PurchaseRequisitionCount,
+    Price*Desc_PackageQuantity Price,--  Price * PackageQuantity Price ,
+    TotalAmount ,
+    IsGiveaway ,
+    RelatedProductIds,
+    SaleType ,
+    CASE WHEN  PurchaseRequisitionCount=PurchaseCount THEN 1 ELSE 0 end  IsDelivery ,--= model.PurchaseRequisitionCount - model.PurchaseCount == 0;
+    Desc_Category Category ,
+    --CheckData_LastPurchasePrice LastPurchasePrice,
+    CASE WHEN  CheckData_LastPurchasePrice >0 THEN  FORMAT(CheckData_LastPurchasePrice,'0.000000') ELSE '--' END LastPurchasePrice ,
+    CASE WHEN  CheckData_LastPurchasePrice >0 THEN
+    CASE	WHEN Price*Desc_PackageQuantity-CheckData_LastPurchasePrice>0 THEN
+    FORMAT((Price*Desc_PackageQuantity-CheckData_LastPurchasePrice)/Price*Desc_PackageQuantity,'+0.00%')
+    ELSE
+    FORMAT((Price*Desc_PackageQuantity-CheckData_LastPurchasePrice)/Price*Desc_PackageQuantity,'0.00%')
+    end
+    ELSE '--' END LastPriceDifference,
+    RebateType,
+    BarePrice ,
+    SingleRebate ,
+    RebatePolicy ,
+    RebateTotalAmount
+    FROM dbo.PurchaseRequisitionItems  WITH(NOLOCK)
+    LEFT JOIN dbo.Product   WITH(NOLOCK) ON Product.Id = PurchaseRequisitionItems.Product_Id
+    LEFT JOIN dbo.ProductInfo   WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    where PurchaseRequisition_Id = @PurchaseRequisition_Id
+  </SelectItemForOP>
+  <Insert>
+    INSERT INTO [dbo].[PurchaseRequisitions]
+    ([Id],[State],[AuditTime],[RequisitionNo],[TotalAmount],[PayType],[PrepayAmount],[HasCreatePrepayBill],[HasPaymentAmount],[PurchaseUserId],[PurchaseName],[PurchaseMobileNo]
+    ,[ExpiredDays],[NeedAuditUserRole],[IsNewProvider],[Remark],[CheckInfoJsonString],[CreateTime],[LastUpdateTime],[City_Id],[Provider_Id],[StoreHouse_Id],[RequistitionTime],[PurchaseUserRoleName]
+    ,[NotSkuGiftString],[NeedAuditUserRoleName],[RequisitionType],[SpecificationsCount],[UnitCount],[ProviderState],[BatchNo],[AuditSetting_Id],[SeparateBillType],[CCOrgUserIds],[CallGoodsState]
+    ,[WhetherRebate]
+    ,[VerificationDate]
+    ,[RebateTotalAmount]
+    ,[PurchaseReason]
+    ,[PickupAmount]
+    ,[UnWriteOffAmount]
+    ,[WriteOffDays]
+    ,[PayDays])
+    VALUES
+    (@Id,@State,@AuditTime,@RequisitionNo,@TotalAmount,@PayType,@PrepayAmount,@HasCreatePrepayBill,@HasPaymentAmount,@PurchaseUserId,@PurchaseName,@PurchaseMobileNo,@ExpiredDays
+    ,@NeedAuditUserRole,@IsNewProvider,@Remark,@CheckInfoJsonString,GETDATE(),GETDATE(),@City_Id,@Provider_Id,@StoreHouse_Id,@RequistitionTime,@PurchaseUserRoleName,@NotSkuGiftString,@NeedAuditUserRoleName
+    ,@RequisitionType,@SpecificationsCount,@UnitCount,@ProviderState,@BatchNo,@AuditSetting_Id,@SeparateBillType,@CCOrgUserIds,@CallGoodsState
+    ,@WhetherRebate
+    ,@VerificationDate
+    ,@RebateTotalAmount
+    ,@PurchaseReason
+    ,@PickupAmount
+    ,@UnWriteOffAmount
+    ,@WriteOffDays
+    ,@PayDays)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[PurchaseRequisitionItems]
+    ([Id],[Price],[Unit],[PurchaseRequisitionCount],[PurchaseCount],[AuditPurchaseCount],[TotalAmount],[SaleType],[SaleCities],[WhetherRebate],[IsGiveaway],[RelatedProductIds],[CheckData_IsNewProduct]
+    ,[CheckData_RegionAveragePurchasePrice],[CheckData_SalePrice],[CheckData_LastPurchasePrice],[CheckData_StoreCount],[CheckData_SaleCount_15],[CheckData_SaleCount_30],[CheckData_SaleCount_60]
+    ,[CreateTime],[LastUpdateTime],[Product_Id],[PurchaseRequisition_Id],[CheckData_MaxPurchasePrice],[ProviderConfirmPrice],[ProviderConfirmCount],[HasCallGoods],[AuditState],[OrdinaryStockCount],[BulkProductStockCount]
+    ,[AdviceRetailPrice],[RebateType]
+    ,[BarePrice],[SingleRebate],[RebatePolicy],[RebateTotalAmount])
+    VALUES
+    (@Id,@Price,@Unit,@PurchaseRequisitionCount,@PurchaseCount,@AuditPurchaseCount,@TotalAmount,@SaleType,@SaleCities,@WhetherRebate,@IsGiveaway,@RelatedProductIds,@CheckData_IsNewProduct
+    ,@CheckData_RegionAveragePurchasePrice,@CheckData_SalePrice,@CheckData_LastPurchasePrice,@CheckData_StoreCount,@CheckData_SaleCount_15,@CheckData_SaleCount_30,@CheckData_SaleCount_60,GETDATE()
+    ,GETDATE(),@Product_Id,@PurchaseRequisition_Id,@CheckData_MaxPurchasePrice,@ProviderConfirmPrice,@ProviderConfirmCount,@HasCallGoods,@AuditState,@OrdinaryStockCount,@BulkProductStockCount,@AdviceRetailPrice
+    ,@RebateType,@BarePrice,@SingleRebate,@RebatePolicy,@RebateTotalAmount)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[PurchaseRequisitions]
+    SET [State] = @STATE
+    ,[AuditTime] = @AuditTime
+    ,[RequisitionNo] = @RequisitionNo
+    ,[TotalAmount] = @TotalAmount
+    ,[PayType] = @PayType
+    ,[PrepayAmount] = @PrepayAmount
+    ,[HasCreatePrepayBill] = @HasCreatePrepayBill
+    ,[HasPaymentAmount] = @HasPaymentAmount
+    ,[PurchaseUserId] = @PurchaseUserId
+    ,[PurchaseName] = @PurchaseName
+    ,[PurchaseMobileNo] = @PurchaseMobileNo
+    ,[ExpiredDays] = @ExpiredDays
+    ,[NeedAuditUserRole] = @NeedAuditUserRole
+    ,[IsNewProvider] = @IsNewProvider
+    ,[Remark] = @Remark
+    ,[CheckInfoJsonString] = @CheckInfoJsonString
+    ,[LastUpdateTime] = GETDATE()
+    ,[Provider_Id] = @Provider_Id
+    ,[StoreHouse_Id] = @StoreHouse_Id
+    ,[RequistitionTime] = @RequistitionTime
+    ,[PurchaseUserRoleName] = @PurchaseUserRoleName
+    ,[NotSkuGiftString] = @NotSkuGiftString
+    ,[NeedAuditUserRoleName] = @NeedAuditUserRoleName
+    ,[RequisitionType] = @RequisitionType
+    ,[SpecificationsCount] = @SpecificationsCount
+    ,[UnitCount] = @UnitCount
+    ,[ProviderState] = @ProviderState
+    ,[BatchNo] = @BatchNo
+    ,[AuditSetting_Id] = @AuditSetting_Id
+    ,[SeparateBillType] = @SeparateBillType
+    ,[CCOrgUserIds] = @CCOrgUserIds
+    ,[CallGoodsState] = @CallGoodsState
+    ,[WhetherRebate] = @WhetherRebate
+    ,[VerificationDate] = @VerificationDate
+    ,[RebateTotalAmount] = @RebateTotalAmount
+    ,[PurchaseReason] = @PurchaseReason
+    ,[PickupAmount] = @PickupAmount
+    ,[UnWriteOffAmount] = @UnWriteOffAmount
+    ,[WriteOffDays] = @WriteOffDays
+    ,[PayDays] = @PayDays
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[PurchaseRequisitionItems]
+    SET
+    [Price] = @Price
+    ,[Unit] = @Unit
+    ,[PurchaseRequisitionCount] = @PurchaseRequisitionCount
+    ,[PurchaseCount] = @PurchaseCount
+    ,[AuditPurchaseCount] = @AuditPurchaseCount
+    ,[TotalAmount] = @TotalAmount
+    ,[SaleType] = @SaleType
+    ,[SaleCities] = @SaleCities
+    ,[WhetherRebate] = @WhetherRebate
+    ,[IsGiveaway] = @IsGiveaway
+    ,[RelatedProductIds] = @RelatedProductIds
+    ,[CheckData_IsNewProduct] = @CheckData_IsNewProduct
+    ,[CheckData_RegionAveragePurchasePrice] = @CheckData_RegionAveragePurchasePrice
+    ,[CheckData_SalePrice] = @CheckData_SalePrice
+    ,[CheckData_LastPurchasePrice] = @CheckData_LastPurchasePrice
+    ,[CheckData_StoreCount] = @CheckData_StoreCount
+    ,[CheckData_SaleCount_15] = @CheckData_SaleCount_15
+    ,[CheckData_SaleCount_30] = @CheckData_SaleCount_30
+    ,[CheckData_SaleCount_60] = @CheckData_SaleCount_60
+    ,[LastUpdateTime] = GETDATE()
+    ,[Product_Id] = @Product_Id
+    ,[PurchaseRequisition_Id] = @PurchaseRequisition_Id
+    ,[CheckData_MaxPurchasePrice] = @CheckData_MaxPurchasePrice
+    ,[ProviderConfirmPrice] = @ProviderConfirmPrice
+    ,[ProviderConfirmCount] = @ProviderConfirmCount
+    ,[HasCallGoods] = @HasCallGoods
+    ,[AuditState] = @AuditState
+    ,[OrdinaryStockCount] = @OrdinaryStockCount
+    ,[BulkProductStockCount] = @BulkProductStockCount
+    ,[AdviceRetailPrice] = @AdviceRetailPrice
+    ,[RebateType] = @RebateType
+    ,[BarePrice] = @BarePrice
+    ,[SingleRebate] = @SingleRebate
+    ,[RebatePolicy] = @RebatePolicy
+    ,[RebateTotalAmount] = @RebateTotalAmount
+    WHERE Id=@Id
+  </UpdateItem>
+  <DeleteItem>
+    DELETE FROM dbo.PurchaseRequisitionItems WHERE Id=@Id
+  </DeleteItem>
+  <SelectDetail>
+    SELECT  State,AuditTime,RequisitionNo,TotalAmount ,PrepayAmount,
+    PurchaseName,PurchaseMobileNo,VerificationDate,VerificationDate,
+    dbo.PurchaseRequisitions.CreateTime,PurchaseRequisitions.Remark PurchaseApplyRemark,PayType ,Provider.Name ProviderName,
+    Orgs.Name CityName,Orgs1.Name StoreHouseName
+    FROM dbo.PurchaseRequisitions WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs  WITH(NOLOCK) ON Orgs.Id = PurchaseRequisitions.City_Id
+    LEFT  JOIN dbo.Providers Provider WITH(NOLOCK) ON Provider.Id = PurchaseRequisitions.Provider_Id
+    JOIN dbo.Orgs Orgs1 ON Orgs1.Id = PurchaseRequisitions.StoreHouse_Id
+    WHERE PurchaseRequisitions.Id =@Id
+  </SelectDetail>
+  <AuditTracList>
+    SELECT  SequenceNo, TraceState, UserRoleInfo_Level, UserRoleInfo_UserRole , UserRoleInfo_UserRoleName UserRole, UserName, MobileNo, AuditTrace.Remark, AuditTrace.AuditTime, AuditTrace.CreateTime, AuditTrace.LastUpdateTime, UserId, ImgIds, FileIds
+    FROM
+    PurchaseRequisitionAuditTrace WITH(NOLOCK)
+    LEFT JOIN AuditTrace WITH(NOLOCK) ON AuditTrace.Id = PurchaseRequisitionAuditTrace.Id
+    WHERE PurchaseRequisitionAuditTrace.PurchaseRequisition_Id =@Id
+  </AuditTracList>
+  <GetWaitInStockItems>
+    select p.ProductType,pri.CreateTime,pri.Product_Id productId,p.NewId productSkuId,pf.Desc_ProductName productName,
+    pri.PurchaseCount inStockCount,pri.PurchaseRequisitionCount-pri.PurchaseCount notInStockCount,
+    pri.PurchaseRequisitionCount purchaseCount,pri.PurchaseRequisition_Id purchaseRequisitionId,
+    pr.PurchaseName,pr.PurchaseMobileNo,pri.Id purchaseRequisitionItemId,pr.RequisitionNo purchaseRequisitionNO,
+    pf.Desc_Specifications specification,pf.Desc_PackageUnit packageUnit,pf.Desc_PackageQuantity packageQuantity,
+    pri.Unit,pr.Provider_Id supplierId,pro.[Name] supplierName,pf.Desc_OldCategory category,pf.Desc_BrandName brandName,
+    pri.IsGiveaway,pri.WhetherRebate,pf.MonthOfShelfLife,pri.OrdinaryStockCount,pri.BulkProductStockCount
+    from [dbo].[PurchaseRequisitionItems] pri WITH(NOLOCK)
+    inner join [dbo].[PurchaseRequisitions] pr WITH(NOLOCK) on pri.PurchaseRequisition_Id=pr.Id
+    inner join dbo.Product p WITH(NOLOCK) on p.Id=pri.Product_Id
+    inner join dbo.ProductInfo pf WITH(NOLOCK) on pf.Id=p.Info_Id
+    inner join dbo.Providers pro WITH(NOLOCK) on pro.id=pr.Provider_Id
+    INNER JOIN [dbo].[Orgs] s WITH(NOLOCK) ON s.Id=pr.StoreHouse_Id --StoreHouse
+    INNER JOIN [dbo].[Orgs] c WITH(NOLOCK) ON c.Id=pr.City_Id  --City
+  </GetWaitInStockItems>
+  <GetUnAuditPurchaseRequisitionCount>
+    SELECT COUNT(1) FROM dbo.PurchaseRequisitionAuditTrace WITH(NOLOCK)
+    INNER JOIN dbo.PurchaseRequisitions WITH(NOLOCK) ON PurchaseRequisitions.Id = PurchaseRequisitionAuditTrace.PurchaseRequisition_Id AND State=1 --审核中
+    INNER JOIN dbo.AuditTrace WITH(NOLOCK) ON AuditTrace.Id = PurchaseRequisitionAuditTrace.Id AND TraceState = 1 --待审核
+    AND PurchaseRequisitions.NeedAuditUserRole= AuditTrace.UserRoleInfo_UserRole
+    WHERE (NeedAuditUserRole='FirstAuditUser' AND PurchaseMobileNo IN @FirstMobileNos
+    AND PurchaseRequisitions.City_Id IN @FirstCityIds AND (UserName IS NULL OR UserName='') )
+    OR (NeedAuditUserRole='SecondAuditUser'  AND PurchaseMobileNo IN @SecondMobileNos
+    AND PurchaseRequisitions.City_Id IN @SecondCityIds AND (UserName IS NULL OR UserName=''))
+    OR (UserName LIKE '%'+@MobileNo+'%')
+  </GetUnAuditPurchaseRequisitionCount>
+</SqlResource>

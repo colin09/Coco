@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[Count],[BusinessNoteNo],[Remark],[CreateTime],[LastUpdateTime],[Product_Id],[StoreHouse_Id],[City_Id],[BusinessTime]
+    FROM [dbo].[DisposedOutNotes] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[DisposedOutNotes]
+    ([Id],[Count],[BusinessNoteNo],[Remark],[CreateTime],[LastUpdateTime],[Product_Id],[StoreHouse_Id],[BusinessTime],[City_Id])
+    VALUES
+    (@Id,@Count,@BusinessNoteNo,@Remark,GETDATE(),GETDATE(),@Product_Id,@StoreHouse_Id,@BusinessTime,@City_Id)
+  </Insert>
+  <SelectForSCM>
+    Select di.BusinessNoteNo,s.Id storeHouseId,s.[NewId] storeHouseNewId,di.Product_Id productId,
+    pf.Desc_PackageQuantity packageQuantity,
+    pf.Desc_Specifications specifications,pf.Desc_PackageUnit unit,di.[Count],di.Remark,di.BusinessTime
+    from DisposedOutNotes di WITH(NOLOCK)
+    inner join Orgs s WITH(NOLOCK) on di.StoreHouse_Id=s.Id
+    inner join Product p WITH(NOLOCK) on p.id=di.Product_Id
+    inner join ProductInfo pf WITH(NOLOCK) on pf.id=p.Info_Id
+  </SelectForSCM>
+  <SelectDisposedOutCountByCityIdv2>
+    SELECT c.NewId cityId,shOrg.NewId warehouseId,p.NewId productSkuId,ps.DisposedOutCount count FROM dbo.ProductStocks ps WITH(NOLOCK)
+    INNER JOIN dbo.StoreHouse sh WITH(NOLOCK) ON ps.StoreHouse_Id = sh.Id AND ps.DisposedOutCount>0
+    INNER JOIN dbo.Orgs shOrg WITH(NOLOCK) ON sh.Id=shorg.Id
+    INNER JOIN dbo.Orgs c WITH(NOLOCK) ON sh.City_Id= c.Id AND c.NewId=@CityId
+    INNER JOIN dbo.Product p WITH(NOLOCK) ON ps.Product_Id = p.Id AND p.NewId IS NOT NULL
+  </SelectDisposedOutCountByCityIdv2>
+</SqlResource>

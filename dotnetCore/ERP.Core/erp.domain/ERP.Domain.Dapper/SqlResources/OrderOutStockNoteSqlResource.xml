@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[Remark],[BusinessTime],[AuditState],[AuditRemark],[IsDownReason],[Bonus],[CouponAmount],[OrderAmount],[TotalAmount],[CreateTime]
+    ,[LastUpdateTime],[BrokerUser_Id],[Order_Id],[StoreHouse_Id],[User_Id],[IsDeleted],[IsInternal],[NoteNO],[CompanyUserCity_Id],[OddAmount],[IsFromAgencySaleNote]
+    ,[Operators],[OrderNo],[City_Id],[IsHidden],[SaleBusinessType],[AllocationNoteNo],[AllocationNote_Id],[CannotEditAndDelete],[IsNotSyncStock],[BigGoodsMode],[HasCreateRelatedNote]
+    ,[AdditionalProfit],[CashMarkAmount],[BankMarkAmount],[WeiXinMarkAmount],[AlipayMarkAmount],[UseRewardBonusAmount],[SaleCity_Id]
+    FROM [dbo].[OrderOutStockNote] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [OrderOutStockNote].[Id],[OrderOutStockNote].[Remark],[OrderOutStockNote].[BusinessTime],[OrderOutStockNote].[AuditState],[OrderOutStockNote].[AuditRemark],
+    [OrderOutStockNote].[IsDownReason],[OrderOutStockNote].[Bonus],[OrderOutStockNote].[CouponAmount],[OrderOutStockNote].[OrderAmount],[OrderOutStockNote].[TotalAmount],
+    [OrderOutStockNote].[CreateTime],[OrderOutStockNote].[LastUpdateTime],[OrderOutStockNote].[BrokerUser_Id],[OrderOutStockNote].[Order_Id],[OrderOutStockNote].[StoreHouse_Id],
+    [OrderOutStockNote].[User_Id],[OrderOutStockNote].[IsDeleted],[OrderOutStockNote].[IsInternal],[OrderOutStockNote].[NoteNO],[OrderOutStockNote].[CompanyUserCity_Id],
+    [OrderOutStockNote].[OddAmount],[OrderOutStockNote].[IsFromAgencySaleNote],[OrderOutStockNote].[Operators],[OrderOutStockNote].[OrderNo],[OrderOutStockNote].[City_Id],
+    [OrderOutStockNote].[IsHidden],[OrderOutStockNote].[SaleBusinessType],[OrderOutStockNote].[AllocationNoteNo],[OrderOutStockNote].[AllocationNote_Id],
+    [OrderOutStockNote].[CannotEditAndDelete],[OrderOutStockNote].[IsNotSyncStock],[OrderOutStockNote].[BigGoodsMode],[OrderOutStockNote].[HasCreateRelatedNote]
+    ,[OrderOutStockNote].[AdditionalProfit],[OrderOutStockNote].[CashMarkAmount],[OrderOutStockNote].[BankMarkAmount],[OrderOutStockNote].[WeiXinMarkAmount],
+    [OrderOutStockNote].[AlipayMarkAmount],[OrderOutStockNote].[UseRewardBonusAmount],[OrderOutStockNote].[SaleCity_Id],
+    [User].Id ,[User].MobileNO ,[User].TrueName ,[User].CompanyName,
+    [City].Name,OrgUser.TrueName
+    FROM [dbo].[OrderOutStockNote] WITH(NOLOCK)
+    LEFT JOIN dbo.[User] WITH(NOLOCK) ON [User].Id = OrderOutStockNote.[User_Id]
+    LEFT JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id = OrderOutStockNote.CompanyUserCity_Id
+    LEFT JOIN dbo.OrgUser WITH(NOLOCK) ON OrgUser.Id = OrderOutStockNote.BrokerUser_Id
+  </SelectIncludeAll>
+  <SelectNoteItem>
+    SELECT [Id],[Unit],[Num],[Price],[DiscountAmount],[AdValoremAmount],[CreateTime],[LastUpdateTime],[Product_Id],[OrderOutStockNote_Id]
+    ,[CostPrice],[IsGiveaway],[Remark],[AllocationNoteItem_Id],[AdditionalProfit],[UseRewardBonusAmount],[SaleMode],[SettlementNoteItem_Id],[SaleProduct_Id]
+    FROM [dbo].[NoteItems] WITH(NOLOCK)
+  </SelectNoteItem>
+  <SelectNoteItemIncludeAll>
+    SELECT [NoteItems].[Id],[NoteItems].[Unit],[NoteItems].[Num],[NoteItems].[Price],[NoteItems].[DiscountAmount],[NoteItems].[AdValoremAmount],[NoteItems].[CreateTime],[NoteItems].[LastUpdateTime]
+    ,[NoteItems].[Product_Id],[NoteItems].[OrderOutStockNote_Id],[NoteItems].[CostPrice],[NoteItems].[IsGiveaway],[NoteItems].[Remark],[NoteItems].[AllocationNoteItem_Id],[NoteItems].[AdditionalProfit]
+    ,[NoteItems].[UseRewardBonusAmount],[NoteItems].[SaleMode],[NoteItems].[SettlementNoteItem_Id],[NoteItems].[SaleProduct_Id],
+    [Product].ProductType,[Product].Id,ProductInfo.MonthOfShelfLife,ProductInfo.Id,ProductInfo.Desc_ProductName ProductName,ProductInfo.Desc_OldCategory OldCategory,ProductInfo.Desc_Specifications Specifications,
+    ProductInfo.Desc_PackageUnit PackageUnit,ProductInfo.Desc_PackageQuantity PackageQuantity,
+    [OrderOutStockNote].[Id],[OrderOutStockNote].AuditState,[OrderOutStockNote].[Remark],[OrderOutStockNote].[BusinessTime],[OrderOutStockNote].[AuditRemark],
+    [OrderOutStockNote].[IsDownReason],[OrderOutStockNote].[Bonus],[OrderOutStockNote].[CouponAmount],[OrderOutStockNote].[OrderAmount],[OrderOutStockNote].[TotalAmount],
+    [OrderOutStockNote].[CreateTime],[OrderOutStockNote].[LastUpdateTime],[OrderOutStockNote].[BrokerUser_Id],[OrderOutStockNote].[Order_Id],[OrderOutStockNote].[StoreHouse_Id],
+    [OrderOutStockNote].[User_Id],[OrderOutStockNote].[IsDeleted],[OrderOutStockNote].[IsInternal],[OrderOutStockNote].[NoteNO],[OrderOutStockNote].[CompanyUserCity_Id],
+    [OrderOutStockNote].[OddAmount],[OrderOutStockNote].[IsFromAgencySaleNote],[OrderOutStockNote].[Operators],[OrderOutStockNote].[OrderNo],[OrderOutStockNote].[City_Id],
+    [OrderOutStockNote].[IsHidden],[OrderOutStockNote].[SaleBusinessType],[OrderOutStockNote].[AllocationNoteNo],[OrderOutStockNote].[AllocationNote_Id],
+    [OrderOutStockNote].[CannotEditAndDelete],[OrderOutStockNote].[IsNotSyncStock],[OrderOutStockNote].[BigGoodsMode],[OrderOutStockNote].[HasCreateRelatedNote]
+    ,[OrderOutStockNote].[AdditionalProfit],[OrderOutStockNote].[CashMarkAmount],[OrderOutStockNote].[BankMarkAmount],[OrderOutStockNote].[WeiXinMarkAmount],
+    [OrderOutStockNote].[AlipayMarkAmount],[OrderOutStockNote].[UseRewardBonusAmount],[OrderOutStockNote].[SaleCity_Id],
+    [User].Id ,[User].MobileNO ,[User].TrueName ,[User].CompanyName,OrgUser.TrueName
+    FROM dbo.NoteItems WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = NoteItems.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    INNER JOIN [dbo].[OrderOutStockNote] WITH(NOLOCK) ON OrderOutStockNote.Id = NoteItems.OrderOutStockNote_Id
+    LEFT JOIN dbo.[User] WITH(NOLOCK) ON [User].Id = OrderOutStockNote.[User_Id]
+    LEFT JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id = OrderOutStockNote.CompanyUserCity_Id
+    LEFT JOIN dbo.OrgUser WITH(NOLOCK) ON OrgUser.Id = OrderOutStockNote.BrokerUser_Id
+  </SelectNoteItemIncludeAll>
+  <SelectFirstOrDefaultIncludeItems>
+    SELECT OrderOutStockNote.Id,OrderOutStockNote.Remark,BusinessTime,AuditState,AuditRemark,IsDownReason,Bonus,CouponAmount,OrderAmount,TotalAmount,OrderOutStockNote.CreateTime,OrderOutStockNote.LastUpdateTime,BrokerUser_Id,Order_Id,StoreHouse_Id,User_Id,IsDeleted,IsInternal,NoteNO,CompanyUserCity_Id,OddAmount,IsFromAgencySaleNote,Operators,OrderNo,City_Id,IsHidden,SaleBusinessType,AllocationNoteNo,AllocationNote_Id,CannotEditAndDelete,IsNotSyncStock,BigGoodsMode,HasCreateRelatedNote,OrderOutStockNote.AdditionalProfit,CashMarkAmount,BankMarkAmount,WeiXinMarkAmount,AlipayMarkAmount,OrderOutStockNote.UseRewardBonusAmount,SaleCity_Id,NoteItems.Id,Unit,Num,Price,DiscountAmount,AdValoremAmount,NoteItems.CreateTime,NoteItems.LastUpdateTime,Product_Id,OrderOutStockNote_Id,CostPrice,IsGiveaway,NoteItems.Remark,AllocationNoteItem_Id,NoteItems.AdditionalProfit,NoteItems.UseRewardBonusAmount,SaleMode,SettlementNoteItem_Id,SaleProduct_Id,ERPSaleMode FROM dbo.OrderOutStockNote WITH(NOLOCK)
+    INNER JOIN dbo.NoteItems WITH(NOLOCK) ON [NoteItems].OrderOutStockNote_Id=[OrderOutStockNote].Id
+  </SelectFirstOrDefaultIncludeItems>
+  <Insert>
+    INSERT INTO [dbo].[OrderOutStockNote]
+    ([Id],[Remark],[BusinessTime],[AuditState],[AuditRemark],[IsDownReason],[Bonus],[CouponAmount],[OrderAmount],[TotalAmount],[CreateTime]
+    ,[LastUpdateTime],[BrokerUser_Id],[Order_Id],[StoreHouse_Id],[User_Id],[IsDeleted],[IsInternal],[NoteNO],[CompanyUserCity_Id],[OddAmount],[IsFromAgencySaleNote]
+    ,[Operators],[OrderNo],[City_Id],[IsHidden],[SaleBusinessType],[AllocationNoteNo],[AllocationNote_Id],[CannotEditAndDelete],[IsNotSyncStock],[BigGoodsMode]
+    ,[HasCreateRelatedNote],[AdditionalProfit],[CashMarkAmount],[BankMarkAmount],[WeiXinMarkAmount],[AlipayMarkAmount],[UseRewardBonusAmount],[SaleCity_Id])
+    VALUES
+    (@Id,@Remark,@BusinessTime,@AuditState,@AuditRemark,@IsDownReason,@Bonus,@CouponAmount,@OrderAmount,@TotalAmount,GETDATE(),GETDATE(),@BrokerUser_Id
+    ,@Order_Id,@StoreHouse_Id,@USER_ID,@IsDeleted,@IsInternal,@NoteNO,@CompanyUserCity_Id,@OddAmount,@IsFromAgencySaleNote,@Operators,@OrderNo,@City_Id,@IsHidden,@SaleBusinessType
+    ,@AllocationNoteNo,@AllocationNote_Id,@CannotEditAndDelete,@IsNotSyncStock,@BigGoodsMode,@HasCreateRelatedNote,@AdditionalProfit,@CashMarkAmount,@BankMarkAmount,@WeiXinMarkAmount
+    ,@AlipayMarkAmount,@UseRewardBonusAmount,@SaleCity_Id)
+  </Insert>
+  <InsertNoteItem>
+    INSERT INTO [dbo].[NoteItems]
+    ([Id],[Unit],[Num],[Price],[DiscountAmount],[AdValoremAmount],[CreateTime],[LastUpdateTime],[Product_Id],[OrderOutStockNote_Id]
+    ,[CostPrice],[IsGiveaway],[Remark],[AllocationNoteItem_Id],[AdditionalProfit],[UseRewardBonusAmount],[SaleMode],[SettlementNoteItem_Id],[SaleProduct_Id])
+    VALUES
+    (@Id,@Unit,@Num,@Price,@DiscountAmount,@AdValoremAmount,GETDATE(),GETDATE(),@Product_Id,@OrderOutStockNote_Id,@CostPrice
+    ,@IsGiveaway,@Remark,@AllocationNoteItem_Id,@AdditionalProfit,@UseRewardBonusAmount,@SaleMode,@SettlementNoteItem_Id,@SaleProduct_Id)
+  </InsertNoteItem>
+  <Update>
+    UPDATE [dbo].[OrderOutStockNote]
+    SET [Remark] = @Remark,[BusinessTime] = @BusinessTime,[AuditState] = @AuditState,[AuditRemark] = @AuditRemark,[IsDownReason] = @IsDownReason,[Bonus] = @Bonus
+    ,[CouponAmount] = @CouponAmount,[OrderAmount] = @OrderAmount,[TotalAmount] = @TotalAmount,[LastUpdateTime] =GETDATE(),[BrokerUser_Id] = @BrokerUser_Id,[Order_Id] = @Order_Id
+    ,[StoreHouse_Id] = @StoreHouse_Id,[User_Id] = @User_Id,[IsDeleted] = @IsDeleted,[IsInternal] = @IsInternal,[NoteNO] = @NoteNO,[CompanyUserCity_Id] = @CompanyUserCity_Id
+    ,[OddAmount] = @OddAmount,[IsFromAgencySaleNote] = @IsFromAgencySaleNote,[Operators] = @Operators,[OrderNo] = @OrderNo,[City_Id] = @City_Id,[IsHidden] = @IsHidden
+    ,[SaleBusinessType] = @SaleBusinessType,[AllocationNoteNo] = @AllocationNoteNo,[AllocationNote_Id] = @AllocationNote_Id,[CannotEditAndDelete] = @CannotEditAndDelete
+    ,[IsNotSyncStock] = @IsNotSyncStock,[BigGoodsMode] = @BigGoodsMode,[HasCreateRelatedNote] = @HasCreateRelatedNote,[AdditionalProfit] = @AdditionalProfit,[CashMarkAmount] = @CashMarkAmount
+    ,[BankMarkAmount] = @BankMarkAmount,[WeiXinMarkAmount] = @WeiXinMarkAmount,[AlipayMarkAmount] = @AlipayMarkAmount,[UseRewardBonusAmount] = @UseRewardBonusAmount,[SaleCity_Id] = @SaleCity_Id
+    WHERE Id=@Id
+  </Update>
+  <UpdateNoteItem>
+    UPDATE [dbo].[NoteItems]
+    SET [Unit] = @Unit
+    ,[Num] = @Num
+    ,[Price] = @Price
+    ,[DiscountAmount] = @DiscountAmount
+    ,[AdValoremAmount] = @AdValoremAmount
+    ,[LastUpdateTime] =GETDATE()
+    ,[CostPrice] = @CostPrice
+    ,[IsGiveaway] = @IsGiveaway
+    ,[Remark] = @Remark
+    ,[AdditionalProfit] = @AdditionalProfit
+    ,[UseRewardBonusAmount] = @UseRewardBonusAmount
+    ,[SettlementNoteItem_Id] = @SettlementNoteItem_Id
+    WHERE Id=@Id
+  </UpdateNoteItem>
+  <Delete>
+    UPDATE dbo.OrderOutStockNote SET IsDeleted = 1,LastUpdateTime =GETDATE() WHERE Id=@Id
+  </Delete>
+  <DeleteNoteItem>
+    DELETE FROM dbo.NoteItems WHERE Id=@Id
+  </DeleteNoteItem>
+  <UpdateIsDownReason>
+    UPDATE dbo.OrderOutStockNote SET IsDownReason = @IsDownReason,LastUpdateTime= GETDATE() WHERE id=@Id
+  </UpdateIsDownReason>
+  <SelectForSCM>
+    SELECT o.id,o.noteNO,remark,auditState,auditRemark,businessTime,isInternal,
+    isFromAgencySaleNote,operators,o.createTime,
+    Order_Id orderId,cannotEditAndDelete,saleBusinessType,allocationNoteNo,
+    oddAmount,o.totalAmount,orderAmount,couponAmount,bonus,isDownReason,orderNo,
+    StoreHouse.id storeHouseId,s.Name storeHouseName,city.Address_Province province,
+    city.Address_City city,city.Address_County county,
+    b.id brokerUserId,b.TrueName brokerUserName,AllocationNotes.ToStoreHouse_Id toStoreHouseId,
+    ConsigneeInfo_UserName toUserName,ConsigneeInfo_MobileNo toUserMobileNo,ConsigneeInfo_Address toUserAddress,
+    CASE WHEN IsInternal=1 THEN c.Id ELSE   u.Id END userId,
+    CASE WHEN IsInternal=1 THEN c.name ELSE   u.CompanyName END userName,
+    CASE WHEN IsInternal=1 THEN NULL ELSE    u.MobileNO END userMobileNo,
+    toStoreHouse.Name toStoreHouseName,
+	AllocationNotes.ConsigneeInfo_UserName toUserName,ConsigneeInfo_MobileNo toUserMobileNo,
+    ConsigneeInfo_Address toUserAddress
+
+    FROM OrderOutStockNote o  WITH(NOLOCK)
+    LEFT JOIN  dbo. StoreHouse   WITH(NOLOCK) ON StoreHouse.Id = o.StoreHouse_Id
+    LEFT JOIN  dbo.Orgs s  WITH(NOLOCK)  ON StoreHouse.Id = s.id
+    LEFT JOIN dbo.Orgs city  WITH(NOLOCK) ON city.Id = StoreHouse.City_Id
+    LEFT JOIN OrgUser b  WITH(NOLOCK) ON	b.Id = o.BrokerUser_Id
+    LEFT JOIN dbo.AllocationNotes  WITH(NOLOCK) ON AllocationNotes.Id = o.AllocationNote_Id
+    LEFT JOIN Orgs  c  WITH(NOLOCK) ON c.Id = o.CompanyUserCity_Id
+    LEFT JOIN dbo.[User] u  WITH(NOLOCK) ON u.Id = o.User_Id
+    LEFT JOIN dbo.Orgs toStoreHouse WITH(NOLOCK) ON toStoreHouse.Id = AllocationNotes.ToStoreHouse_Id</SelectForSCM>
+</SqlResource>

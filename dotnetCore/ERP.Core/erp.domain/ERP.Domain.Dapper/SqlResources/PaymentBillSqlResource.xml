@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[PayableAmount],[PaymentAmount],[MoneyType],[AuditState],[CreateTime],[LastUpdateTime],[City_Id],[PayableBill_Id],[Supplier_Id],[IsDeleted]
+    ,[AuditTime],[IsInternal],[SupplierCity_Id],[CashAmount],[BankAmount],[WeiXinAmount],[AlipayAmount],[NoteNo],[PayableBillNo],[BillNo],[CannotEditAndDelete]
+    ,[AgentSettlementNote_Id]  FROM [dbo].[PaymentBills] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [PaymentBills].[Id],[PaymentBills].[PayableAmount],[PaymentBills].[PaymentAmount],[PaymentBills].[MoneyType],[PaymentBills].[AuditState],[PaymentBills].[CreateTime],
+    [PaymentBills].[LastUpdateTime],[PaymentBills].[City_Id],[PaymentBills].[PayableBill_Id],[PaymentBills].[Supplier_Id],[PaymentBills].[IsDeleted],[PaymentBills].[AuditTime],
+    [PaymentBills].[IsInternal],[PaymentBills].[SupplierCity_Id],[PaymentBills].[CashAmount],[PaymentBills].[BankAmount],[PaymentBills].[WeiXinAmount],[PaymentBills].[AlipayAmount],
+    [PaymentBills].[NoteNo],[PaymentBills].[PayableBillNo],[PaymentBills].[BillNo],[PaymentBills].[CannotEditAndDelete],[PaymentBills].[AgentSettlementNote_Id]
+    ,Providers.Name,Providers.Id,
+    SupplierCity.Name,SupplierCity.Id,
+    Orgs.Name,Orgs.Id
+    FROM [dbo].[PaymentBills] WITH(NOLOCK)
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = [PaymentBills].Supplier_Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = [PaymentBills].SupplierCity_Id
+    INNER JOIN dbo.Orgs  WITH(NOLOCK) ON [PaymentBills].City_Id=[Orgs].Id
+  </SelectIncludeAll>
+  <SelectItem>
+    SELECT [Id],[Settlement],[PaymentPurpose],[PayableAmount],[DiscountPrice],[DiscountAfterPrice],[CounterFee],[PaymentAmount],[OurBankNo],[SettlementNo]
+    ,[Remark],[CreateTime],[LastUpdateTime],[PaymentBill_Id],[ProductId],[PayableBillItemId]  FROM [dbo].[PaymentBillItems] WITH(NOLOCK)
+  </SelectItem>
+  <SelectItemIncludeAll>
+    SELECT [PaymentBillItems].[Id],[PaymentBillItems].[Settlement],[PaymentBillItems].[PaymentPurpose],[PaymentBillItems].[PayableAmount],[PaymentBillItems].[DiscountPrice],
+    [PaymentBillItems].[DiscountAfterPrice],[PaymentBillItems].[CounterFee],[PaymentBillItems].[PaymentAmount],[PaymentBillItems].[OurBankNo],[PaymentBillItems].[SettlementNo],
+    [PaymentBillItems].[Remark],[PaymentBillItems].[CreateTime],[PaymentBillItems].[LastUpdateTime],[PaymentBillItems].[PaymentBill_Id],[PaymentBillItems].[ProductId],
+    [PaymentBillItems].[PayableBillItemId],
+    [PaymentBills].[AuditState],[PaymentBills].[Id],[PaymentBills].[PayableAmount],[PaymentBills].[PaymentAmount],[PaymentBills].[MoneyType],[PaymentBills].[AuditState],[PaymentBills].[CreateTime],
+    [PaymentBills].[LastUpdateTime],[PaymentBills].[City_Id],[PaymentBills].[PayableBill_Id],[PaymentBills].[Supplier_Id],[PaymentBills].[IsDeleted],[PaymentBills].[AuditTime],
+    [PaymentBills].[IsInternal],[PaymentBills].[SupplierCity_Id],[PaymentBills].[CashAmount],[PaymentBills].[BankAmount],[PaymentBills].[WeiXinAmount],[PaymentBills].[AlipayAmount],
+    [PaymentBills].[NoteNo],[PaymentBills].[PayableBillNo],[PaymentBills].[BillNo],[PaymentBills].[CannotEditAndDelete],[PaymentBills].[AgentSettlementNote_Id]  ,
+    Providers.Name,Providers.Id,
+    SupplierCity.Name,SupplierCity.Id,
+    Orgs.Name,Orgs.Id
+    FROM [dbo].[PaymentBillItems] WITH(NOLOCK)
+    INNER JOIN dbo.PaymentBills WITH(NOLOCK) ON PaymentBills.Id = PaymentBillItems.PaymentBill_Id
+    INNER JOIN dbo.Orgs  WITH(NOLOCK) ON [PaymentBills].City_Id=[Orgs].Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = [PaymentBills].Supplier_Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = [PaymentBills].SupplierCity_Id
+  </SelectItemIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[PaymentBills]
+    ([Id],[PayableAmount],[PaymentAmount],[MoneyType],[AuditState],[CreateTime],[LastUpdateTime],[City_Id],[PayableBill_Id],[Supplier_Id],[IsDeleted],[AuditTime],[IsInternal]
+    ,[SupplierCity_Id],[CashAmount],[BankAmount],[WeiXinAmount],[AlipayAmount],[NoteNo],[PayableBillNo],[BillNo],[CannotEditAndDelete],[AgentSettlementNote_Id])
+    VALUES
+    (@Id,@PayableAmount,@PaymentAmount,@MoneyType,@AuditState,GETDATE(),GETDATE(),@City_Id,@PayableBill_Id,@Supplier_Id,@IsDeleted,@AuditTime,@IsInternal,@SupplierCity_Id
+    ,@CashAmount,@BankAmount,@WeiXinAmount,@AlipayAmount,@NoteNo,@PayableBillNo,@BillNo,@CannotEditAndDelete,@AgentSettlementNote_Id)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[PaymentBillItems]
+    ([Id],[Settlement],[PaymentPurpose],[PayableAmount],[DiscountPrice],[DiscountAfterPrice],[CounterFee],[PaymentAmount],[OurBankNo],[SettlementNo]
+    ,[Remark],[CreateTime],[LastUpdateTime],[PaymentBill_Id],[ProductId],[PayableBillItemId])
+    VALUES
+    (@Id,@Settlement,@PaymentPurpose,@PayableAmount,@DiscountPrice,@DiscountAfterPrice,@CounterFee,@PaymentAmount,@OurBankNo,@SettlementNo
+    ,@Remark,GETDATE(),GETDATE(),@PaymentBill_Id,@ProductId,@PayableBillItemId)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[PaymentBills]
+    SET [PayableAmount] = @PayableAmount
+    ,[PaymentAmount] = @PaymentAmount
+    ,[MoneyType] = @MoneyType
+    ,[AuditState] = @AuditState
+    ,[LastUpdateTime] = GETDATE()
+    ,[Supplier_Id] = @Supplier_Id
+    ,[AuditTime] = @AuditTime
+    ,[SupplierCity_Id] = @SupplierCity_Id
+    ,[CashAmount] = @CashAmount
+    ,[BankAmount] = @BankAmount
+    ,[WeiXinAmount] = @WeiXinAmount
+    ,[AlipayAmount] = @AlipayAmount
+    ,[AgentSettlementNote_Id] = @AgentSettlementNote_Id
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[PaymentBillItems]
+    SET [Settlement] = @Settlement
+    ,[PaymentPurpose] = @PaymentPurpose
+    ,[PayableAmount] = @PayableAmount
+    ,[DiscountPrice] = @DiscountPrice
+    ,[DiscountAfterPrice] = @DiscountAfterPrice
+    ,[CounterFee] = @CounterFee
+    ,[PaymentAmount] = @PaymentAmount
+    ,[OurBankNo] = @OurBankNo
+    ,[SettlementNo] = @SettlementNo
+    ,[Remark] = @Remark
+    ,[LastUpdateTime] = GETDATE()
+    WHERE Id=@Id
+  </UpdateItem>
+  <Delete>
+    UPDATE dbo.[PaymentBills] SET IsDeleted = 1,LastUpdateTime =GETDATE() WHERE Id=@Id
+  </Delete>
+  <DeleteItem>
+    DELETE FROM dbo.PaymentBillItems WHERE Id=@Id
+  </DeleteItem>
+</SqlResource>

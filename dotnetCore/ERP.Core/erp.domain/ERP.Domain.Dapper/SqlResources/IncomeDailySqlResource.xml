@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<IncomeDailySqlResource>
+  <Select>
+    SELECT Id,ReceiptAmount,ReceivableAmount,SellingExpense,CostAmount,GrossProfit,NetProfit,CreateTime,LastUpdateTime,City_Id,Product_Id,DailyType,Year,Month,Day,IsSupplier FROM dbo.IncomeDailies WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [IncomeDailies].Id,[IncomeDailies].ReceiptAmount,[IncomeDailies].ReceivableAmount,[IncomeDailies].SellingExpense,[IncomeDailies].CostAmount,[IncomeDailies].GrossProfit,[IncomeDailies].NetProfit,[IncomeDailies].CreateTime,[IncomeDailies].LastUpdateTime,[IncomeDailies].City_Id,[IncomeDailies].Product_Id,[IncomeDailies].DailyType,[IncomeDailies].Year,[IncomeDailies].Month,[IncomeDailies].Day,[IncomeDailies].IsSupplier,[City].Id Id,[City].NewId NewId,[City].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_OldCategory OldCategory
+    FROM dbo.IncomeDailies WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City_Id=City.Id
+    LEFT JOIN dbo.Product WITH(NOLOCK) ON Product_Id=[Product].Id
+    LEFT JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id=[Product].Info_Id
+  </SelectIncludeAll>
+  <SelectIncomeDailyByMonth>
+    SELECT ReceiptAmount,ReceivableAmount,SellingExpense,CostAmount,GrossProfit,NetProfit,City_Id,Product_Id ProductId,ProductName,Category,DailyType Settlement,Year,Month FROM View_IncomeDailyByMonth WITH(NOLOCK)
+    WHERE
+    (@Year IS NULL OR @Year='' OR Year=@Year) AND
+    (@Month IS NULL OR @Month='' OR Month=@Month) AND
+    (@Category IS NULL OR @Category='' OR Category=@Category) AND
+    (@CityId IS NULL OR @CityId='' OR City_Id IN @CityId)
+  </SelectIncomeDailyByMonth>
+  <SelectPagedIncomeDailyByMonth>
+    SELECT ReceiptAmount,ReceivableAmount,SellingExpense,CostAmount,GrossProfit,NetProfit,City_Id,Product_Id ProductId,ProductName,Category,DailyType Settlement,Year,Month FROM View_IncomeDailyByMonth WITH(NOLOCK)
+  </SelectPagedIncomeDailyByMonth>
+  <Insert>
+    INSERT dbo.IncomeDailies
+    (Id,ReceiptAmount,ReceivableAmount,SellingExpense,CostAmount,GrossProfit,NetProfit,City_Id,Product_Id,DailyType,Year,Month,Day,IsSupplier,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@ReceiptAmount,@ReceivableAmount,@SellingExpense,@CostAmount,@GrossProfit,@NetProfit,@City_Id,@Product_Id,@DailyType,@Year,@Month,@Day,@IsSupplier,GETDATE(),GETDATE())
+  </Insert>
+  <Update>
+    UPDATE dbo.IncomeDailies SET ReceiptAmount=@ReceiptAmount,ReceivableAmount=@ReceivableAmount,SellingExpense=@SellingExpense,CostAmount=@CostAmount,GrossProfit=@GrossProfit,NetProfit=@NetProfit,LastUpdateTime=GETDATE() where Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.IncomeDailies WHERE Id=@Id
+  </Delete>
+</IncomeDailySqlResource>

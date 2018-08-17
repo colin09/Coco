@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT Id,NoteNo,BusinessTime,ReplenishmentRequisitionState,CancelReason,CreateTime,LastUpdateTime,City_Id,User_Id
+    FROM  dbo.ReplenishmentRequisitions WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT DISTINCT ReplenishmentRequisitions.Id,ReplenishmentRequisitions.NoteNo,ReplenishmentRequisitions.BusinessTime,ReplenishmentRequisitions.ReplenishmentRequisitionState,
+    ReplenishmentRequisitions.CancelReason,ReplenishmentRequisitions.CreateTime,
+    Orgs.Id,Orgs.Name, OrgUser.Id,OrgUser.TrueName
+    FROM dbo.ReplenishmentRequisitions WITH(NOLOCK)
+    LEFT JOIN dbo.ReplenishmentRequisitionItems WITH(NOLOCK) ON ReplenishmentRequisitions.Id = ReplenishmentRequisitionItems.ReplenishmentRequisition_Id
+    LEFT JOIN dbo.AllocationNotes WITH(NOLOCK) ON ReplenishmentRequisitionItems.AllocationNote_Id=AllocationNotes.Id
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON ReplenishmentRequisitions.City_Id=Orgs.Id
+    LEFT JOIN dbo.OrgUser WITH(NOLOCK) ON ReplenishmentRequisitions.User_Id=OrgUser.Id
+  </SelectIncludeAll>
+  <SelectItem>
+    SELECT [Id]
+    ,[ReplenishmentState]
+    ,[ReplenishmenRequisitiontNum]
+    ,[AllocationNum]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[AllocationNote_Id]
+    ,[Product_Id]
+    ,[ReplenishmentRequisition_Id]
+    FROM [dbo].[ReplenishmentRequisitionItems] WITH(NOLOCK)
+  </SelectItem>
+  <Insert>
+    INSERT INTO dbo.ReplenishmentRequisitions( Id ,NoteNo ,BusinessTime , ReplenishmentRequisitionState ,CancelReason , CreateTime , LastUpdateTime , City_Id , User_Id)
+    VALUES ( @Id ,@NoteNo ,@BusinessTime , @ReplenishmentRequisitionState ,@CancelReason , @CreateTime , @LastUpdateTime , @City_Id , @User_Id)
+  </Insert>
+  <InsertItem>
+    INSERT INTO dbo.ReplenishmentRequisitionItems( Id ,ReplenishmentState , ReplenishmenRequisitiontNum , AllocationNum , CreateTime ,LastUpdateTime ,AllocationNote_Id , Product_Id ,ReplenishmentRequisition_Id)
+    VALUES ( @Id ,@ReplenishmentState , @ReplenishmenRequisitiontNum , @AllocationNum , @CreateTime ,@LastUpdateTime ,@AllocationNote_Id , @Product_Id ,@ReplenishmentRequisition_Id)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[ReplenishmentRequisitionItems]
+    SET [Id] = @Id
+    ,[ReplenishmentState] = @ReplenishmentState
+    ,[ReplenishmenRequisitiontNum] = @ReplenishmenRequisitiontNum
+    ,[AllocationNum] = @AllocationNum
+    ,[LastUpdateTime] = GETDATE()
+    ,[AllocationNote_Id] = @AllocationNote_Id
+    ,[Product_Id] = @Product_Id
+    ,[ReplenishmentRequisition_Id] = @ReplenishmentRequisition_Id
+    WHERE Id =@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[ReplenishmentRequisitions]
+    SET [Id] = @Id
+    ,[NoteNo] = @NoteNo
+    ,[BusinessTime] = @BusinessTime
+    ,[ReplenishmentRequisitionState] = @ReplenishmentRequisitionState
+    ,[CancelReason] = @CancelReason
+    ,[LastUpdateTime] = GETDATE()
+    ,[City_Id] = @City_Id
+    ,[User_Id] = @USER_ID
+    WHERE [Id]=@Id
+  </UpdateItem>
+  <UpdateStateAndCancelReason>
+    UPDATE dbo.ReplenishmentRequisitions SET ReplenishmentRequisitionState=@ReplenishmentRequisitionState,CancelReason=@CancelReason,[LastUpdateTime] = GETDATE() WHERE Id=@Id
+  </UpdateStateAndCancelReason>
+  <UpdateItemReplenishmentState>
+    UPDATE dbo.ReplenishmentRequisitionItems SET ReplenishmentState=@ReplenishmentState ,LastUpdateTime =GETDATE() WHERE Id=@Id
+  </UpdateItemReplenishmentState>
+  <SelectItemIncludeAll>
+    SELECT ReplenishmentRequisitionItems.Id,ReplenishmentRequisitionItems.ReplenishmentState,ReplenishmentRequisitionItems.CreateTime,ReplenishmentRequisitionItems.ReplenishmenRequisitiontNum,
+    ReplenishmentRequisitionItems.ReplenishmentRequisition_Id,ReplenishmentRequisitionItems.AllocationNote_Id,ReplenishmentRequisitionItems.Product_Id,ReplenishmentRequisitionItems.CreateTime,
+    ReplenishmentRequisitions.NoteNo NoteNo,ReplenishmentRequisitions.BusinessTime,
+    AllocationNotes.NoteNo NoteNo,AllocationNotes.State,AllocationNotes.Type,
+    Orgs.Id Id,Orgs.NewId,Orgs.Name,Orgs.Address_Province Province,
+    ProductInfo.Id Id,ProductInfo.Desc_ProductName ProductName,ProductInfo.Desc_PackageQuantity PackageQuantity, ProductInfo.Desc_Specifications Specifications,ProductInfo.Desc_PackageUnit PackageUnit
+    FROM dbo.ReplenishmentRequisitionItems WITH(NOLOCK)
+    INNER JOIN dbo.ReplenishmentRequisitions WITH(NOLOCK) ON dbo.ReplenishmentRequisitionItems.ReplenishmentRequisition_Id = dbo.ReplenishmentRequisitions.Id
+    LEFT JOIN dbo.AllocationNotes WITH(NOLOCK) ON dbo.ReplenishmentRequisitionItems.AllocationNote_Id=dbo.AllocationNotes.Id
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON dbo.ReplenishmentRequisitions.City_Id=dbo.Orgs.Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON dbo.ReplenishmentRequisitionItems.Product_Id=dbo.Product.Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON dbo.Product.Info_Id=dbo.ProductInfo.Id
+  </SelectItemIncludeAll>
+  <ReplenishmentProductIncludeAll>
+    SELECT Product.Id ProductId, Product.NewId ProductNewId,ProductInfo.Id ProductInfoId, ProductInfo.Desc_ProductName ProductName,
+    ProductInfo.Desc_Specifications Specifications,ProductInfo.Desc_PackageUnit Unit,ProductInfo.Desc_PackageQuantity PackageQuantity,
+    Orgs.Id CityId,dbo.Orgs.Name CityName,
+    ISNULL(yjc_ProductSaleCount.SaleNum,0) MonthSaleNum,
+    ISNULL(ReplenishmentSettings.Num,50*ProductInfo.Desc_PackageQuantity) AdjustNum
+    FROM dbo.Product WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON Product.City_Id=Orgs.Id
+    LEFT JOIN dbo.ProductInfo WITH(NOLOCK) ON Product.Info_Id=ProductInfo.Id
+    LEFT JOIN [dbo].[yjc_ProductSaleCount] WITH(NOLOCK) ON Product.Id=yjc_ProductSaleCount.ProductId
+    LEFT JOIN dbo.ReplenishmentSettings WITH(NOLOCK) ON ProductInfo.Id=ReplenishmentSettings.ProductInfo_Id AND ReplenishmentSettings.ReplenishmentSettingState=1
+  </ReplenishmentProductIncludeAll>
+</SqlResource>

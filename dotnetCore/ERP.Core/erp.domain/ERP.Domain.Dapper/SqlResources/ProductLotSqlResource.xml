@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProductLotSqlResource>
+  <Select>
+    SELECT Id,PurchaseInStockNote_Id,InStockItem_Id,Version,Num,Unit,Specifications,PackageQuantity,ProductionDate,ExpirationDate,CreateTime,LastUpdateTime,City_Id,Product_Id,Provider_Id,StoreHouse_Id FROM dbo.ProductLots WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT
+    [ProductLots].Id,[ProductLots].Num,[ProductLots].ExpirationDate,[ProductLots].ProductionDate,[ProductLots].Version,[ProductLots].PurchaseInStockNote_Id,[City].Id Id,[City].NewId NewId,[City].Name Name,[StoreHouse].Id Id,[StoreHouse].NewId NewId,[StoreHouse].Name Name,[Providers].Id Id,[Providers].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_PackageUnit PackageUnit,[ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_Specifications Specifications
+    FROM dbo.ProductLots WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK)  ON City.Id=[ProductLots].City_Id
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id=[ProductLots].StoreHouse_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON dbo.Product.Id=[ProductLots].Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON Info_Id=[ProductInfo].Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = ProductLots.Provider_Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT [ProductLots].Id,[ProductLots].PurchaseInStockNote_Id,[ProductLots].InStockItem_Id,[ProductLots].Version,[ProductLots].Num,[ProductLots].Unit,[ProductLots].Specifications,[ProductLots].PackageQuantity,[ProductLots].ProductionDate,[ProductLots].ExpirationDate,[ProductLots].CreateTime,[ProductLots].LastUpdateTime,[ProductLots].City_Id,[ProductLots].Product_Id,[ProductLots].Provider_Id,[ProductLots].StoreHouse_Id,[City].Id,[City].NewId,[City].Name,[StoreHouse].Id,[StoreHouse].NewId,[StoreHouse].Name,[Providers].Id,[Providers].Name,[Product].Id,[Product].NewId,[ProductInfo].Id,[ProductInfo].NewId,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_PackageUnit PackageUnit,[ProductInfo].Desc_Specifications Specifications
+    FROM dbo.ProductLots
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=City_Id
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse_Id=[StoreHouse].Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=Info_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Provider_Id=[Providers].Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT INTO dbo.ProductLots  (Id,PurchaseInStockNote_Id,InStockItem_Id,Version,Num,Unit,Specifications,PackageQuantity,ProductionDate,ExpirationDate,CreateTime,LastUpdateTime,City_Id,Product_Id,Provider_Id,StoreHouse_Id)
+    VALUES  (@Id,@PurchaseInStockNote_Id,@InStockItem_Id,@Version,@Num,@Unit,@Specifications,@PackageQuantity,@ProductionDate,@ExpirationDate,GETDATE(),GETDATE(),@City_Id,@Product_Id,@Provider_Id,@StoreHouse_Id)
+  </Insert>
+  <Update>
+    UPDATE dbo.ProductLots SET LastUpdateTime=GETDATE(),ProductionDate=@ProductionDate,ExpirationDate=@ExpirationDate,Num=@Num WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.ProductLots WHERE Id=@Id
+  </Delete>
+  <SelectForSCM>
+    select pl.Id,pl.PurchaseInStockNote_Id,pl.[Version],pl.Num,pl.Unit,pl.Specifications,pl.PackageQuantity,pl.ProductionDate,pl.ExpirationDate,
+    pv.[Name] providerName,pl.Product_Id productId, pf.Desc_ProductName productName,pl.City_Id cityId,c.Address_Province province,c.Address_City city,
+    c.Address_City cityName,c.Address_County county,pl.StoreHouse_Id storeHouseId,s.[Name] storeHouseName,s.[NewId] storeHouseNewId
+    from dbo.ProductLots pl WITH(NOLOCK)
+    left join dbo.Providers pv WITH(NOLOCK) on pl.Provider_Id=pv.Id
+    inner join dbo.Product p WITH(NOLOCK) on pl.Product_Id=p.Id
+    inner join dbo.ProductInfo pf WITH(NOLOCK) on p.info_id=pf.id
+    inner join dbo.Orgs c WITH(NOLOCK) on c.id=pl.city_id
+    inner join dbo.Orgs s WITH(NOLOCK) on s.id=pl.StoreHouse_Id
+
+  </SelectForSCM>
+  <SelectProductLotByStoreHouseId>
+    SELECT ProductLots.id  id,Product.Id productId ,CASE WHEN dbo.Product.ProductName IS NULL OR dbo.Product.ProductName = ''
+    then ProductInfo.Desc_ProductName ELSE Product.ProductName END productName
+    ,StoreHouse.id storeHouseId, StoreHouse.NewId storeHouseNewId
+    ,StoreHouse.Name   storeHouseName,City.Id   cityId ,City.Address_Province province,
+    city.Address_City city,City.Address_County county,Providers.Name Providers,
+    num,unit,specifications,packageQuantity,expirationDate,productionDate,purchaseInStockNote_Id,version
+    FROM dbo.ProductLots   WITH(NOLOCK)
+    LEFT JOIN dbo.Product  WITH(NOLOCK) ON Product.Id = ProductLots.Product_Id
+    LEFT JOIN dbo.ProductInfo  WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    LEFT JOIN dbo.Orgs StoreHouse   WITH(NOLOCK) ON StoreHouse.Id = ProductLots.StoreHouse_Id
+    LEFT JOIN dbo.Orgs City  WITH(NOLOCK) ON city.Id =ProductLots.City_Id
+    LEFT JOIN dbo.Providers  WITH(NOLOCK) ON Providers.Id = ProductLots.Provider_Id
+    WHERE StoreHouse.Id =@StoreHouseId OR StoreHouse.NewId =@StoreHouseId
+    ORDER BY productName
+  </SelectProductLotByStoreHouseId>
+  <SeleteProductionDate>
+    SELECT Product_Id AS ProductId, MAX(ProductionDate) AS ProductionDate FROM ProductLots WITH(NOLOCK) WHERE City_Id=@cityId AND StoreHouse_Id=@storeHouseId AND Product_Id IN @productIds GROUP BY Product_Id
+  </SeleteProductionDate>
+</ProductLotSqlResource>

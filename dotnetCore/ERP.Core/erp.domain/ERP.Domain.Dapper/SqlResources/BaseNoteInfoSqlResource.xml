@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[NoteType],[OperationType],[Remark],[AuditState],[AuditRemark],[IsDeleted],[OperatorUserId],[OperatorUserName],[OperatorMobile],[BusinessTime],[CreateTime]
+    ,[LastUpdateTime],[StoreHouse_Id],[TakeStockNote_Id],[NoteNo],[City_Id],[TakeStockNoteNo]
+    FROM [dbo].[BaseNoteInfo] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[BaseNoteInfo]
+    ([Id],[NoteType],[OperationType],[Remark],[AuditState],[AuditRemark],[IsDeleted],[OperatorUserId],[OperatorUserName],[OperatorMobile],[BusinessTime],[CreateTime],[LastUpdateTime]
+    ,[StoreHouse_Id],[TakeStockNote_Id],[NoteNo],[City_Id],[TakeStockNoteNo])
+    VALUES
+    (@Id,@NoteType,@OperationType,@Remark,@AuditState,@AuditRemark,@IsDeleted,@OperatorUserId,@OperatorUserName,@OperatorMobile,@BusinessTime,GETDATE(),GETDATE(),@StoreHouse_Id
+    ,@TakeStockNote_Id,@NoteNo,@City_Id,@TakeStockNoteNo)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[BaseNoteInfo]
+    SET [Remark] = @Remark
+    ,[AuditState] = @AuditState
+    ,[AuditRemark] = @AuditRemark
+    ,[IsDeleted] = @IsDeleted
+    ,[OperatorUserId] = @OperatorUserId
+    ,[OperatorUserName] = @OperatorUserName
+    ,[OperatorMobile] = @OperatorMobile
+    ,[BusinessTime] = @BusinessTime
+    ,[LastUpdateTime] = GETDATE()
+    ,[TakeStockNote_Id] = @TakeStockNote_Id
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.BaseNoteInfo SET IsDeleted=1 WHERE id=@Id
+  </Delete>
+  <SelectForScm>
+       SELECT [BaseNoteInfo].Id,[BaseNoteInfo].NoteType,[BaseNoteInfo].NoteNo AS BillNo,[BaseNoteInfo].AuditState,[BaseNoteInfo].CreateTime,[BaseNoteInfo].BusinessTime,[BaseNoteInfo].StoreHouse_Id storeHouseId,
+    StoreHouse.Name storeHouseName,[BaseNoteInfo].OperationType,[BaseNoteInfo].Remark,[BaseNoteInfo].OperatorUserId,[BaseNoteInfo].OperatorUserName,
+    [BaseNoteInfo].OperatorMobile,[BaseNoteInfo].TakeStockNote_Id relationNoteId,TakeStockNote.NoteNo relationNoteNo,City.Name CityName
+    FROM dbo.BaseNoteInfo WITH(NOLOCK)
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id = BaseNoteInfo.StoreHouse_Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id = BaseNoteInfo.City_Id
+	LEFT JOIN dbo.TakeStockNote WITH(NOLOCK) ON TakeStockNote.Id = BaseNoteInfo.TakeStockNote_Id
+  </SelectForScm>
+</SqlResource>

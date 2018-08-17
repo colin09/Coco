@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[AdValoremAmount],[MoneyType],[AuditState],[BusinessTime],[IsPayment],[IsDownReason],[CreateTime],[LastUpdateTime],[City_Id],[PurchaseInStockNote_Id]
+    ,[Supplier_Id],[IsDeleted],[PurchaseOutStockNote_Id],[IsInternal],[SupplierCity_Id],[HasPaymentAmount],[PayableBillType],[NoteNo],[BillNo],[PurchaseBusinessType]
+    ,[AllocationNote_Id]  FROM [dbo].[PayableBills] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [PayableBills].[Id],[PayableBills].[AdValoremAmount],[PayableBills].[MoneyType],[PayableBills].[AuditState],[PayableBills].[BusinessTime],[PayableBills].[IsPayment],
+    [PayableBills].[IsDownReason],[PayableBills].[CreateTime],[PayableBills].[LastUpdateTime],[PayableBills].[City_Id],[PayableBills].[PurchaseInStockNote_Id]
+    ,[PayableBills].[Supplier_Id],[PayableBills].[IsDeleted],[PayableBills].[PurchaseOutStockNote_Id],[PayableBills].[IsInternal],[PayableBills].[SupplierCity_Id],
+    [PayableBills].[HasPaymentAmount],[PayableBills].[PayableBillType],[PayableBills].[NoteNo],[PayableBills].[BillNo],[PayableBills].[PurchaseBusinessType],[PayableBills].[AllocationNote_Id]
+    ,Providers.Name,Providers.Id,
+    SupplierCity.Name,SupplierCity.Id,
+    Orgs.Name,Orgs.Id
+    FROM [dbo].[PayableBills] WITH(NOLOCK)
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = PayableBills.Supplier_Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = PayableBills.SupplierCity_Id
+    INNER JOIN dbo.Orgs  WITH(NOLOCK) ON [PayableBills].City_Id=[Orgs].Id
+  </SelectIncludeAll>
+  <SelectItem>
+    SELECT [Id],[Unit],[Num],[IncludeTaxPrice],[TaxRate],[NotTaxAmount],[TaxAmount],[AdValoremAmount],[Price],[DiscountRate],[DiscountAmount],[ProductId],[ProductName]
+    ,[CreateTime],[LastUpdateTime],[PayableBill_Id],[NoteItemId],[HasPaymentAmount],[WriteOffAmount]
+    FROM [dbo].[PayableBillItems] WITH(NOLOCK)
+  </SelectItem>
+  <SelectItemIncludeAll>
+    SELECT [PayableBillItems].[Id],[PayableBillItems].[Unit],[PayableBillItems].[Num],[PayableBillItems].[IncludeTaxPrice],[PayableBillItems].[TaxRate],
+    [PayableBillItems].[NotTaxAmount],[PayableBillItems].[TaxAmount],[PayableBillItems].[AdValoremAmount],[PayableBillItems].[Price],[PayableBillItems].[DiscountRate],
+    [PayableBillItems].[DiscountAmount],[PayableBillItems].[ProductId],[PayableBillItems].[ProductName],[PayableBillItems].[CreateTime],[PayableBillItems].[LastUpdateTime],
+    [PayableBillItems].[PayableBill_Id],[PayableBillItems].[NoteItemId],[PayableBillItems].[HasPaymentAmount],[PayableBillItems].[WriteOffAmount],
+    [PayableBills].[AuditState],[PayableBills].[Id],[PayableBills].[AdValoremAmount],[PayableBills].[MoneyType],[PayableBills].[BusinessTime],[PayableBills].[IsPayment],
+    [PayableBills].[IsDownReason],[PayableBills].[CreateTime],[PayableBills].[LastUpdateTime],[PayableBills].[City_Id],[PayableBills].[PurchaseInStockNote_Id]
+    ,[PayableBills].[Supplier_Id],[PayableBills].[IsDeleted],[PayableBills].[PurchaseOutStockNote_Id],[PayableBills].[IsInternal],[PayableBills].[SupplierCity_Id],
+    [PayableBills].[HasPaymentAmount],[PayableBills].[PayableBillType],[PayableBills].[NoteNo],[PayableBills].[BillNo],[PayableBills].[PurchaseBusinessType],[PayableBills].[AllocationNote_Id]
+    ,Providers.Name,Providers.Id,
+    SupplierCity.Name,SupplierCity.Id,
+    Orgs.Name,Orgs.Id
+    FROM [dbo].[PayableBillItems] WITH(NOLOCK)
+    INNER JOIN dbo.PayableBills WITH(NOLOCK) ON PayableBills.Id = PayableBillItems.PayableBill_Id
+    INNER JOIN dbo.Orgs  WITH(NOLOCK) ON [PayableBills].City_Id=[Orgs].Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = PayableBills.Supplier_Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = PayableBills.SupplierCity_Id
+  </SelectItemIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[PayableBills]
+    ([Id],[AdValoremAmount],[MoneyType],[AuditState],[BusinessTime],[IsPayment],[IsDownReason],[CreateTime],[LastUpdateTime],[City_Id],[PurchaseInStockNote_Id],[Supplier_Id]
+    ,[IsDeleted],[PurchaseOutStockNote_Id],[IsInternal],[SupplierCity_Id],[HasPaymentAmount],[PayableBillType],[NoteNo],[BillNo],[PurchaseBusinessType],[AllocationNote_Id])
+    VALUES
+    (@Id,@AdValoremAmount,@MoneyType,@AuditState,@BusinessTime,@IsPayment,@IsDownReason,GETDATE(),GETDATE(),@City_Id,@PurchaseInStockNote_Id,@Supplier_Id,@IsDeleted
+    ,@PurchaseOutStockNote_Id,@IsInternal,@SupplierCity_Id,@HasPaymentAmount,@PayableBillType,@NoteNo,@BillNo,@PurchaseBusinessType,@AllocationNote_Id)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[PayableBillItems]
+    ([Id],[Unit],[Num],[IncludeTaxPrice],[TaxRate],[NotTaxAmount],[TaxAmount],[AdValoremAmount],[Price],[DiscountRate],[DiscountAmount],[ProductId]
+    ,[ProductName],[CreateTime],[LastUpdateTime],[PayableBill_Id],[NoteItemId],[HasPaymentAmount],[WriteOffAmount])
+    VALUES
+    (@Id,@Unit,@Num,@IncludeTaxPrice,@TaxRate,@NotTaxAmount,@TaxAmount,@AdValoremAmount,@Price,@DiscountRate,@DiscountAmount,@ProductId,@ProductName,GETDATE()
+    ,GETDATE(),@PayableBill_Id,@NoteItemId,@HasPaymentAmount,@WriteOffAmount)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[PayableBills]
+    SET
+    [AdValoremAmount] = @AdValoremAmount
+    ,[MoneyType] = @MoneyType
+    ,[AuditState] = @AuditState
+    ,[BusinessTime] = @BusinessTime
+    ,[IsPayment] = @IsPayment
+    ,[IsDownReason] = @IsDownReason
+    ,[LastUpdateTime] =GETDATE()
+    ,[City_Id] = @City_Id
+    ,[Supplier_Id] = @Supplier_Id
+    ,[IsInternal] = @IsInternal
+    ,[SupplierCity_Id] = @SupplierCity_Id
+    ,[HasPaymentAmount] = @HasPaymentAmount
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[PayableBillItems]
+    SET
+    [Num] = @Num
+    ,[IncludeTaxPrice] = @IncludeTaxPrice
+    ,[TaxRate] = @TaxRate
+    ,[NotTaxAmount] = @NotTaxAmount
+    ,[TaxAmount] = @TaxAmount
+    ,[AdValoremAmount] = @AdValoremAmount
+    ,[Price] = @Price
+    ,[DiscountRate] = @DiscountRate
+    ,[DiscountAmount] = @DiscountAmount
+    ,[LastUpdateTime] = GETDATE()
+    ,[HasPaymentAmount] = @HasPaymentAmount
+    ,[WriteOffAmount] = @WriteOffAmount
+    WHERE Id=@Id
+  </UpdateItem>
+  <Delete>
+    UPDATE dbo.[PayableBills] SET IsDeleted = 1,LastUpdateTime =GETDATE() WHERE Id=@Id
+  </Delete>
+  <DeleteItem>
+    DELETE FROM dbo.PayableBillItems WHERE Id=@Id
+  </DeleteItem>
+  <DeleteItemByBillId>
+    DELETE FROM dbo.PayableBillItems WHERE PayableBill_Id = @Id
+  </DeleteItemByBillId>
+  <PayableReport>
+    SELECT t.CityName,t.MonthPayablePrice,t.DayAvgPayablePrice,t.DayCount,YEAR(t.CreateDate) AS Year,MONTH(t.CreateDate) AS Month
+    FROM
+    (
+    SELECT
+    s.CityId,org.Name CityName,SUM(s.PayablePrice) MonthPayablePrice,(SUM(s.PayablePrice)/COUNT(1)) DayAvgPayablePrice,
+    COUNT(1) DayCount,MAX(s.CreateDate) CreateDate
+    FROM erp_CityPayablePriceSummary s WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON s.CityId=org.Id
+    WHERE (@CityId IS NULL OR @CityId='' OR s.CityId = @CityId) and
+    YEAR(s.CreateDate)=@Year AND  MONTH(s.CreateDate)=@Month
+    GROUP BY s.CityId,org.Name
+    ) AS t
+    ORDER BY t.CityName
+  </PayableReport>
+  <PayableReportPaged>
+    SELECT t.CityName,t.MonthPayablePrice,t.DayAvgPayablePrice,t.DayCount,YEAR(t.CreateDate) AS Year,MONTH(t.CreateDate) AS Month
+    FROM
+    (
+    SELECT
+    s.CityId,org.Name CityName,SUM(s.PayablePrice) MonthPayablePrice,(SUM(s.PayablePrice)/COUNT(1)) DayAvgPayablePrice,
+    COUNT(1) DayCount,MAX(s.CreateDate) CreateDate
+    FROM erp_CityPayablePriceSummary s WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON s.CityId=org.Id
+    WHERE (@CityId IS NULL OR @CityId='' OR s.CityId = @CityId) and
+    YEAR(s.CreateDate)=@Year AND  MONTH(s.CreateDate)=@Month
+    GROUP BY s.CityId,org.Name
+    ) AS t
+    ORDER BY t.CityName
+    OFFSET (@PageIndex-1)*@PageSize ROWS FETCH NEXT @PageSize ROWS ONLY
+  </PayableReportPaged>
+  <PayableReportCount>
+    SELECT COUNT(1) FROM
+    (
+    SELECT s.CityId ,org.Name CityName ,SUM(s.PayablePrice) MonthPayablePrice
+    ,(SUM(s.PayablePrice)/COUNT(1)) DayAvgPayablePrice ,COUNT(1) DayCount ,MAX(s.CreateDate) CreateDate
+    FROM erp_CityPayablePriceSummary s WITH(NOLOCK)
+    INNER JOIN dbo.Orgs org WITH(NOLOCK) ON s.CityId=org.Id
+    WHERE (@CityId IS NULL OR @CityId='' OR s.CityId = @CityId) AND YEAR(s.CreateDate)=@Year AND MONTH(s.CreateDate)=@Month
+    GROUP BY s.CityId,org.Name
+    )  t
+  </PayableReportCount>
+  <PurchaseTakeupMoney>
+    SELECT t.Year,t.Month,o.Name City,t1.PurchaseName,t1.PurchaseMobileNo,t.TotalTakeupMoney,t.TotalUnWriteOffPrepayAmount,t.AvgUnWriteOffPrepayAmount
+    ,t.RecordCount,t.AvgTakeupMoney,ISNULL(t2.purchaseAmount,0) purchaseAmount,
+    ROW_NUMBER() OVER (ORDER BY o.Name,t.TotalTakeupMoney DESC) rowNumber
+    FROM (
+    SELECT t.City_Id,t.PurchaseUserId,t.Year,t.Month,SUM(t.TakeupMoney) TotalTakeupMoney,SUM(t.UnWriteOffPrepayAmount) TotalUnWriteOffPrepayAmount,
+    COUNT(1) RecordCount,AVG(t.TakeupMoney) AvgTakeupMoney,AVG(t.UnWriteOffPrepayAmount) AvgUnWriteOffPrepayAmount
+    FROM dbo.erp_CityPurchaseTakeupMoney t
+    WHERE (@CityId IS NULL OR @CityId='' OR t.City_Id=@CityId) AND  t.Year=@Year AND t.Month=@Month
+    GROUP BY t.City_Id,t.PurchaseUserId,t.Year,t.Month
+    ) t
+    LEFT JOIN ( SELECT PurchaseUserId,MAX(PurchaseName) PurchaseName,MAX(PurchaseMobileNo) PurchaseMobileNo FROM dbo.PurchaseRequisitions
+    GROUP BY PurchaseUserId) t1 ON t.PurchaseUserId = t1.PurchaseUserId
+    LEFT JOIN ( SELECT r.City_Id,r.PurchaseUserId,SUM(b.AdValoremAmount) purchaseAmount FROM dbo.PurchaseRequisitions r  WITH(NOLOCK)
+    INNER JOIN dbo.PurchaseInStockNotes n WITH(NOLOCK) ON r.id=n.PurchaseRequisition_Id AND n.AuditState=9 AND n.IsHidden=0
+    AND n.InStockTime > DATEADD(DAY,-30,GETDATE())
+    INNER JOIN dbo.PayableBills b WITH(NOLOCK) ON n.id=b.PurchaseInStockNote_Id AND b.IsDeleted=0
+    GROUP BY r.City_Id,r.PurchaseUserId) t2 ON t.PurchaseUserId = t2.PurchaseUserId AND t.City_Id=t2.City_Id
+    INNER JOIN dbo.Orgs o ON t.City_Id=o.Id
+    ORDER BY o.Name,t.TotalTakeupMoney DESC
+  </PurchaseTakeupMoney>
+  <PurchaseTakeupMoneyPaged>
+    SELECT t.Year,t.Month,o.Name City,t1.PurchaseName,t1.PurchaseMobileNo,t.TotalTakeupMoney,t.TotalUnWriteOffPrepayAmount,t.AvgUnWriteOffPrepayAmount
+    ,t.RecordCount,t.AvgTakeupMoney,ISNULL(t2.purchaseAmount,0) purchaseAmount,
+    ROW_NUMBER() OVER (ORDER BY o.Name,t.TotalTakeupMoney DESC) rowNumber
+    FROM (
+    SELECT t.City_Id,t.PurchaseUserId,t.Year,t.Month,SUM(t.TakeupMoney) TotalTakeupMoney,SUM(t.UnWriteOffPrepayAmount) TotalUnWriteOffPrepayAmount,
+    COUNT(1) RecordCount,AVG(t.TakeupMoney) AvgTakeupMoney,AVG(t.UnWriteOffPrepayAmount) AvgUnWriteOffPrepayAmount
+    FROM dbo.erp_CityPurchaseTakeupMoney t
+    WHERE (@CityId IS NULL OR @CityId='' OR t.City_Id=@CityId) AND  t.Year=@Year AND t.Month=@Month
+    GROUP BY t.City_Id,t.PurchaseUserId,t.Year,t.Month
+    ) t
+    LEFT JOIN ( SELECT PurchaseUserId,MAX(PurchaseName) PurchaseName,MAX(PurchaseMobileNo) PurchaseMobileNo FROM dbo.PurchaseRequisitions
+    GROUP BY PurchaseUserId) t1 ON t.PurchaseUserId = t1.PurchaseUserId
+    LEFT JOIN ( SELECT r.City_Id,r.PurchaseUserId,SUM(b.AdValoremAmount) purchaseAmount FROM dbo.PurchaseRequisitions r  WITH(NOLOCK)
+    INNER JOIN dbo.PurchaseInStockNotes n WITH(NOLOCK) ON r.id=n.PurchaseRequisition_Id AND n.AuditState=9 AND n.IsHidden=0
+    AND n.InStockTime > DATEADD(DAY,-30,GETDATE())
+    INNER JOIN dbo.PayableBills b WITH(NOLOCK) ON n.id=b.PurchaseInStockNote_Id AND b.IsDeleted=0
+    GROUP BY r.City_Id,r.PurchaseUserId) t2 ON t.PurchaseUserId = t2.PurchaseUserId AND t.City_Id=t2.City_Id
+    INNER JOIN dbo.Orgs o ON t.City_Id=o.Id
+    ORDER BY o.Name,t.TotalTakeupMoney DESC
+    OFFSET (@PageIndex-1)*@PageSize ROWS FETCH NEXT @PageSize ROWS ONLY
+  </PurchaseTakeupMoneyPaged>
+  <PurchaseTakeupMoneyCount>
+    SELECT COUNT(1)
+    FROM (
+    SELECT t.City_Id,t.PurchaseUserId,t.Year,t.Month,SUM(t.TakeupMoney) TotalTakeupMoney,COUNT(1) RecordCount,AVG(t.TakeupMoney) AvgTakeupMoney
+    FROM dbo.erp_CityPurchaseTakeupMoney t  WITH(NOLOCK)
+    WHERE (@CityId IS NULL OR @CityId = '' OR t.City_Id=@CityId) AND  t.Year=@Year AND t.Month=@Month
+    GROUP BY t.City_Id,t.PurchaseUserId,t.Year,t.Month
+    ) t
+  </PurchaseTakeupMoneyCount>
+</SqlResource>

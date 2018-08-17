@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ShopOrderOutStockNoteSqlResource>
+  <Select>
+    SELECT Id,State,Remark,BusinessTime,Bonus,CouponAmount,OddAmount,OrderAmount,TotalAmount,AdditionalProfit,IsDeleted,NoteNO,OrderNo,CreateTime,LastUpdateTime,BrokerUser_Id,City_Id,Order_Id,Shop_Id,StoreHouse_Id,User_Id,NoteType,BatchNo,ShopPickupNote_Id FROM dbo.ShopOrderOutStockNote WITH(NOLOCK)
+  </Select>
+  <SelectShopOrderOutStockNote>
+    SELECT
+    [ShopOrderOutStockNote].Id,[ShopOrderOutStockNote].NoteNO,[ShopOrderOutStockNote].State,[ShopOrderOutStockNote].BusinessTime,[ShopOrderOutStockNote].Bonus,[ShopOrderOutStockNote].CouponAmount,[ShopOrderOutStockNote].OddAmount,[ShopOrderOutStockNote].OrderAmount,[ShopOrderOutStockNote].TotalAmount,[ShopOrderOutStockNote].AdditionalProfit,[ShopOrderOutStockNote].OrderNo,[ShopOrderOutStockNote].City_Id,[ShopOrderOutStockNote].BrokerUser_Id,[ShopOrderOutStockNote].Order_Id,[ShopOrderOutStockNote].Shop_Id,[ShopOrderOutStockNote].StoreHouse_Id,[ShopOrderOutStockNote].User_Id,[ShopOrderOutStockNote].ShopPickupNote_Id,[City].Id Id,[City].NewId NewId,[City].Name Name,[Shops].Id Id,[Shops].Name Name,[StoreHouse].Id Id,[StoreHouse].NewId NewId,[StoreHouse].Name Name,[BrokerUser].Id Id,[BrokerUser].TrueName TrueName,[User].Id Id,[User].TrueName TrueName
+    FROM dbo.ShopOrderOutStockNote WITH(NOLOCK)
+    INNER JOIN dbo.Shops WITH(NOLOCK) ON Shop_Id=[Shops].Id
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse_Id=[StoreHouse].Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON ShopOrderOutStockNote.City_Id=[City].Id
+    INNER JOIN dbo.OrgUser BrokerUser WITH(NOLOCK) ON [BrokerUser].Id=BrokerUser_Id
+    INNER JOIN dbo.[User] WITH(NOLOCK) ON [User].Id=User_Id
+  </SelectShopOrderOutStockNote>
+  <SelectShopAllocationOutStockNote>
+    SELECT [ShopOrderOutStockNote].Id,[ShopOrderOutStockNote].NoteNO,[ShopOrderOutStockNote].State,[ShopOrderOutStockNote].BusinessTime,[Shops].Id Id,[Shops].Name Name,[StoreHOuse].Id Id,[StoreHouse].Name Name,[ShopPickupNotes].Id Id,[ShopPickupNotes].PickupTime PickupTime
+    FROM dbo.ShopOrderOutStockNote WITH(NOLOCK)
+    INNER JOIN dbo.Shops WITH(NOLOCK) ON Shop_Id=[Shops].Id
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON ShopOrderOutStockNote.StoreHouse_Id=[StoreHouse].Id
+    INNER JOIN dbo.ShopPickupNotes WITH(NOLOCK) ON ShopPickupNotes.Id = ShopOrderOutStockNote.ShopPickupNote_Id
+  </SelectShopAllocationOutStockNote>
+  <SelectShopNoteItems>
+    SELECT [ShopNoteItems].Id,Unit,Num,Price,DiscountAmount,AdditionalProfit,AdValoremAmount,IsGiveaway,Remark,[ShopNoteItems].CreateTime,[ShopNoteItems].LastUpdateTime,Product_Id,ShopOrderOutStockNote_Id,GoodsPosition,ShopPickupNoteItem_Id,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_ProductName ProductName,Desc_Specifications Specifications,Desc_PackageUnit PackageUnit,Desc_BrandName BrandName,Desc_OldCategory OldCategory
+    FROM dbo.ShopNoteItems WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product_Id=[Product].Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=Info_Id
+  </SelectShopNoteItems>
+  <FirstOrDefaultShopOrderOutStockNote>
+    SELECT TOP 1 [ShopOrderOutStockNote].Id,[ShopOrderOutStockNote].State,Remark,BusinessTime,Bonus,CouponAmount,OddAmount,OrderAmount,TotalAmount,AdditionalProfit,IsDeleted,NoteNO,OrderNo,[ShopOrderOutStockNote].CreateTime,[ShopOrderOutStockNote].LastUpdateTime,BrokerUser_Id,[ShopOrderOutStockNote].City_Id,Order_Id,Shop_Id,StoreHouse_Id,User_Id,NoteType,BatchNo,ShopPickupNote_Id,[City].Id Id,[City].NewId NewId,[City].Name Name,[Shops].Id Id,[Shops].Name Name,[StoreHouse].Id Id,[StoreHouse].NewId NewId,[StoreHouse].Name Name,[BrokerUser].Id Id,[BrokerUser].TrueName TrueName,[User].Id Id,[User].TrueName TrueName
+    FROM dbo.ShopOrderOutStockNote WITH(NOLOCK)
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id=StoreHouse_Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City_Id=[City].Id
+    INNER JOIN dbo.Shops WITH(NOLOCK) ON Shops.Id = ShopOrderOutStockNote.Shop_Id
+    INNER JOIN dbo.OrgUser BrokerUser WITH(NOLOCK) ON BrokerUser_Id=[BrokerUser].Id
+    INNER JOIN dbo.[User] WITH(NOLOCK) ON [User].Id =[ShopOrderOutStockNote].User_Id
+  </FirstOrDefaultShopOrderOutStockNote>
+  <FirstOrDefaultShopAllocationOutStockNote>
+    SELECT TOP 1 [ShopOrderOutStockNote].Id,[ShopOrderOutStockNote].State,[ShopOrderOutStockNote].Remark,BusinessTime,IsDeleted,[ShopOrderOutStockNote].NoteNO,OrderNo,[ShopOrderOutStockNote].CreateTime,[ShopOrderOutStockNote].LastUpdateTime,BrokerUser_Id,[ShopOrderOutStockNote].City_Id,Order_Id,[ShopOrderOutStockNote].Shop_Id,[ShopOrderOutStockNote].StoreHouse_Id,User_Id,NoteType,BatchNo,ShopPickupNote_Id,[City].Id Id,[City].NewId NewId,[City].Name Name,[Shops].Id Id,[Shops].Name Name,[StoreHouse].Id Id,[StoreHouse].NewId NewId,[StoreHouse].Name Name,[ShopPickupNotes].Id,[ShopPickupNotes].PickupTime
+    FROM dbo.ShopOrderOutStockNote WITH(NOLOCK)
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id=StoreHouse_Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City_Id=[City].Id
+    INNER JOIN dbo.Shops WITH(NOLOCK) ON Shops.Id = ShopOrderOutStockNote.Shop_Id
+    INNER JOIN dbo.ShopPickupNotes WITH(NOLOCK) ON [ShopPickupNotes].Id=[ShopOrderOutStockNote].ShopPickupNote_Id
+  </FirstOrDefaultShopAllocationOutStockNote>
+  <Insert>
+    INSERT INTO dbo.ShopOrderOutStockNote(Id,State,Remark,BusinessTime,Bonus,CouponAmount,OddAmount,OrderAmount,TotalAmount,AdditionalProfit,IsDeleted,NoteNO,OrderNo,CreateTime,LastUpdateTime,BrokerUser_Id,City_Id,Order_Id,Shop_Id,StoreHouse_Id,User_Id,NoteType,BatchNo,ShopPickupNote_Id)
+    VALUES  (@Id,@State,@Remark,@BusinessTime,@Bonus,@CouponAmount,@OddAmount,@OrderAmount,@TotalAmount,@AdditionalProfit,@IsDeleted,@NoteNO,@OrderNo,GETDATE(),GETDATE(),@BrokerUser_Id,@City_Id,@Order_Id,@Shop_Id,@StoreHouse_Id,@User_Id,@NoteType,@BatchNo,@ShopPickupNote_Id)
+  </Insert>
+  <Update>
+    UPDATE dbo.ShopOrderOutStockNote SET State=@State,Remark=@Remark,BusinessTime=@BusinessTime,Bonus=@Bonus,CouponAmount=@CouponAmount,OddAmount=@OddAmount,OrderAmount=@OrderAmount,TotalAmount=@TotalAmount,AdditionalProfit=@AdditionalProfit,IsDeleted=@IsDeleted,NoteNO=@NoteNO,OrderNo=@OrderNo,LastUpdateTime=GETDATE(),BrokerUser_Id=@BrokerUser_Id,City_Id=@City_Id,Order_Id=@Order_Id,Shop_Id=@Shop_Id,StoreHouse_Id=@StoreHouse_Id,User_Id=@User_Id,NoteType=@NoteType,BatchNo=@BatchNo,ShopPickupNote_Id=@ShopPickupNote_Id WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.ShopOrderOutStockNote SET IsDeleted=1 WHERE Id=@Id
+  </Delete>
+  <SelectItem>
+    SELECT Id,Unit,Num,Price,DiscountAmount,AdditionalProfit,AdValoremAmount,IsGiveaway,Remark,CreateTime,LastUpdateTime,Product_Id,ShopOrderOutStockNote_Id,GoodsPosition,ShopPickupNoteItem_Id FROM dbo.ShopNoteItems WITH(NOLOCK)
+  </SelectItem>
+  <UpdateItem>
+    UPDATE dbo.ShopNoteItems SET Unit=@Unit,Num=@Num,Price=@Price,DiscountAmount=@DiscountAmount,AdditionalProfit=@AdditionalProfit,AdValoremAmount=@AdValoremAmount,IsGiveaway=@IsGiveaway,Remark=@Remark,LastUpdateTime=GETDATE(),Product_Id=@Product_Id,ShopOrderOutStockNote_Id=@ShopOrderOutStockNote_Id,GoodsPosition=@GoodsPosition,ShopPickupNoteItem_Id=@ShopPickupNoteItem_Id
+    WHERE Id=@Id
+  </UpdateItem>
+  <InsertItem>
+    INSERT INTO dbo.ShopNoteItems(Id,Unit,Num,Price,DiscountAmount,AdditionalProfit,AdValoremAmount,IsGiveaway,Remark,CreateTime,LastUpdateTime,Product_Id,ShopOrderOutStockNote_Id,GoodsPosition,ShopPickupNoteItem_Id)
+    VALUES  (@Id,@Unit,@Num,@Price,@DiscountAmount,@AdditionalProfit,@AdValoremAmount,@IsGiveaway,@Remark,GETDATE(),GETDATE(),@Product_Id,@ShopOrderOutStockNote_Id,@GoodsPosition,@ShopPickupNoteItem_Id)
+  </InsertItem>
+  <DeleteItem>
+    DELETE FROM dbo.ShopNoteItems WHERE Id=@Id
+  </DeleteItem>
+</ShopOrderOutStockNoteSqlResource>

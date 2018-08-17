@@ -72,7 +72,8 @@ namespace jiu.CreateDS.executer
             var repository = $"{modelName}DapperRepository";
 
             var context = new ArrayList();
-            context.AddRange(usingC);
+                context.AddRange(usingC);
+                context.Add ("using LDTech.ERP.Domain.Context;");
             
             context.Add($"namespace {nameSpace}.{modelName}Module {{");
             context.Add($"public class {repository} : DapperRepositoryBase<{modelName}>,{iRepository},{iQuery} {{");
@@ -132,6 +133,7 @@ namespace jiu.CreateDS.executer
 
             var context = new ArrayList();            
             context.Add("using Autofac;");
+            context.Add ("using LDTech.ERP.Domain.Context;");
             context.AddRange(usingC);
             
             context.Add($"namespace {nameSpace}.{modelName}Module {{");

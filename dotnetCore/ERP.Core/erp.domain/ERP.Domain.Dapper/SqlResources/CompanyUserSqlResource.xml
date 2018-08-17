@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [User].Id ,[User].UserName,[User].MobileNO ,[User].TrueName ,[User].CreateTime ,[User].LastUpdateTime ,
+    [User].UserType ,[User].City_Id ,[User].NewId,[User].State ,[User].CompanyName
+    FROM  dbo.[User]  WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO dbo.[User]
+    ( Id ,UserName ,MobileNO  ,TrueName
+    , CreateTime ,LastUpdateTime ,UserType ,City_Id ,NewId,State,CompanyName)
+    VALUES  (@Id,@UserName ,@MobileNO,@TrueName,
+    GETDATE() ,GETDATE() ,@UserType,@City_Id,@NewId,@State,@CompanyName)
+  </Insert>
+  <Update>
+    UPDATE dbo.[User]
+    SET  UserName =@UserName,MobileNO =@MobileNO,TrueName=@TrueName,LastUpdateTime=GETDATE()
+    ,UserType=@UserType,City_Id=@City_Id,[State]=@State,[CompanyName]=@CompanyName WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.[User] WHERE Id=@Id
+  </Delete>
+</SqlResource>

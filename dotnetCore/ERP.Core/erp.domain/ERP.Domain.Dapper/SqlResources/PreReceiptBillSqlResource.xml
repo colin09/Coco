@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PreReceiptBillSqlResource>
+  <Select>
+    SELECT Id,PreReceiptAmount,WriteOffAmount,AuditState,AuditTime,IsDeleted,CreateTime,LastUpdateTime,City_Id,CompanyUser_Id,WriteOffState,PreReceiptBillType,Settlement,IsInternal,CompanyUserCity_Id,RefundAmount,Remark,BillNo FROM dbo.PreReceiptBills WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [PreReceiptBills].Id,PreReceiptAmount,WriteOffAmount,AuditState,AuditTime,IsDeleted,[PreReceiptBills].CreateTime,[PreReceiptBills].City_Id,CompanyUser_Id,WriteOffState,PreReceiptBillType,Settlement,IsInternal,CompanyUserCity_Id,RefundAmount,BillNo,[City].Id,[City].NewId,[City].Name,[CompanyUser].Id,[CompanyUser].CompanyName,[CompanyUser].MobileNO,[CompanyUserCity].Id,[CompanyUserCity].NewId,[CompanyUserCity].Name
+    FROM dbo.PreReceiptBills WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City_Id=[City].Id
+    LEFT JOIN dbo.[User] CompanyUser WITH(NOLOCK) ON CompanyUser_Id=[CompanyUser].Id
+    LEFT JOIN Orgs [CompanyUserCity] WITH(NOLOCK) ON CompanyUserCity_Id=[CompanyUserCity].Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT TOP 1 [PreReceiptBills].Id,PreReceiptAmount,WriteOffAmount,AuditState,AuditTime,IsDeleted,[PreReceiptBills].CreateTime,[PreReceiptBills].City_Id,CompanyUser_Id,WriteOffState,PreReceiptBillType,Settlement,IsInternal,CompanyUserCity_Id,RefundAmount,BillNo,[City].Id,[City].NewId,[City].Name,[CompanyUser].Id,[CompanyUser].CompanyName,[CompanyUser].MobileNO,[CompanyUserCity].Id,[CompanyUserCity].NewId,[CompanyUserCity].Name
+    FROM dbo.PreReceiptBills WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City_Id=[City].Id
+    LEFT JOIN dbo.[User] CompanyUser WITH(NOLOCK) ON CompanyUser_Id=[CompanyUser].Id
+    LEFT JOIN Orgs [CompanyUserCity] WITH(NOLOCK) ON CompanyUserCity_Id=[CompanyUserCity].Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT INTO dbo.PreReceiptBills  (Id,PreReceiptAmount,WriteOffAmount,AuditState,AuditTime,IsDeleted,CreateTime,LastUpdateTime,City_Id,CompanyUser_Id,WriteOffState,PreReceiptBillType,Settlement,IsInternal,CompanyUserCity_Id,RefundAmount,Remark,BillNo)
+    VALUES  (@Id,@PreReceiptAmount,@WriteOffAmount,@AuditState,@AuditTime,@IsDeleted,GETDATE(),GETDATE(),@City_Id,@CompanyUser_Id,@WriteOffState,@PreReceiptBillType,@Settlement,@IsInternal,@CompanyUserCity_Id,@RefundAmount,@Remark,@BillNo)
+  </Insert>
+  <Update>
+    UPDATE dbo.PreReceiptBills SET
+    PreReceiptAmount=@PreReceiptAmount,WriteOffAmount=@WriteOffAmount,AuditState=@AuditState,AuditTime=@AuditTime,IsDeleted=@IsDeleted,LastUpdateTime=GETDATE(),City_Id=@City_Id,CompanyUser_Id=@CompanyUser_Id,WriteOffState=@WriteOffState,PreReceiptBillType=@PreReceiptBillType,Settlement=@Settlement,IsInternal=@IsInternal,CompanyUserCity_Id=@CompanyUserCity_Id,RefundAmount=@RefundAmount,Remark=@Remark,BillNo=@BillNo
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.PreReceiptBills SET IsDeleted=1 WHERE Id=@Id
+  </Delete>
+</PreReceiptBillSqlResource>

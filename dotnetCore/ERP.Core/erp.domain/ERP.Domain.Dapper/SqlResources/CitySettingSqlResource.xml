@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CitySettingSqlResource>
+  <Select>
+    SELECT Id,InitOpeningDataState,OnlineState,CreateTime,LastUpdateTime,City_Id,FocusCapture,EnablePurchaseRequisition,IsOpenProductionDate FROM dbo.CitySettings WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [CitySettings].Id,[CitySettings].InitOpeningDataState,[CitySettings].City_Id,[CitySettings].FocusCapture,[CitySettings].EnablePurchaseRequisition,[CitySettings].IsOpenProductionDate,OnlineState,[Orgs].Name Name FROM dbo.CitySettings WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON [CitySettings].City_Id=[Orgs].Id
+  </SelectIncludeAll>
+  <GetByCityId>
+    SELECT Id,InitOpeningDataState,OnlineState,CreateTime,LastUpdateTime,City_Id,FocusCapture,EnablePurchaseRequisition,IsOpenProductionDate FROM dbo.CitySettings WITH(NOLOCK) WHERE City_Id=@CityId
+  </GetByCityId>
+  <Insert>
+    INSERT INTO dbo.CitySettings
+    (Id,InitOpeningDataState,OnlineState,City_Id,FocusCapture,EnablePurchaseRequisition,IsOpenProductionDate,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@InitOpeningDataState,@OnlineState,@City_Id,@FocusCapture,@EnablePurchaseRequisition,@IsOpenProductionDate,GETDATE(),GETDATE())
+  </Insert>
+  <Update>
+    UPDATE dbo.CitySettings SET InitOpeningDataState=@InitOpeningDataState,OnlineState=@OnlineState,City_Id=@City_Id,FocusCapture=@FocusCapture,EnablePurchaseRequisition=@EnablePurchaseRequisition,IsOpenProductionDate=@IsOpenProductionDate,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.CitySettings WHERE Id=@Id
+  </Delete>
+</CitySettingSqlResource>

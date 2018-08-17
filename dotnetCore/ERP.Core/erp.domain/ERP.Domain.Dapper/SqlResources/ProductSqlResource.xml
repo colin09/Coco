@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT Product.[Id],Product.[State],Product.[CreateTime],Product.[LastUpdateTime],Product.[Info_Id],Product.[ProductType]
+    ,Product.[ProductName],Product.[City_Id],Product.[NewId],Product.[Shop_Id],Product.IsAreaAgent
+    FROM [dbo].[Product] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeProductInfo>
+    SELECT Product.[Id],Product.[State],Product.[CreateTime],Product.[LastUpdateTime],Product.[Info_Id],Product.[ProductType]
+    ,Product.[ProductName],Product.[City_Id],Product.[NewId],[Product].[OnSaleTime],Product.[Shop_Id],Product.IsAreaAgent,ProductInfo.[MonthOfShelfLife]
+    ,ProductInfo.[Id],ProductInfo.[CreateTime],ProductInfo.[LastUpdateTime],ProductInfo.[NewVersionInfoId],ProductInfo.[NewId],ProductInfo.[ProductBusinessClass]
+    ,ProductInfo.[ProductInfoState],ProductInfo.[DistributionPercent],ProductInfo.[Desc_ProductName] ProductName,ProductInfo.[Desc_ProductNo] ProductNo,ProductInfo.[Desc_BrandName] BrandName
+    ,ProductInfo.[Desc_Specifications] Specifications,ProductInfo.[Desc_Category] Category,ProductInfo.[Desc_PackageQuantity] PackageQuantity,ProductInfo.[Desc_PackageUnit] PackageUnit
+    ,ProductInfo.[Desc_SubCategory] SubCategory,ProductInfo.[Desc_OwnProductType] OwnProductType,ProductInfo.[Desc_OldCategory] OldCategory
+    FROM [dbo].[Product] WITH(NOLOCK)
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectIncludeProductInfo>
+  <SelectIncludeAll>
+    SELECT Product.[Id],Product.[State],Product.[CreateTime],Product.[LastUpdateTime],Product.[Info_Id],Product.[ProductType]
+    ,Product.[ProductName],Product.[City_Id],Product.[NewId],[Product].[OnSaleTime],Product.[Shop_Id],Product.IsAreaAgent,ProductInfo.[MonthOfShelfLife]
+    ,ProductInfo.[Id],ProductInfo.[CreateTime],ProductInfo.[LastUpdateTime],ProductInfo.[NewVersionInfoId],ProductInfo.[NewId],ProductInfo.[ProductBusinessClass]
+    ,ProductInfo.[ProductInfoState],ProductInfo.[DistributionPercent],ProductInfo.[Desc_ProductName] ProductName,ProductInfo.[Desc_ProductNo] ProductNo,ProductInfo.[Desc_BrandName] BrandName
+    ,ProductInfo.[Desc_Specifications] Specifications,ProductInfo.[Desc_Category] Category,ProductInfo.[Desc_PackageQuantity] PackageQuantity,ProductInfo.[Desc_PackageUnit] PackageUnit
+    ,ProductInfo.[Desc_SubCategory] SubCategory,ProductInfo.[Desc_OwnProductType] OwnProductType,ProductInfo.[Desc_OldCategory] OldCategory,Orgs.Name Name
+    FROM [dbo].[Product] WITH(NOLOCK)
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = Product.City_Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeInfo>
+    SELECT Product.[Id],Product.[State],Product.[CreateTime],Product.[LastUpdateTime],Product.[Info_Id],Product.[ProductType]
+    ,Product.[ProductName],Product.[City_Id],Product.[NewId],[Product].[OnSaleTime],Product.[Shop_Id],Product.IsAreaAgent,ProductInfo.[MonthOfShelfLife]
+    ,ProductInfo.[Id],ProductInfo.[CreateTime],ProductInfo.[LastUpdateTime],ProductInfo.[NewVersionInfoId],ProductInfo.[NewId],ProductInfo.[ProductBusinessClass]
+    ,ProductInfo.[ProductInfoState],ProductInfo.[DistributionPercent],ProductInfo.[Desc_ProductName] ProductName,ProductInfo.[Desc_ProductNo] ProductNo,ProductInfo.[Desc_BrandName] BrandName
+    ,ProductInfo.[Desc_Specifications] Specifications,ProductInfo.[Desc_Category] Category,ProductInfo.[Desc_PackageQuantity] PackageQuantity,ProductInfo.[Desc_PackageUnit] PackageUnit
+    ,ProductInfo.[Desc_SubCategory] SubCategory,ProductInfo.[Desc_OwnProductType] OwnProductType,ProductInfo.[Desc_OldCategory] OldCategory
+    FROM [dbo].[Product] WITH(NOLOCK)
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id  WHERE Product.Id=@Id
+  </FirstOrDefaultIncludeInfo>
+  <FirstOrDefaultIncludeAll>
+    SELECT Product.[Id],Product.[State],Product.[CreateTime],Product.[LastUpdateTime],Product.[Info_Id],Product.[ProductType]
+    ,Product.[ProductName],Product.[City_Id],Product.[NewId],[Product].[OnSaleTime],Product.[Shop_Id],Product.IsAreaAgent,ProductInfo.[MonthOfShelfLife]
+    ,ProductInfo.[Id],ProductInfo.[CreateTime],ProductInfo.[LastUpdateTime],ProductInfo.[NewVersionInfoId],ProductInfo.[NewId],ProductInfo.[ProductBusinessClass]
+    ,ProductInfo.[ProductInfoState],ProductInfo.[DistributionPercent],ProductInfo.[Desc_ProductName] ProductName,ProductInfo.[Desc_ProductNo] ProductNo,ProductInfo.[Desc_BrandName] BrandName
+    ,ProductInfo.[Desc_Specifications] Specifications,ProductInfo.[Desc_Category] Category,ProductInfo.[Desc_PackageQuantity] PackageQuantity,ProductInfo.[Desc_PackageUnit] PackageUnit
+    ,ProductInfo.[Desc_SubCategory] SubCategory,ProductInfo.[Desc_OwnProductType] OwnProductType,ProductInfo.[Desc_OldCategory] OldCategory,Orgs.Name Name
+    FROM [dbo].[Product] WITH(NOLOCK)
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = Product.City_Id WHERE Product.Id=@Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[Product]
+    ([Id],[State],[CreateTime],[LastUpdateTime],[Info_Id],[ProductType]
+    ,[ProductName],[City_Id],[NewId],[Shop_Id],[IsAreaAgent])
+    VALUES
+    (@Id,@State,GETDATE(),GETDATE(),@Info_Id,@ProductType
+    ,@ProductName,@City_Id,@NewId,@Shop_Id,@IsAreaAgent)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[Product]
+    SET [State] = @State
+    ,[LastUpdateTime] = GETDATE()
+    ,[Info_Id] = @Info_Id
+    ,[ProductType] = @ProductType
+    ,[ProductName] = @ProductName
+    ,[City_Id] = @City_Id
+    ,[Shop_Id] = @Shop_Id
+    ,[IsAreaAgent] = @IsAreaAgent
+    WHERE Id=@Id
+  </Update>
+  <UpdateIsAreaAgent>
+    UPDATE [dbo].[Product]
+    SET 
+    [LastUpdateTime] = GETDATE()
+    ,[IsAreaAgent] = @IsAreaAgent
+    WHERE Id=@Id
+  </UpdateIsAreaAgent>
+  <Delete>
+    DELETE FROM dbo.Product WHERE Id=@Id
+  </Delete>
+  <SelectSCMWeekTakeProduct>
+    SELECT Product.Id ProductId,ProductInfo.Desc_PackageUnit Unit FROM dbo.Product WITH(NOLOCK)
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectSCMWeekTakeProduct>
+  <SelectSCMMonthTakeProduct>
+    SELECT  Product.[Id] ProductId,dbo.MonthCheckProducts.Unit
+    FROM dbo.Product WITH(NOLOCK)
+    INNER JOIN dbo.MonthCheckProducts WITH(NOLOCK) ON Product.Id=dbo.MonthCheckProducts.ProductId
+  </SelectSCMMonthTakeProduct>
+  <SelectSCMAllStoreHouseTakeProduct>
+    SELECT  Product.[Id] ProductId,ProductInfo.[Desc_PackageUnit] Unit
+    FROM dbo.Product WITH(NOLOCK)
+    INNER JOIN dbo.ProductStocks WITH(NOLOCK) ON ProductStocks.Product_Id = Product.Id AND Product.ProductType NOT IN (7,9)--合作商、入驻产品
+    AND Product.State &lt;&gt; 3
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectSCMAllStoreHouseTakeProduct>
+  <QueryGlobalBrandInfo>
+    SELECT t.Category,t.SubCategory,t.Brand,ISNULL(t2.OnSaleCityCount,0) OnSaleCityCount,
+    ISNULL(t3.SaleCount,0) SaleCount,
+    (CASE WHEN t4.CityId IS NULL THEN 0 ELSE 1 END) LocalOnSale,
+    (CASE WHEN t5.Category IS NULL THEN 0 ELSE 1 END) LocalHasStore
+    FROM dbo.yjc_BrandInfo t WITH(NOLOCK)
+    LEFT JOIN dbo.yjc_BrandOnSaleCityCount t2 WITH(NOLOCK)
+    ON t2.Category = t.Category AND t2.SubCategory=t.SubCategory AND t2.Brand=t.Brand
+    LEFT JOIN dbo.yjc_BrandSaleCount t3 WITH(NOLOCK)
+    ON t3.Category = t.Category AND t3.SubCategory=t.SubCategory AND t3.Brand=t.Brand
+    LEFT JOIN dbo.yjc_CityOnSaleBrand t4 WITH(NOLOCK)
+    ON t4.Category = t.Category AND t4.SubCategory=t.SubCategory AND t4.Brand=t.Brand AND t4.CityId=@CityId
+    LEFT JOIN (
+    SELECT DISTINCT info.Desc_Category Category,info.Desc_SubCategory SubCategory,info.Desc_BrandName Brand
+    FROM dbo.yjc_View_CityProductStoreCount t WITH(NOLOCK)
+    LEFT JOIN dbo.ProductInfo info WITH(NOLOCK) ON t.ProductInfoId = info.Id AND t.StockNum &gt; 0 AND CityId=@CityId
+    ) t5 ON t5.Category = t.Category AND t5.SubCategory=t.SubCategory AND t5.Brand=t.Brand
+  </QueryGlobalBrandInfo>
+</SqlResource>

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RaffleTicketInfoSqlResource>
+  <Select>
+    SELECT [Id]
+    ,[RaffleOutCount]
+    ,[RaffleInCount]
+    ,[TotalBounsAmount]
+    ,[RaffleInAmount]
+    ,[RaffleReceivableAmount]
+    ,[IsParticularProduct]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    ,[Product_Id]
+    ,[StoreHouse_Id]
+    FROM [dbo].[RaffleTicketInfoes] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[RaffleTicketInfoes]
+    ([Id]
+    ,[RaffleOutCount]
+    ,[RaffleInCount]
+    ,[TotalBounsAmount]
+    ,[RaffleInAmount]
+    ,[RaffleReceivableAmount]
+    ,[IsParticularProduct]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    ,[Product_Id]
+    ,[StoreHouse_Id])
+    VALUES
+    (@Id
+    ,@RaffleOutCount
+    ,@RaffleInCount
+    ,@TotalBounsAmount
+    ,@RaffleInAmount
+    ,@RaffleReceivableAmount
+    ,@IsParticularProduct
+    ,@CreateTime
+    ,@LastUpdateTime
+    ,@City_Id
+    ,@Product_Id
+    ,@StoreHouse_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[RaffleTicketInfoes]
+    SET [RaffleOutCount] = @RaffleOutCount
+    ,[RaffleInCount] = @RaffleInCount
+    ,[TotalBounsAmount] = @TotalBounsAmount
+    ,[RaffleInAmount] = @RaffleInAmount
+    ,[RaffleReceivableAmount] = @RaffleReceivableAmount
+    ,[IsParticularProduct] = @IsParticularProduct
+    ,[LastUpdateTime] = GETDATE()
+    ,[City_Id] = @City_Id
+    ,[Product_Id] = @Product_Id
+    ,[StoreHouse_Id] = @StoreHouse_Id
+    WHERE [Id]=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.RaffleTicketInfoes WHERE Id=@Id
+  </Delete>
+  <SelectList>
+    SELECT [RaffleTicketInfoes].[Id]
+    ,[RaffleOutCount]
+    ,[RaffleInCount]
+    ,[TotalBounsAmount]
+    ,[RaffleInAmount]
+    ,[RaffleReceivableAmount]
+    ,[IsParticularProduct]
+    ,[RaffleTicketInfoes].[CreateTime]
+    ,[RaffleTicketInfoes].[City_Id]
+    ,[RaffleTicketInfoes].[Product_Id]
+    ,[RaffleTicketInfoes].[StoreHouse_Id]
+    ,[Product].[Id]
+    ,CASE WHEN  [Product].[ProductName] IS NULL OR  [Product].[ProductName] ='' THEN [ProductInfo].Desc_ProductName ELSE  [Product].[ProductName] end ProductName
+    ,[ProductInfo].[Desc_Specifications] Specifications
+    ,[ProductInfo].[Desc_PackageUnit] PackageUnit
+    ,[ProductInfo].[Desc_PackageQuantity] PackageQuantity
+    ,[City].[Id]
+    ,[City].[Name]
+    ,[City].[Address_Province] Province
+    ,[City].[Address_City] City
+    ,[City].[Address_County] County
+    ,[StoreHouseOrg].[Id] Id
+    ,[StoreHouseOrg].[Name] Name
+    FROM [dbo].[RaffleTicketInfoes] WITH(NOLOCK)
+    INNER JOIN [dbo].[Orgs] AS City WITH(NOLOCK) ON City.Id = [RaffleTicketInfoes].City_Id
+    INNER JOIN [dbo].[Product] WITH(NOLOCK) ON Product.Id = [RaffleTicketInfoes].Product_Id
+    INNER JOIN [dbo].[ProductInfo] WITH(NOLOCK) ON [ProductInfo].[Id] = [Product].[Info_Id]
+    INNER JOIN [dbo].[StoreHouse] WITH(NOLOCK) ON StoreHouse.Id = [RaffleTicketInfoes].StoreHouse_Id
+    INNER JOIN [dbo].[Orgs] AS StoreHouseOrg WITH(NOLOCK) ON [StoreHouseOrg].[Id] = [StoreHouse].[Id]
+  </SelectList>
+</RaffleTicketInfoSqlResource>

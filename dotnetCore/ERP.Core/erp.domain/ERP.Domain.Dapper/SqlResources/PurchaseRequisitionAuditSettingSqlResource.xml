@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[FirstAuditUserMobileNos],[SecondAuditUserMobileNos],[Remark],[CreateTime],[LastUpdateTime],[City_Id],[SettingType]
+    FROM [dbo].[PurchaseRequisitionAuditSettings] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [PurchaseRequisitionAuditSettings].Id,FirstAuditUserMobileNos,SecondAuditUserMobileNos,[PurchaseRequisitionAuditSettings].Remark,[PurchaseRequisitionAuditSettings].CreateTime,[PurchaseRequisitionAuditSettings].LastUpdateTime,City_Id,SettingType,[dbo].[Orgs].Name City_Name FROM dbo.PurchaseRequisitionAuditSettings WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = PurchaseRequisitionAuditSettings.City_Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT PurchaseRequisitionAuditSettings.Id,FirstAuditUserMobileNos,SecondAuditUserMobileNos,PurchaseRequisitionAuditSettings.Remark,City_Id,SettingType,City.Name Name,City.Id Id
+    FROM dbo.PurchaseRequisitionAuditSettings WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=PurchaseRequisitionAuditSettings.City_Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT INTO dbo.PurchaseRequisitionAuditSettings (Id,FirstAuditUserMobileNos,SecondAuditUserMobileNos,Remark,City_Id,SettingType,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@FirstAuditUserMobileNos,@SecondAuditUserMobileNos,@Remark,@City_Id,@SettingType,GETDATE(),GETDATE())
+  </Insert>
+  <Update>
+    UPDATE dbo.PurchaseRequisitionAuditSettings
+    SET    FirstAuditUserMobileNos=@FirstAuditUserMobileNos,SecondAuditUserMobileNos=@SecondAuditUserMobileNos,Remark=@Remark,City_Id=@City_Id,SettingType=@SettingType,LastUpdateTime=GETDATE()
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.PurchaseRequisitionAuditSettings WHERE Id=@Id
+  </Delete>
+  <FirstOrDefaultByCityAndType>
+    SELECT PurchaseRequisitionAuditSettings.Id,FirstAuditUserMobileNos,SecondAuditUserMobileNos,PurchaseRequisitionAuditSettings.Remark,City_Id,SettingType,City.Name Name,City.Id Id
+    FROM dbo.PurchaseRequisitionAuditSettings WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=PurchaseRequisitionAuditSettings.City_Id
+    WHERE [PurchaseRequisitionAuditSettings].City_Id=@CityId AND [PurchaseRequisitionAuditSettings].SettingType=@SettingType
+  </FirstOrDefaultByCityAndType>
+</SqlResource>

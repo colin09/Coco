@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CityCustomAuditSettingSqlResource>
+  <Select>
+    SELECT [Id]
+    ,[CityManagerMobileNos]
+    ,[FirstAuditUserMobileNos]
+    ,[SecondAuditUserMobileNos]
+    ,[Remark]
+    ,[AuditRuleName]
+    ,[GlobalAuditSetting_Id]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    FROM [dbo].[CityCustomAuditSettings] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [CityCustomAuditSettings].Id,CityManagerMobileNos,FirstAuditUserMobileNos,SecondAuditUserMobileNos,[CityCustomAuditSettings].Remark,AuditRuleName,GlobalAuditSetting_Id,Name Name FROM dbo.CityCustomAuditSettings WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=City_Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT INTO dbo.CityCustomAuditSettings
+    (Id,CityManagerMobileNos,FirstAuditUserMobileNos,SecondAuditUserMobileNos,Remark,AuditRuleName,GlobalAuditSetting_Id,City_Id,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@CityManagerMobileNos,@FirstAuditUserMobileNos,@SecondAuditUserMobileNos,@Remark,@AuditRuleName,@GlobalAuditSetting_Id,@City_Id,GETDATE(),GETDATE())
+  </Insert>
+  <Delete>
+    DELETE FROM dbo.CityCustomAuditSettings WHERE Id=@Id
+  </Delete>
+  <DeleteByGlobalAuditSettingId>
+    DELETE FROM dbo.CityCustomAuditSettings WHERE GlobalAuditSetting_Id=@GlobalAuditSettingId
+  </DeleteByGlobalAuditSettingId>
+</CityCustomAuditSettingSqlResource>

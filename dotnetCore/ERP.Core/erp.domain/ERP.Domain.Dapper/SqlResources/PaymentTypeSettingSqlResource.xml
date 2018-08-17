@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id]
+    ,[PaymentName]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    ,[CityBank_Id]
+    FROM [dbo].[PaymentTypeSettings] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[PaymentTypeSettings]
+    ([Id]
+    ,[PaymentName]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    ,[CityBank_Id])
+    VALUES
+    (@Id
+    ,@PaymentName
+    ,GETDATE()
+    ,GETDATE()
+    ,@City_Id
+    ,@CityBank_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[PaymentTypeSettings]
+    SET [PaymentName] = @PaymentName
+    ,[LastUpdateTime] =GETDATE()
+    ,[City_Id] = @City_Id
+    ,[CityBank_Id] = @CityBank_Id
+    WHERE Id =@Id
+  </Update>
+  <Delete>
+    DELETE FROM [dbo].[PaymentTypeSettings]
+    WHERE Id =@id
+  </Delete>
+</SqlResource>
