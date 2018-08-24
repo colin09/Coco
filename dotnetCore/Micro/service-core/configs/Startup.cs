@@ -33,7 +33,7 @@ namespace configs {
             services.AddConfiguration(Configuration);
 
             services.AddMvc ().SetCompatibilityVersion (CompatibilityVersion.Version_2_1);
-            services.Configure<ConfigServerData> (Configuration);
+            services.Configure<ConfigData> (Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

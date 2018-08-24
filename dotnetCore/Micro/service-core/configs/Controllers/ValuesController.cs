@@ -13,37 +13,14 @@ namespace configs.Controllers {
     [ApiController]
     public class ValuesController : ControllerBase {
 
-        /*
-        private readonly IConfigurationRoot _config;
-        private readonly IOptionsSnapshot<ConfigManager> _configDemo;
-
-        public ValuesController (IConfigurationRoot config, IOptionsSnapshot<ConfigManager> configDemo) {
-            _config = config;
-            _configDemo = configDemo;
-        }
-
-        // GET api/values
-        [HttpGet("config")]
-        public ConfigManager GetConfig () {
-           //两种方式获取配置文件的数据
-            //var demo = new Demo
-            //{
-            //    Name = _config["name"],
-            //    Age = int.Parse(_config["age"]),
-            //    Env = _config["env"]
-            //};
-            var config = _configDemo.Value;
-            return config;
-        }*/
-
         private IConfigurationRoot Config { get; set; }
-        private IOptionsSnapshot<ConfigServerData> IConfigServerData { get; set; }
+        private IOptionsSnapshot<ConfigData> IConfigServerData { get; set; }
         private ConfigServerClientSettingsOptions ConfigServerClientSettingsOptions { get; set; }
 
-        public ValuesController (IConfigurationRoot config, IOptionsSnapshot<ConfigServerData> configServerData, IOptions<ConfigServerClientSettingsOptions> confgServerSettings) {
+        public ValuesController (IConfigurationRoot config, IOptionsSnapshot<ConfigData> configServerData, IOptions<ConfigServerClientSettingsOptions> confgServerSettings) {
             // The ASP.NET DI mechanism injects the data retrieved from the Spring Cloud Config Server 
-            // as an IOptionsSnapshot<ConfigServerData>. This happens because we added the call to:
-            // "services.Configure<ConfigServerData>(Configuration);" in the StartUp class
+            // as an IOptionsSnapshot<ConfigData>. This happens because we added the call to:
+            // "services.Configure<ConfigData>(Configuration);" in the StartUp class
             if (configServerData != null)
                 IConfigServerData = configServerData;
 
@@ -56,7 +33,7 @@ namespace configs.Controllers {
 
         // GET api/values
         [HttpGet ("config")]
-        public ConfigServerData GetConfig () {
+        public ConfigData GetConfig () {
             return  IConfigServerData.Value;
         }
 
@@ -66,9 +43,10 @@ namespace configs.Controllers {
         }
 
         [HttpGet ("reload")]
-        public string Reload () {
+        public IConfigurationRoot Reload () {
             Config.Reload();           
-            return  "Config.Reload !";
+            //return  "Config.Reload !";
+            return Config;
         }
 
 
