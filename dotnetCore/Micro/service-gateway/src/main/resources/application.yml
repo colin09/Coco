@@ -1,0 +1,23 @@
+server:
+  port: 9302
+
+eureka:
+  client:
+    shouldFetchRegistry: false
+    shouldRegisterWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:9300/eureka/
+
+spring:
+  application:
+    name: service-gateway
+
+#下面的代码可以注释
+zuul:
+  routes:
+    S01:
+      path: /S01/**
+      serviceId: S01
+    S02:
+      path: /S02/**
+      serviceId: S02

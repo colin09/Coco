@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using configs.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,10 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Steeltoe.Discovery.Client;
-//using Pivotal.Discovery.Client;
+using Steeltoe.Extensions.Configuration.ConfigServer;
 
-namespace S01 {
+namespace configs {
     public class Startup {
         public Startup (IConfiguration configuration) {
             Configuration = configuration;
@@ -23,8 +23,17 @@ namespace S01 {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices (IServiceCollection services) {
-            services.AddDiscoveryClient (Configuration); // Add framework services.
+
+           services.AddOptions();
+
+            // Optional: Adds ConfigServerClientOptions to service container
+            services.ConfigureConfigServerClientOptions(Configuration);
+
+            // Optional:  Adds IConfiguration and IConfigurationRoot to service container
+            services.AddConfiguration(Configuration);
+
             services.AddMvc ().SetCompatibilityVersion (CompatibilityVersion.Version_2_1);
+            services.Configure<ConfigServerData> (Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,7 +46,6 @@ namespace S01 {
 
             app.UseHttpsRedirection ();
             app.UseMvc ();
-            app.UseDiscoveryClient();
         }
     }
 }
