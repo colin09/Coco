@@ -28,7 +28,7 @@ services:
       RABBITMQ_ERLANG_COOKIE: "lsAPPLICATION"
       RABBITMQ_DEFAULT_USER: "rabbitmq"
       RABBITMQ_DEFAULT_PASS: "password"
-      RABBITMQ_DEFAULT_VHOST: "test"
+      RABBITMQ_DEFAULT_VHOST: "/test"
     ports:
       - "15672:15672"
       - "5672:5672"

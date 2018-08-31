@@ -9,7 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Foundatio.Redis" Version="7.0.1564" />
+    <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Steeltoe.Common" Version="2.1.0" />
+    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

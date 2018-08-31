@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Steeltoe.Common.Discovery;
 using Steeltoe.Discovery.Client;
-//using Pivotal.Discovery.Client;
+using IdentityModel.Client;
 
 namespace S01.Controllers {
     [Route ("api/[controller]")]
@@ -38,10 +38,15 @@ namespace S01.Controllers {
             return await client.GetStringAsync (ProductUrl);
         }
 
-        // GET api/values/5
-        [HttpGet ("{id}")]
-        public ActionResult<string> Get (int id) {
-            return "value";
+        // GET api/values/S2
+        [HttpGet ("S2")]
+        public async Task<DiscoveryResponse> Get (int id) {
+
+            var discoveryClient = new DiscoveryClient ($"http://S02", _handler) {
+                Policy = new DiscoveryPolicy { RequireHttps = false }
+            };
+            return await discoveryClient.GetAsync ();
+            //return "value";
         }
 
         // POST api/values

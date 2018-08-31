@@ -9,11 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <!-- <PackageReference Include="Pivotal.Discovery.Client" Version="1.1.0" /> -->
     <PackageReference Include="Steeltoe.Common" Version="2.1.0" />
-    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.1.0"/>
-    <PackageReference Include="IdentityModel" Version="3.9.0" />
+    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

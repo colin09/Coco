@@ -9,7 +9,8 @@ Packages :
     
     dotnet add package Dapper --version 1.50.5
     dotnet add package log4net --version 2.0.8
-
+    dotnet add package Newtonsoft.Json --version 11.0.2
+    
     dotnet add package Autofac --version 4.8.1
     dotnet add package Autofac.Configuration --version 4.1.0
     dotnet add package Autofac.Extensions.DependencyInjection --version 4.2.2

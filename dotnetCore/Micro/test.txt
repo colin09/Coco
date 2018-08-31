@@ -1,0 +1,4 @@
+;注释�?这是临时文件,用完删除 
+service-center 
+service-configs 
+service-gateway 

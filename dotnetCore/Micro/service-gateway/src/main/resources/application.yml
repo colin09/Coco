@@ -14,6 +14,9 @@ spring:
 
 #下面的代码可以注释
 zuul:
+  sensitive:
+    headers:
+      true
   routes:
     S01:
       path: /S01/**
@@ -21,3 +24,12 @@ zuul:
     S02:
       path: /S02/**
       serviceId: S02
+    identity:
+      path: /identity/**
+      serviceId: identity
+    user:
+      path: /user/**
+      serviceId: user
+    order:
+      path: /order/**
+      serviceId: order

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace user
+namespace S04
 {
     public class Program
     {
@@ -20,6 +20,6 @@ namespace user
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-            .UseUrls ("http://*:9320");
+                .UseUrls("Http://localhost:5002");
     }
 }
