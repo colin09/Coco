@@ -29,6 +29,7 @@ namespace order {
             var discoveryClient = services.BuildServiceProvider ().GetService<IDiscoveryClient> ();
             var handler = new DiscoveryHttpClientHandler (discoveryClient);
             services.AddAuthorization ();
+
             services.AddAuthentication (x => {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -43,13 +44,14 @@ namespace order {
                     x.IntrospectionBackChannelHandler = handler;
                 });
             /*
-            services.AddAuthentication ("Bearer")
-                .AddIdentityServerAuthentication (options => {
-                    options.Authority = "http://localhost:9318"; //配置Identityserver的授权地址
-                    options.RequireHttpsMetadata = false; //不需要https    
-                    options.ApiName = "api1"; //api的name，需要和config的名称相同
+            services.AddAuthentication ("Bearer") //添加授权模式
+                .AddIdentityServerAuthentication (Options => {
+                    Options.Authority = "http://localhost:5006"; //授权服务器地址
+                    Options.RequireHttpsMetadata = false; //是否是https
+                    Options.ApiName = "api";
                 });*/
             services.AddMvc ().SetCompatibilityVersion (CompatibilityVersion.Version_2_1);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

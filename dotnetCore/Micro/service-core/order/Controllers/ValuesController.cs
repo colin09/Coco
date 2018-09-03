@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace order.Controllers {
 
@@ -11,10 +13,17 @@ namespace order.Controllers {
     [ApiController]
     public class ValuesController : ControllerBase {
 
+        private readonly ILogger _logger;
+
+        public ValuesController (ILogger<ValuesController> logger) {
+            _logger = logger;
+        }
+
         // admin role
         [HttpGet ("admin")]
         [Authorize (Roles = "admin")]
         public IActionResult Get1 () {
+            //_logger.LogInformation(JsonConvert.SerializeObject(User));
             var userId = User.Claims.FirstOrDefault (x => x.Type == "sub")?.Value;
             var role = User.Claims.FirstOrDefault (x => x.Type == "role")?.Value;
             return Ok (new { userId, role });

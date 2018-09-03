@@ -44,3 +44,9 @@ Project
 
         erp.domain\ERP.Domain.Dapper\ERP.Domain.Dapper.csproj
         erp.domain\ERP.Domain.Services\ERP.Domain.Services.csproj
+
+
+
+
+Micro-Service:
+    http://localhost:5006/.well-known/openid-configuration

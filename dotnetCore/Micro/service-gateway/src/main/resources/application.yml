@@ -14,9 +14,7 @@ spring:
 
 #下面的代码可以注释
 zuul:
-  sensitive:
-    headers:
-      true
+  sensitive-headers: true
   routes:
     S01:
       path: /S01/**

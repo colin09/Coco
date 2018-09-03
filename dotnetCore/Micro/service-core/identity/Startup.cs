@@ -38,7 +38,7 @@ namespace identity {
                 })
                 .AddDeveloperSigningCredential ()
                 .AddInMemoryPersistedGrants ()
-                .AddInMemoryApiResources (config.GetApiResources2 ())
+                .AddInMemoryApiResources (config.GetApiResources ())
                 .AddInMemoryClients (config.GetClients ())
                 .AddInMemoryIdentityResources(config.GetIdentityResources())
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();

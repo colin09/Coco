@@ -25,8 +25,8 @@ namespace S04 {
 
             services.AddAuthentication ("Bearer") //添加授权模式
                 .AddIdentityServerAuthentication (Options => {
-                    Options.Authority = "https://localhost:5001"; //授权服务器地址
-                    Options.RequireHttpsMetadata = true; //是否是https
+                    Options.Authority = "http://localhost:5006"; //授权服务器地址
+                    Options.RequireHttpsMetadata = false; //是否是https
                     Options.ApiName = "api";
                 });
         }
@@ -39,10 +39,9 @@ namespace S04 {
                 app.UseHsts ();
             }
 
-            app.UseAuthentication ();
+            app.UseAuthentication ();//使用授权中间件
             app.UseHttpsRedirection ();
             app.UseMvc ();
-            app.UseAuthentication (); //使用授权中间件
         }
     }
 }
