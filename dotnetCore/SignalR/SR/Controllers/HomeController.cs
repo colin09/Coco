@@ -36,6 +36,12 @@ namespace SR.Controllers {
         public ActionResult Chat () {
             return View ();
         }
+        
+
+        public ActionResult Canvas () {
+            ViewData["Message"] = "Canvas Program Edit.";
+            return View ();
+        }
 
     }
 }

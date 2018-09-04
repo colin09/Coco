@@ -35,3 +35,12 @@ body {
         display: none;
     }
 }
+
+
+
+li {list-style-type: none;}
+a ,a:hover,a:focus{text-decoration: none;}
+
+div,ul,li,p,span,h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {padding: 0;margin: 0;font-family: Arial, Verdana,"微软雅黑","宋体";}
+
+.clear { clear: both;width: 0;height: 0;}

@@ -53,7 +53,7 @@ namespace SR
             app.UseCookiePolicy();
 
             // Any connection or hub wire up and configuration should go here
-            app.MapSignalR();
+            //app.MapSignalR();
 
             app.UseMvc(routes =>
             {

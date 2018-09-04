@@ -136,6 +136,11 @@ project.lock.json
 #################
 /docker/LocalService/local-data
 
+#################
+## cocos-2d
+#################
+/frameworks/
+
 ############
 ## nodejs
 ############
