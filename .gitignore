@@ -228,3 +228,5 @@ _dll/com.magicalhorse.arch.common.dll
 _dll/com.magicalhorse.arch.framework.dll
 .vs/config/applicationhost.config
 
+/cocos-2d/sushi/frameworks
+/cocos-2d/S1/s1/frameworks
