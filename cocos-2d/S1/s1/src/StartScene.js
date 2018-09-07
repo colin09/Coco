@@ -21,7 +21,7 @@ var StartLayer = cc.Layer.extend({
         var screen = new Screen1();
         this.addChild(screen, 10, 103);
 
-
+        this.test();
 
 
 
@@ -45,6 +45,26 @@ var StartLayer = cc.Layer.extend({
 
 
         return true;
+    },
+    test: function () {
+        var texture = cc.textureCache.addImage(res.empty);
+        //指定纹理创建精灵
+        //var sp1 = new cc.Sprite(texture);
+        //指定纹理和裁剪的矩形区域来创建精灵
+        var sprite = new cc.Sprite(texture, cc.rect(0, 0, 125, 125));
+
+        var animation = cc.Animation.create();
+        animation.setDelayPerUnit(0.1);
+        //动画播放完成是否保持在第一帧
+        animation.setRestoreOriginalFrame(true);
+        //添加动画的每一帧
+        for (var a = 1; a < 17; a++) {
+            animation.addSpriteFrameWithFile("/res/run/run-" + a + ".png");
+        }
+        //sprite.runAction(cc.Repeat.create(cc.Animate.create(animation)));
+        sprite.runAction(cc.Animate.create(animation).repeatForever());
+        sprite.setPosition(cc.p(200,200));
+        this.addChild(sprite, 10);
     }
 });
 

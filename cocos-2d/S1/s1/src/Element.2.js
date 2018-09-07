@@ -50,16 +50,10 @@ cc.Element = cc.Class.extend({
         this._offset = cc.p(0, 0);
     },
     createElement: function () {
-        var layer = new cc.LayerColor(cc.color(0, 0, 255, 80), this._size.width, this._size.height);
-        layer.setPosition(this._position);
-        layer.setAnchorPoint(this._anchorPoint);
-
         var sprite = this.createSprite();
+        this.addTouchEventListenser(sprite);
 
-        layer.name = "Element_" + sprite.name;
-        layer.addChild(sprite, 1);
-        this.addTouchEventListenser(layer);
-        return layer;
+        return sprite;
     },
     createSprite: function () {
         var sprite = null;
@@ -101,27 +95,16 @@ cc.Element = cc.Class.extend({
         //指定纹理和裁剪的矩形区域来创建精灵
         var sprite = new cc.Sprite(texture, cc.rect(0, 0, this._size.width, this._size.height));
 
-
-
-        var animation = cc.Animation.create();
-        animation.setDelayPerUnit(0.1);
-        //动画播放完成是否保持在第一帧
-        animation.setRestoreOriginalFrame(true);
-        //添加动画的每一帧
-        for(var a = 1; a < 17; a++){
-            animation.addSpriteFrameWithFile("/res/run/run-"+a+".png");
-        }
-        sprite.runAction(cc.Repeat.create(cc.Animate.create(animation)));
         return sprite;
     },
-    addTouchEventListenser: function (layer) {
+    addTouchEventListenser: function (sprite) {
         var that = this;
         var touchListener = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
             onTouchMoved: function (touch, event) {
                 //this.onTouchesMoved(touch, event);
-                cc.log(layer.name + " onTouchMoved");
+                cc.log(sprite.name + " onTouchMoved");
 
                 var pos = touch.getLocation();
                 var posOld = touch.getPreviousLocation();
@@ -130,12 +113,12 @@ cc.Element = cc.Class.extend({
                     var newPos = cc.p(pos.x - that._offset.x, pos.y - that._offset.y);
                     that._position = that.checkTouchBounder(newPos);
                     //that._position = newPos;
-                    layer.setPosition(that._position);
+                    sprite.setPosition(that._position);
                 }
             },
             onTouchEnded: function (touch, event) {
                 //this.onTouchesEnded(touch, event);
-                cc.log(layer.name + " onTouchEnded");
+                cc.log(sprite.name + " onTouchEnded");
                 that._selected = false;
             },
             onTouchBegan: function (touch, event) {
@@ -149,14 +132,14 @@ cc.Element = cc.Class.extend({
                     that._selected = true;
                     that._offset = cc.p(pos.x - that._position.x, pos.y - that._position.y);
 
-                    cc.log(layer.name + ", pos.x=" + pos.x + ",pos.y=" + pos.y);
+                    cc.log(sprite.name + ", pos.x=" + pos.x + ",pos.y=" + pos.y);
                     cc.log("_offset , pos.x=" + pos.x + ",pos.y=" + pos.y);
                 }
 
                 return true;
             }
         });
-        cc.eventManager.addListener(touchListener, layer);
+        cc.eventManager.addListener(touchListener, sprite);
     },
     checkTouchBounder: function (pos) {
         //var size = cc.winSize;
