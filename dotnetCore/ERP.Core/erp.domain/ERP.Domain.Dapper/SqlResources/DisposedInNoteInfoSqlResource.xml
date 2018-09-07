@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[NoteNo],[BusinessTime],[CreateTime],[LastUpdateTime],[City_Id],[StoreHouse_Id]
+    FROM [dbo].[DisposedInNoteInfoes] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[DisposedInNoteInfoes]
+    ([Id],[NoteNo],[BusinessTime],[CreateTime],[LastUpdateTime],[City_Id],[StoreHouse_Id])
+    VALUES
+    (@Id,@NoteNo,@BusinessTime,GETDATE(),GETDATE(),@City_Id,@StoreHouse_Id)
+  </Insert>
+</SqlResource>

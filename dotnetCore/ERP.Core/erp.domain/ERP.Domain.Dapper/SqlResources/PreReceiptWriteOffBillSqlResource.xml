@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[WriteOffAmount],[IsDeleted],[CreateTime],[LastUpdateTime],[CompanyUser_Id],[City_Id],[IsInternal],[CompanyUserCity_Id],[BillNo]
+    FROM [dbo].[PreReceiptWriteOffBills] WITH(NOLOCK)
+  </Select>
+  <SelectWriteOffReceivableBillItem>
+    SELECT [Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PreReceiptWriteOffBill_Id],[ReceivableBill_Id]
+    FROM [dbo].[WriteOffReceivableBillItems] WITH(NOLOCK)
+  </SelectWriteOffReceivableBillItem>
+  <SelectWriteOffPreReceiptBillItem>
+    SELECT [Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PreReceiptBill_Id],[PreReceiptWriteOffBill_Id]
+    FROM [dbo].[WriteOffPreReceiptBillItems] WITH(NOLOCK)
+  </SelectWriteOffPreReceiptBillItem>
+  <SelectIncludeAll>
+    SELECT [PreReceiptWriteOffBills].[Id],[PreReceiptWriteOffBills].[WriteOffAmount],[PreReceiptWriteOffBills].[IsDeleted],[PreReceiptWriteOffBills].[CreateTime],
+    [PreReceiptWriteOffBills].[LastUpdateTime],[PreReceiptWriteOffBills].[CompanyUser_Id],[PreReceiptWriteOffBills].[City_Id],[PreReceiptWriteOffBills].[IsInternal],
+    [PreReceiptWriteOffBills].[CompanyUserCity_Id],[PreReceiptWriteOffBills].[BillNo],
+    [User].CompanyName,[User].Id ,[User].MobileNO ,[User].TrueName ,
+    CompanyUserCity.Name,CompanyUserCity.Id,
+    Orgs.Name,Orgs.Id
+    FROM [dbo].[PreReceiptWriteOffBills] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = PreReceiptWriteOffBills.City_Id
+    LEFT JOIN dbo.[User] WITH(NOLOCK) ON [User].Id = PreReceiptWriteOffBills.CompanyUser_Id
+    LEFT JOIN dbo.Orgs CompanyUserCity WITH(NOLOCK) ON CompanyUserCity.Id = PreReceiptWriteOffBills.CompanyUserCity_Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[PreReceiptWriteOffBills]
+    ([Id],[WriteOffAmount],[IsDeleted],[CreateTime],[LastUpdateTime],[CompanyUser_Id],[City_Id],[IsInternal],[CompanyUserCity_Id],[BillNo])
+    VALUES
+    (@Id,@WriteOffAmount,@IsDeleted,GETDATE(),GETDATE(),@CompanyUser_Id,@City_Id,@IsInternal,@CompanyUserCity_Id,@BillNo)
+  </Insert>
+  <InsertWriteOffReceivableBillItem>
+    INSERT INTO [dbo].[WriteOffReceivableBillItems]
+    ([Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PreReceiptWriteOffBill_Id],[ReceivableBill_Id])
+    VALUES
+    (@Id,@WriteOffAmount,GETDATE(),GETDATE(),@PreReceiptWriteOffBill_Id,@ReceivableBill_Id)
+  </InsertWriteOffReceivableBillItem>
+  <InsertWriteOffPreReceiptBillItem>
+    INSERT INTO [dbo].[WriteOffPreReceiptBillItems]
+    ([Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PreReceiptBill_Id],[PreReceiptWriteOffBill_Id])
+    VALUES
+    (@Id,@WriteOffAmount,GETDATE(),GETDATE(),@PreReceiptBill_Id,@PreReceiptWriteOffBill_Id)
+  </InsertWriteOffPreReceiptBillItem>
+  <Delete>
+    UPDATE [dbo].[PreReceiptWriteOffBills] SET IsDeleted = 1 WHERE Id=@Id
+  </Delete>
+</SqlResource>

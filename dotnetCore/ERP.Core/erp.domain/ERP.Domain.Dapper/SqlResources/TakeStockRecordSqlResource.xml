@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[Count],[TakeCount],[IsTake],[TakeNoteCount],[IsTakeNote],[CreateTime],[LastUpdateTime],[StoreHouse_Id],[City_Id]
+    FROM [dbo].[TakeStockRecord] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[TakeStockRecord]
+    ([Id],[Count],[TakeCount],[IsTake],[TakeNoteCount],[IsTakeNote],[CreateTime],[LastUpdateTime],[StoreHouse_Id],[City_Id])
+    VALUES
+    (@Id,@COUNT,@TakeCount,@IsTake,@TakeNoteCount,@IsTakeNote,GETDATE(),GETDATE(),@StoreHouse_Id,@City_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[TakeStockRecord]
+    SET [Count] = @Count
+    ,[TakeCount] = @TakeCount
+    ,[IsTake] = @IsTake
+    ,[TakeNoteCount] = @TakeNoteCount
+    ,[IsTakeNote] = @IsTakeNote
+    ,[LastUpdateTime] = GETDATE()
+    WHERE Id=@Id
+  </Update>
+  <SelectQueryPagedTakeStockReportIncludeAll>
+    SELECT * FROM
+    (
+    SELECT ROW_NUMBER() OVER(ORDER BY sh.City_Id,tsn.StoreHouse_Id) SortId,
+    tsn.StoreHouse_Id storeHouseId,org1.Name storeHouseName,
+    org2.NewId cityNewId,sh.City_Id cityId,org2.Name cityName,
+    dynamicCount,auditedDynamicCount,monthCount,allStockCount,
+    pitem.itemProCount,pCity.productCount
+    FROM
+    (
+    SELECT StoreHouse_Id,
+    SUM(DynamicCount) DynamicCount,SUM(AuditedDynamicCount) AuditedDynamicCount,
+    SUM(MonthCount) MonthCount,SUM(AllStockCount) AllStockCount
+    FROM
+    (
+    SELECT
+    CASE WHEN d.StoreHouse_Id IS NULL THEN t.StoreHouse_Id ELSE d.StoreHouse_Id END StoreHouse_Id,
+    ISNULL(DynamicCount,0) DynamicCount,ISNULL(AuditedDynamicCount,0) AuditedDynamicCount,
+    ISNULL(MonthCount,0) MonthCount,ISNULL(AllStockCount,0) AllStockCount
+    FROM
+    (SELECT StoreHouse_Id,COUNT(1) DynamicCount,
+    SUM(CASE WHEN IsTake=1 THEN 1 ELSE 0 END) AuditedDynamicCount
+    FROM TakeStockRecord  WITH(NOLOCK)
+    WHERE  ((@StartDate is null and  @EndDate is null) or (CreateTime>=@StartDate AND CreateTime&lt; @EndDate))
+    GROUP BY StoreHouse_Id) d
+    FULL JOIN
+    (SELECT StoreHouse_Id,
+    SUM(CASE WHEN TakeStockType=3 THEN 1 ELSE 0 END) MonthCount,
+    SUM(CASE WHEN TakeStockType=4 THEN 1 ELSE 0 END) AllStockCount
+    FROM [dbo].[TakeStockNote]   WITH(NOLOCK)
+    WHERE  IsDeleted=0 and AuditState=3 and ((@StartDate is null and  @EndDate is null) or (TakeTime>=@StartDate AND TakeTime&lt; @EndDate))
+    GROUP BY StoreHouse_Id) T ON d.StoreHouse_Id=t.StoreHouse_Id
+    ) temp GROUP BY temp.StoreHouse_Id
+    ) tsn
+    LEFT JOIN dbo.StoreHouse sh WITH(NOLOCK) ON sh.Id=tsn.StoreHouse_Id
+    LEFT JOIN dbo.Orgs org1 WITH(NOLOCK) ON  org1.Id=sh.Id
+    LEFT JOIN dbo.Orgs org2  WITH(NOLOCK) ON  org2.Id=sh.City_Id
+    LEFT JOIN (
+    SELECT StoreHouseId,COUNT(*) ItemProCount FROM
+    (
+    SELECT DISTINCT tsn.StoreHouse_Id StoreHouseId,tsi.Product_Id
+    FROM
+    (
+    SELECT id, StoreHouse_Id
+    FROM dbo.TakeStockNote WITH(NOLOCK)
+    WHERE AuditState=3 AND IsDeleted=0 AND TakeStockType IN (3,4) AND ((@StartDate is null and  @EndDate is null) or (TakeTime>=@StartDate AND TakeTime&lt;@EndDate))
+    UNION
+    SELECT id, StoreHouse_Id FROM TakeStockNote
+    WHERE [TakeStockRecord_Id] IN (SELECT id FROM [dbo].[TakeStockRecord] WITH(NOLOCK) WHERE IsTake=1 AND  (@StartDate is null and  @EndDate is null) or (CreateTime>=@StartDate AND CreateTime&lt;@EndDate))
+    ) tsn
+    LEFT JOIN dbo.TakeStockItem tsi ON tsi.Note_Id=tsn.id
+    ) p GROUP BY StoreHouseId
+    ) pitem ON pitem.StoreHouseId=tsn.StoreHouse_Id
+    LEFT JOIN (
+    SELECT  City_Id,COUNT(1) ProductCount FROM dbo.Product WITH(NOLOCK) GROUP BY City_Id
+    ) pCity  ON pCity.City_Id=org2.Id
+    WHERE (@StoreHouseName IS NULL or org1.Name LIKE '%'+@StoreHouseName+'%')  AND (@CityId IS NULL OR org2.Id=@CityId)
+    ) result WHERE @PageIndex=0 or SortId>((@PageIndex-1)*@PageSize) AND SortId&lt;=(@PageSize*@PageIndex)    
+
+  </SelectQueryPagedTakeStockReportIncludeAll>
+  <SelectQueryPagedCount>
+    SELECT COUNT(1)
+    FROM
+    (
+    SELECT StoreHouse_Id
+    FROM
+    (
+    SELECT
+    CASE WHEN d.StoreHouse_Id IS NULL THEN t.StoreHouse_Id ELSE d.StoreHouse_Id END StoreHouse_Id
+    FROM
+    (SELECT StoreHouse_Id
+    FROM TakeStockRecord  WITH(NOLOCK)
+    WHERE  ((@StartDate is null and  @EndDate is null) or (CreateTime>=@StartDate AND CreateTime &lt; @EndDate))
+    GROUP BY StoreHouse_Id,IsTake) d
+    FULL JOIN
+    (SELECT StoreHouse_Id
+    FROM [dbo].[TakeStockNote]   WITH(NOLOCK)
+    WHERE  IsDeleted=0 and AuditState=3 and ((@StartDate is null and  @EndDate is null) or (TakeTime>=@StartDate AND TakeTime&lt; @EndDate))
+    GROUP BY StoreHouse_Id,TakeStockType) T ON d.StoreHouse_Id=t.StoreHouse_Id
+    ) temp GROUP BY temp.StoreHouse_Id
+    ) tsn
+    LEFT JOIN dbo.StoreHouse sh WITH(NOLOCK) ON sh.Id=tsn.StoreHouse_Id
+    LEFT JOIN dbo.Orgs org1 WITH(NOLOCK) ON  org1.Id=sh.Id
+    LEFT JOIN dbo.Orgs org2 WITH(NOLOCK) ON  org2.Id=sh.City_Id
+    WHERE (@StoreHouseName IS NULL or org1.Name LIKE '%'+@StoreHouseName+'%')  AND (@CityId IS NULL OR org2.Id=@CityId )
+  </SelectQueryPagedCount>
+  <SelectQueryPagedTakeStockProfitAndLossCount>
+    SELECT COUNT(1) FROM
+    (SELECT ROW_NUMBER() OVER(ORDER BY org1.Id,org.Id,bn.Product_Id) SortId, bn.Product_Id ProductId,pi.Desc_ProductName ProductName,p.ProductType,
+    pi.Desc_OwnProductType OwnProductType,pi.Desc_PackageQuantity PackageQuantity,
+    org.Id StoreHouseId,org.Name StoreHouseName,org1.Id CityId,org1.Name CityName,bn.Unit,PI.Desc_Specifications Specifications,
+    SUM(CASE WHEN bn.NoteType=0 AND bn.OperationType=4 THEN bn.Num WHEN bn.NoteType=1 AND bn.OperationType=4 THEN bn.Num*-1 ELSE 0 END) Num,
+    SUM(CASE WHEN bn.NoteType=0 AND bn.OperationType=4 THEN bn.Num*bn.Price WHEN bn.NoteType=1 AND bn.OperationType=4 THEN bn.Price*bn.Num*-1 ELSE 0 END) TotalAmount
+    FROM dbo.BaseNotes bn WITH(NOLOCK)
+    LEFT JOIN dbo.Product p WITH(NOLOCK) ON p.Id=bn.Product_Id
+    LEFT JOIN dbo.ProductInfo pi WITH(NOLOCK) ON pi.Id=p.Info_Id
+    LEFT JOIN dbo.StoreHouse sh WITH(NOLOCK) ON sh.Id=bn.StoreHouse_Id
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON  org.Id=sh.Id
+    LEFT JOIN dbo.Orgs org1 WITH(NOLOCK) ON  org1.Id=sh.City_Id
+    WHERE bn.OperationType=4 AND bn.AuditState=9 and bn.IsDeleted=0
+    AND (@CityId IS NULL OR sh.City_Id = @CityId ) AND (@StoreHouseName IS NULL OR org.Name LIKE '%'+@StoreHouseName+'%')
+    AND (@ProductName IS NULL OR pi.Desc_ProductName LIKE '%'+@ProductName+'%') AND (@OwnProductType IS NULL OR pi.Desc_OwnProductType=@OwnProductType)
+    AND (@ProductType IS NULL OR p.ProductType=@ProductType)
+    AND ( (@StartDate IS NULL AND @EndDate IS NULL) OR (bn.CreateTime>=@StartDate AND bn.CreateTime&lt;=@EndDate) )
+    GROUP BY bn.Product_Id ,pi.Desc_ProductName ,p.ProductType,pi.Desc_OwnProductType ,pi.Desc_PackageQuantity ,
+    org.Id ,org.Name ,org1.Id ,org1.Name,bn.Unit,PI.Desc_Specifications) result
+  </SelectQueryPagedTakeStockProfitAndLossCount>
+  <SelectQueryPagedTakeStockProfitAndLoss>
+    SELECT * FROM
+    (SELECT ROW_NUMBER() OVER(ORDER BY org1.Id,org.Id,bn.Product_Id) SortId, bn.Product_Id ProductId,pi.Desc_ProductName ProductName,p.ProductType,
+    pi.Desc_OwnProductType OwnProductType,pi.Desc_PackageQuantity PackageQuantity,
+    org.Id StoreHouseId,org.Name StoreHouseName,org1.Id CityId,org1.Name CityName,bn.Unit,PI.Desc_Specifications Specifications,
+    SUM(CASE WHEN bn.NoteType=0 AND bn.OperationType=4 THEN bn.Num WHEN bn.NoteType=1 AND bn.OperationType=4 THEN bn.Num*-1 ELSE 0 END) Num,
+    SUM(CASE WHEN bn.NoteType=0 AND bn.OperationType=4 THEN bn.Num*bn.Price WHEN bn.NoteType=1 AND bn.OperationType=4 THEN bn.Price*bn.Num*-1 ELSE 0 END) TotalAmount
+    FROM dbo.BaseNotes bn WITH(NOLOCK)
+    LEFT JOIN dbo.Product p WITH(NOLOCK) ON p.Id=bn.Product_Id
+    LEFT JOIN dbo.ProductInfo pi WITH(NOLOCK) ON pi.Id=p.Info_Id
+    LEFT JOIN dbo.StoreHouse sh WITH(NOLOCK) ON sh.Id=bn.StoreHouse_Id
+    LEFT JOIN dbo.Orgs org WITH(NOLOCK) ON  org.Id=sh.Id
+    LEFT JOIN dbo.Orgs org1 WITH(NOLOCK) ON  org1.Id=sh.City_Id
+    WHERE bn.OperationType=4 AND bn.AuditState=9 and bn.IsDeleted=0
+    AND (@CityId IS NULL OR sh.City_Id = @CityId) AND (@StoreHouseName IS NULL OR org.Name LIKE '%'+@StoreHouseName+'%')
+    AND (@ProductName IS NULL OR pi.Desc_ProductName LIKE '%'+@ProductName+'%') AND (@OwnProductType IS NULL OR pi.Desc_OwnProductType=@OwnProductType)
+    AND (@ProductType IS NULL OR p.ProductType=@ProductType)
+    AND ( (@StartDate IS NULL AND @EndDate IS NULL) OR (bn.CreateTime>=@StartDate AND bn.CreateTime&lt;=@EndDate) )
+    GROUP BY bn.Product_Id ,pi.Desc_ProductName ,p.ProductType,pi.Desc_OwnProductType ,pi.Desc_PackageQuantity ,
+    org.Id ,org.Name ,org1.Id ,org1.Name,bn.Unit,PI.Desc_Specifications) result WHERE @PageIndex=0 or (SortId>((@PageIndex-1)*@PageSize) AND SortId&lt;=(@PageSize*@PageIndex))
+  </SelectQueryPagedTakeStockProfitAndLoss>
+
+</SqlResource>

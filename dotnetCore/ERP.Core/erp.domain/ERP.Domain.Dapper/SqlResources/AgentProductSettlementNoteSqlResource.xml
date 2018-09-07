@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id]
+    ,[NoteNo]
+    ,[State]
+    ,[SettlementCount]
+    ,[SaleCount]
+    ,[PurchaseCount]
+    ,[PurchasePrice]
+    ,[PurchaseBarePrice]
+    ,[SalePrice]
+    ,[SettlementSaleAmount]
+    ,[SettlementRebateAmount]
+    ,[SettlementCityPayTime]
+    ,[AgentCityComfirmTime]
+    ,[PurchaseNoteNo]
+    ,[OrderNo]
+    ,[ProductName]
+    ,[Unit]
+    ,[Specifications]
+    ,[PackageQuantity]
+    ,[PurchaseInStockNote_Id]
+    ,[OrderOutStockNote_Id]
+    ,[AgentCity_Id]
+    ,[AgentStoreHouse_Id]
+    ,[SettlementCity_Id]
+    ,[Product_Id]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    FROM [dbo].[AgentProductSettlementNotes] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[AgentProductSettlementNotes]
+    ([Id]
+    ,[NoteNo]
+    ,[State]
+    ,[SettlementCount]
+    ,[SaleCount]
+    ,[PurchaseCount]
+    ,[PurchasePrice]
+    ,[PurchaseBarePrice]
+    ,[SalePrice]
+    ,[SettlementSaleAmount]
+    ,[SettlementRebateAmount]
+    ,[SettlementCityPayTime]
+    ,[AgentCityComfirmTime]
+    ,[PurchaseNoteNo]
+    ,[OrderNo]
+    ,[ProductName]
+    ,[Unit]
+    ,[Specifications]
+    ,[PackageQuantity]
+    ,[PurchaseInStockNote_Id]
+    ,[OrderOutStockNote_Id]
+    ,[AgentCity_Id]
+    ,[AgentStoreHouse_Id]
+    ,[SettlementCity_Id]
+    ,[Product_Id]
+    ,[CreateTime]
+    ,[LastUpdateTime])
+    VALUES
+    (@Id
+    ,@NoteNo
+    ,@State
+    ,@SettlementCount
+    ,@SaleCount
+    ,@PurchaseCount
+    ,@PurchasePrice
+    ,@PurchaseBarePrice
+    ,@SalePrice
+    ,@SettlementSaleAmount
+    ,@SettlementRebateAmount
+    ,@SettlementCityPayTime
+    ,@AgentCityComfirmTime
+    ,@PurchaseNoteNo
+    ,@OrderNo
+    ,@ProductName
+    ,@Unit
+    ,@Specifications
+    ,@PackageQuantity
+    ,@PurchaseInStockNote_Id
+    ,@OrderOutStockNote_Id
+    ,@AgentCity_Id
+    ,@AgentStoreHouse_Id
+    ,@SettlementCity_Id
+    ,@Product_Id
+    ,GETDATE()
+    ,GETDATE())
+  </Insert>
+  <Update>
+    UPDATE [dbo].[AgentProductSettlementNotes]
+    SET [Id] = @Id
+    ,[NoteNo] = @NoteNo
+    ,[State] = @State
+    ,[SettlementCount] = @SettlementCount
+    ,[SaleCount] = @SaleCount
+    ,[PurchaseCount] = @PurchaseCount
+    ,[PurchasePrice] = @PurchasePrice
+    ,[PurchaseBarePrice] = @PurchaseBarePrice
+    ,[SalePrice] = @SalePrice
+    ,[SettlementSaleAmount] = @SettlementSaleAmount
+    ,[SettlementRebateAmount] = @SettlementRebateAmount
+    ,[SettlementCityPayTime] = @SettlementCityPayTime
+    ,[AgentCityComfirmTime] = @AgentCityComfirmTime
+    ,[PurchaseNoteNo] = @PurchaseNoteNo
+    ,[OrderNo] = @OrderNo
+    ,[ProductName] = @ProductName
+    ,[Unit] = @Unit
+    ,[Specifications] = @Specifications
+    ,[PackageQuantity] = @PackageQuantity
+    ,[PurchaseInStockNote_Id] = @PurchaseInStockNote_Id
+    ,[OrderOutStockNote_Id] = @OrderOutStockNote_Id
+    ,[AgentCity_Id] = @AgentCity_Id
+    ,[AgentStoreHouse_Id] = @AgentStoreHouse_Id
+    ,[SettlementCity_Id] = @SettlementCity_Id
+    ,[Product_Id] = @Product_Id
+    ,[LastUpdateTime] = GETDATE()
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM [dbo].[AgentProductSettlementNotes]
+    WHERE Id=@Id
+  </Delete>
+</SqlResource>

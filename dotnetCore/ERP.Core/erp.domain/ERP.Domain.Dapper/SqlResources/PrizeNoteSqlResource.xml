@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PrizeNoteSqlResource>
+  <Select>
+    SELECT Id,Title,Num,Price,Unit,ExpiredTime,CreateTime,LastUpdateTime,Product_Id,StoreHouse_Id,State FROM dbo.PrizeNotes WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO dbo.PrizeNotes
+    (Id,Title,Num,Price,Unit,ExpiredTime,CreateTime,LastUpdateTime,Product_Id,StoreHouse_Id,State)
+    VALUES  (@Id,@Title,@Num,@Price,@Unit,@ExpiredTime,GETDATE(),GETDATE(),@Product_Id,@StoreHouse_Id,@State)
+  </Insert>
+  <Update>
+    UPDATE dbo.PrizeNotes SET
+    Title=@Title,Num=@Num,Price=@Price,Unit=@Unit,ExpiredTime=@ExpiredTime,LastUpdateTime=GETDATE(),Product_Id=@Product_Id,StoreHouse_Id=@StoreHouse_Id,State=@State
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.PrizeNotes WHERE Id=@Id
+  </Delete>
+  <SelectIncludeAll>
+    SELECT
+    [PrizeNotes].Id Id,[PrizeNotes].Num Num,[PrizeNotes].State State,[PrizeNotes].Title Title,[PrizeNotes].Price Price,[PrizeNotes].Unit Unit,[PrizeNotes].CreateTime CreateTime,[PrizeNotes].ExpiredTime ExpiredTime,[StoreHouseOrg].Name StoreHouseName,[City].Name City,[Product].Id ProductId,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_PackageUnit PackageUnit,[ProductInfo].Desc_Specifications Specifications
+    FROM dbo.PrizeNotes WITH(NOLOCK)
+    INNER JOIN dbo.StoreHouse WITH(NOLOCK) ON [StoreHouse].Id=StoreHouse_Id
+    INNER JOIN dbo.Orgs StoreHouseOrg WITH(NOLOCK) ON StoreHouseOrg.Id=[StoreHouse].Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON [StoreHouse].City_Id=[City].Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product_Id=[Product].Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=Info_Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT
+    [PrizeNotes].Id,[PrizeNotes].Num,[PrizeNotes].Unit,[PrizeNotes].Price,[PrizeNotes].Title,[PrizeNotes].State,[PrizeNotes].CreateTime,[PrizeNotes].ExpiredTime,[Product].Id ProductId,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_Specifications Specifications,[ProductInfo].Desc_PackageQuantity  PackageQuantity,[StoreHouse].Id StoreHouseId,[StoreHouse].Name StoreHouseName
+    FROM dbo.PrizeNotes WITH(NOLOCK)
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id=[PrizeNotes].StoreHouse_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product_Id=[Product].Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=Info_Id WHERE PrizeNotes.Id=@Id
+  </FirstOrDefaultIncludeAll>
+</PrizeNoteSqlResource>

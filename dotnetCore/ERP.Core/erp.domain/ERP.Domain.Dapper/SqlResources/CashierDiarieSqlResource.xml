@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id]
+    ,[Name]
+    ,[MoneyFlowType]
+    ,[Type]
+    ,[Year]
+    ,[Month]
+    ,[BusinessTime]
+    ,[IncomeAmount]
+    ,[SpendingAmount]
+    ,[BalanceAmount]
+    ,[Remark]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    ,[PaymentBillItem_Id]
+    ,[PaymentTypeSetting_Id]
+    ,[ReceiptBillItem_Id]
+    ,[IsDeleted]
+    ,[SourceCity_Id]
+    FROM [dbo].[CashierDiaries] WITH(NOLOCK)
+  </Select>
+  <Insert>
+
+    INSERT INTO [dbo].[CashierDiaries]
+    ([Id]
+    ,[Name]
+    ,[MoneyFlowType]
+    ,[Type]
+    ,[Year]
+    ,[Month]
+    ,[BusinessTime]
+    ,[IncomeAmount]
+    ,[SpendingAmount]
+    ,[BalanceAmount]
+    ,[Remark]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    ,[PaymentBillItem_Id]
+    ,[PaymentTypeSetting_Id]
+    ,[ReceiptBillItem_Id]
+    ,[IsDeleted]
+    ,[SourceCity_Id])
+    VALUES
+    (@Id
+    ,@NAME
+    ,@MoneyFlowType
+    ,@TYPE
+    ,@YEAR
+    ,@MONTH
+    ,@BusinessTime
+    ,@IncomeAmount
+    ,@SpendingAmount
+    ,@BalanceAmount
+    ,@Remark
+    ,GETDATE()
+    ,GETDATE()
+    ,@City_Id
+    ,@PaymentBillItem_Id
+    ,@PaymentTypeSetting_Id
+    ,@ReceiptBillItem_Id
+    ,@IsDeleted
+    ,@SourceCity_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[CashierDiaries]
+    SET [Name] = @NAME
+    ,[MoneyFlowType] = @MoneyFlowType
+    ,[Type] = @TYPE
+    ,[Year] = @YEAR
+    ,[Month] = @MONTH
+    ,[BusinessTime] = @BusinessTime
+    ,[IncomeAmount] = @IncomeAmount
+    ,[SpendingAmount] = @SpendingAmount
+    ,[BalanceAmount] = @BalanceAmount
+    ,[Remark] = @Remark
+    ,[CreateTime] = GETDATE()
+    ,[LastUpdateTime] = GETDATE()
+    ,[City_Id] = @City_Id
+    ,[PaymentBillItem_Id] = @PaymentBillItem_Id
+    ,[PaymentTypeSetting_Id] = @PaymentTypeSetting_Id
+    ,[ReceiptBillItem_Id] = @ReceiptBillItem_Id
+    ,[IsDeleted] = @IsDeleted
+    ,[SourceCity_Id] = @SourceCity_Id
+    WHERE Id =@id 
+  </Update>
+  <Delete>
+    UPDATE [dbo].[CashierDiaries]
+    SET [IsDeleted] = 1
+    WHERE Id =@Id  
+  </Delete>
+  <SelectList>
+    SELECT  CashierDiaries.Id,CashierDiaries.Name,Type,Year,Month,CashierDiaries.BusinessTime,IncomeAmount,SpendingAmount,BalanceAmount,
+    BalanceAmount,CashierDiaries.Remark,CashierDiaries.IsDeleted,Orgs.Name CityName,dbo.Orgs.Id CityId,
+    PaymentTypeSettings.Id PaymentTypeSettingId,SourceCity_Id SourceCityId,MoneyFlowType,
+    CASE when CityBanks.Id is NULL THEN  PaymentTypeSettings.PaymentName ELSE CityBanks.BankNo end  PaymentTypeName,PaymentBills.BillNo PaymentBillNoteNo ,ReceiptBills.BillNo ReceiptBillNoteNo
+    FROM dbo.CashierDiaries  WITH(NOLOCK)
+    LEFT JOIN dbo.City WITH(NOLOCK) ON	City.Id = CashierDiaries.City_Id
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON	Orgs.Id = City.Id
+    LEFT JOIN dbo.ReceiptBillItems  WITH(NOLOCK)ON	ReceiptBillItems.Id = dbo.CashierDiaries.ReceiptBillItem_Id
+    LEFT JOIN dbo.ReceiptBills WITH(NOLOCK) ON ReceiptBills.Id = ReceiptBillItems.ReceiptBill_Id
+    LEFT JOIN dbo.PaymentBillItems WITH(NOLOCK) ON PaymentBillItems.Id = CashierDiaries.PaymentBillItem_Id
+    LEFT JOIN dbo.PaymentBills WITH(NOLOCK) ON	PaymentBills.Id = PaymentBillItems.PaymentBill_Id
+    LEFT JOIN dbo.PaymentTypeSettings WITH(NOLOCK) ON	PaymentTypeSettings.Id = CashierDiaries.PaymentTypeSetting_Id
+    LEFT JOIN dbo.CityBanks WITH(NOLOCK) ON CityBanks.Id = PaymentTypeSettings.CityBank_Id
+  </SelectList>
+  <GetEditById>
+    SELECT
+    CashierDiaries.Id,CashierDiaries.NAME,MoneyFlowType,Type,Year,Month,BusinessTime,IncomeAmount,
+    SpendingAmount,BalanceAmount,Remark,PaymentTypeSetting_Id  PaymentTypeSettingId
+    ,City_Id CityId,Orgs.Name CityName
+    FROM dbo.CashierDiaries WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = CashierDiaries.City_Id
+    Where CashierDiaries.Id =@Id
+  </GetEditById>
+  <UpdateRemark>
+    UPDATE dbo.CashierDiaries SET Remark =@Remark ,[LastUpdateTime] = GETDATE()WHERE Id=@Id
+  </UpdateRemark>
+  <GetBorrowingInterestByCityId>
+    SELECT  BorrowingInterests.Id,Capital,Interest Interests
+    ,City.Id CityId,City.Name CityName,SourceCity.Id SourceCityId,SourceCity.Name SourceCityName
+    FROM dbo.BorrowingInterests  WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs City  WITH(NOLOCK) ON City.Id = BorrowingInterests.City_Id
+    LEFT JOIN dbo.Orgs SourceCity  WITH(NOLOCK) ON	SourceCity.Id = BorrowingInterests.SourceCity_Id
+  </GetBorrowingInterestByCityId>
+  <GetBalanceAmount>
+    SELECT TOP 1  BalanceAmount FROM dbo.CashierDiaries WITH(NOLOCK)
+    WHERE City_Id=@CityId AND PaymentTypeSetting_Id =@PaymentTypeSettingId
+    ORDER BY CreateTime DESC
+  </GetBalanceAmount>
+  <SelectPaymentTypeSetting>
+    SELECT  PaymentTypeSettings.Id,PaymentTypeSettings.City_Id CityId
+    ,CityBank_Id CityBankId, State,CASE WHEN BankNo IS NULL OR  BankNo=''
+    THEN PaymentName ELSE BankNo END Name
+    FROM  dbo.PaymentTypeSettings  WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs   WITH(NOLOCK) ON Orgs.Id = PaymentTypeSettings.City_Id
+    LEFT JOIN dbo.CityBanks  WITH(NOLOCK) ON	CityBanks.Id = PaymentTypeSettings.CityBank_Id
+  </SelectPaymentTypeSetting>
+  <SelectCities>
+    SELECT  Orgs.Id,dbo.Orgs.Name,Enable,Address_Province Province,CreateTime,Address_County County,Address_City  City
+    FROM City WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON	Orgs.Id = City.Id
+  </SelectCities>
+  <UpdateBalanceAmount>
+    UPDATE dbo.CashierDiaries SET BalanceAmount =@BalanceAmount ,[LastUpdateTime] = GETDATE() WHERE Id=@Id
+  </UpdateBalanceAmount>
+</SqlResource>

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<CombineCitySettingSqlResource>
+    <Select>
+ SELECT [Id]
+      ,[SubCity_Id]
+      ,[MasterCity_Id]
+      ,[CreateTime]
+      ,[LastUpdateTime]
+  FROM [dbo].[CombineCitySettings] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[CombineCitySettings]
+           ([Id]
+           ,[SubCity_Id]
+           ,[MasterCity_Id]
+           ,[CreateTime]
+           ,[LastUpdateTime])
+     VALUES
+           (@Id
+           ,@SubCity_Id
+           ,@MasterCity_Id
+           ,GETDATE()
+           ,GETDATE())
+  </Insert>
+  <Update>
+   UPDATE [dbo].[CombineCitySettings]
+   SET [SubCity_Id] = @SubCity_Id
+      ,[MasterCity_Id] = @MasterCity_Id
+      ,[LastUpdateTime] = GETDATE()
+ WHERE  [Id] =@Id
+  </Update>
+  <Delete>
+  DELETE FROM [dbo].[CombineCitySettings]
+    WHERE Id=@Id
+  </Delete>
+  <InsertIfNotExist>
+    IF NOT EXISTS(SELECT 1 FROM dbo.CombineCitySettings WITH(NOLOCK) WHERE SubCity_Id=@SubCity_Id OR
+    (MasterCity_Id=@SubCity_Id AND @MasterCity_Id != @SubCity_Id) or
+    (SubCity_Id=@MasterCity_Id AND @MasterCity_Id != @SubCity_Id))
+    INSERT INTO dbo.CombineCitySettings( Id ,SubCity_Id , MasterCity_Id ,CreateTime ,LastUpdateTime)
+    VALUES (@Id,@SubCity_Id,@MasterCity_Id,GETDATE(),GETDATE())
+  </InsertIfNotExist>
+  <SelectIncludeAll>
+    SELECT
+    ccs.Id Id ,
+    ccs.CreateTime CreateTime,
+    o2.Id   SubCityId,
+    o2.Name SubCityName  ,
+    o1.Id MasterCityId ,
+    o1.Name MasterCityName
+    FROM      dbo.CombineCitySettings ccs with(nolock)
+    LEFT JOIN dbo.Orgs  o1  with(nolock)ON ccs.MasterCity_Id = o1.Id
+    LEFT JOIN dbo.Orgs o2  with(nolock)ON ccs.SubCity_Id = o2.Id
+  </SelectIncludeAll>
+
+</CombineCitySettingSqlResource>

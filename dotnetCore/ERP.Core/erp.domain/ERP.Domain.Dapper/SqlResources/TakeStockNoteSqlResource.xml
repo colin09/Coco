@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[AuditState],[TakeUsers],[OperatorUserId],[Operator],[NoteNo],[NoteName],[TakeTime],[Remark],[IsDeleted],[TakeResult],[CreateTime],[LastUpdateTime],[StoreHouse_Id]
+    ,[AuditStateRemark],[TakeStockType],[IsPrint],[IsEntering],[TakeStockRecord_Id],[City_Id]
+    FROM [dbo].[TakeStockNote] WITH(NOLOCK)
+  </Select>
+  <SelectItem>
+    SELECT [Id],[Unit],[Num],[TakeNum],[TakeResultNum],[Remark],[CreateTime],[LastUpdateTime],[Note_Id],[Product_Id],[TakeCount],[ProfitLossAmount]
+    FROM [dbo].[TakeStockItem] WITH(NOLOCK)
+  </SelectItem>
+  <SelectTakeStockProductionDate>
+    SELECT [Id],[ProductionDate],[Count],[CreateTime],[LastUpdateTime],[TakeStockItem_Id],[ExpirationDate],[ProductLot_Id]
+    FROM [dbo].[TakeStockProductionDate] WITH(NOLOCK)
+  </SelectTakeStockProductionDate>
+  <Insert>
+    INSERT INTO [dbo].[TakeStockNote]
+    ([Id],[AuditState],[TakeUsers],[OperatorUserId],[Operator],[NoteNo],[NoteName],[TakeTime],[Remark],[IsDeleted],[TakeResult],[CreateTime],[LastUpdateTime],[StoreHouse_Id]
+    ,[AuditStateRemark],[TakeStockType],[IsPrint],[IsEntering],[TakeStockRecord_Id],[City_Id])
+    VALUES
+    (@Id,@AuditState,@TakeUsers,@OperatorUserId,@Operator,@NoteNo,@NoteName,@TakeTime,@Remark,@IsDeleted,@TakeResult,@CreateTime,@LastUpdateTime,@StoreHouse_Id,@AuditStateRemark
+    ,@TakeStockType,@IsPrint,@IsEntering,@TakeStockRecord_Id,@City_Id)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[TakeStockItem]
+    ([Id],[Unit],[Num],[TakeNum],[TakeResultNum],[Remark],[CreateTime],[LastUpdateTime],[Note_Id],[Product_Id],[TakeCount],[ProfitLossAmount])
+    VALUES
+    (@Id,@Unit,@Num,@TakeNum,@TakeResultNum,@Remark,GETDATE(),GETDATE(),@Note_Id,@Product_Id,@TakeCount,@ProfitLossAmount)
+  </InsertItem>
+  <InsertTakeStockProductionDate>
+    INSERT INTO [dbo].[TakeStockProductionDate]
+    ([Id],[ProductionDate],[Count],[CreateTime],[LastUpdateTime],[TakeStockItem_Id],[ExpirationDate],[ProductLot_Id])
+    VALUES
+    (@Id,@ProductionDate,@Count,@CreateTime,@LastUpdateTime,@TakeStockItem_Id,@ExpirationDate,@ProductLot_Id)
+  </InsertTakeStockProductionDate>
+  <Update>
+    UPDATE [dbo].[TakeStockNote]
+    SET [AuditState] = @AuditState
+    ,[TakeUsers] = @TakeUsers
+    ,[OperatorUserId] = @OperatorUserId
+    ,[Operator] = @Operator
+    ,[NoteNo] = @NoteNo
+    ,[NoteName] = @NoteName
+    ,[TakeTime] = @TakeTime
+    ,[Remark] = @Remark
+    ,[IsDeleted] = @IsDeleted
+    ,[TakeResult] = @TakeResult
+    ,[LastUpdateTime] = @LastUpdateTime
+    ,[StoreHouse_Id] = @StoreHouse_Id
+    ,[AuditStateRemark] = @AuditStateRemark
+    ,[TakeStockType] = @TakeStockType
+    ,[IsPrint] = @IsPrint
+    ,[IsEntering] = @IsEntering
+    ,[TakeStockRecord_Id] = @TakeStockRecord_Id
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[TakeStockItem]
+    SET [Unit] = @Unit
+    ,[Num] = @Num
+    ,[TakeNum] = @TakeNum
+    ,[TakeResultNum] = @TakeResultNum
+    ,[Remark] = @Remark
+    ,[LastUpdateTime] = GETDATE()
+    ,[TakeCount] = @TakeCount
+    ,[ProfitLossAmount] = @ProfitLossAmount
+    WHERE Id=@Id
+  </UpdateItem>
+  <UpdateTakeStockProductionDate>
+    UPDATE [dbo].[TakeStockProductionDate]
+    SET [ProductionDate] = @ProductionDate
+    ,[Count] = @Count
+    ,[LastUpdateTime] = GETDATE()
+    ,[ExpirationDate] = @ExpirationDate
+    ,[ProductLot_Id] = @ProductLot_Id
+    WHERE Id=@Id
+  </UpdateTakeStockProductionDate>
+  <Delete>
+    UPDATE [dbo].[TakeStockNote] SET [IsDeleted] = 1 WHERE Id=@Id
+  </Delete>
+  <DeleteItem>
+    DELETE FROM  [dbo].[TakeStockItem] WHERE Id = @Id
+  </DeleteItem>
+  <DeleteTakeStockProductionDate>
+    DELETE FROM  [dbo].[TakeStockProductionDate] WHERE Id = @Id
+  </DeleteTakeStockProductionDate>
+  <DeleteTakeStockProductionDateByTakeStockItemId>
+    DELETE FROM dbo.TakeStockProductionDate WHERE TakeStockItem_Id =@TakeStockItem_Id
+  </DeleteTakeStockProductionDateByTakeStockItemId>
+  <SelectList>
+    SELECT TakeStockNote.Id, StoreHouse.City_Id CityId, Orgs.Name StoreName, AuditState, TakeUsers,
+    OperatorUserId, Operator, NoteNo, NoteName, TakeTime,TakeStockNote.Remark, IsDeleted, TakeResult,TakeStockNote.CreateTime, TakeStockNote.LastUpdateTime, StoreHouse_Id, AuditStateRemark, TakeStockType, IsPrint, IsEntering, TakeStockRecord_Id
+    FROM dbo.TakeStockNote WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse  WITH(NOLOCK) ON StoreHouse.Id = TakeStockNote.StoreHouse_Id
+    LEFT JOIN dbo.Orgs	ON Orgs.Id = StoreHouse.Id
+  </SelectList>
+  <GetDetail>
+    SELECT 
+    [TakeStockNote].Id ,
+    NoteNo ,
+    AuditState ,
+    AuditStateRemark ,
+    TakeUsers ,
+    Operator ,
+    NoteName ,
+    [TakeStockNote].Remark ,
+    TakeResult ,
+    Orgs.Name StoreName ,
+    TakeTime ,
+    TakeStockType
+    FROM    [dbo].[TakeStockNote]  WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse  WITH(NOLOCK)  ON StoreHouse.Id = TakeStockNote.StoreHouse_Id
+    LEFT JOIN  dbo.Orgs	 WITH(NOLOCK)  ON	Orgs.Id = StoreHouse.Id
+    Where TakeStockNote.Id=@Id
+  </GetDetail>
+  <GetDetail>
+    SELECT 
+    [TakeStockNote].Id ,
+    NoteNo ,
+    AuditState ,
+    AuditStateRemark ,
+    TakeUsers ,
+    Operator ,
+    NoteName ,
+    [TakeStockNote].Remark ,
+    TakeResult ,
+    Orgs.Name StoreName ,
+    TakeTime ,
+    TakeStockType
+    FROM    [dbo].[TakeStockNote]  WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse  WITH(NOLOCK)  ON StoreHouse.Id = TakeStockNote.StoreHouse_Id
+    LEFT JOIN  dbo.Orgs	 WITH(NOLOCK)  ON	Orgs.Id = StoreHouse.Id
+    Where TakeStockNote.Id=@Id
+  </GetDetail>
+  <GetDetailItem>
+    SELECT  Product.Id ProductNo,Unit,TakeNum,TakeResultNum,Num ,Remark ,
+    ProductInfo.Desc_ProductName ProdctName,ProductInfo.Desc_OldCategory Category,ProductInfo.Desc_PackageUnit PackageUnit
+    ,dbo.ProductInfo.Desc_PackageQuantity PackageQuantity,ProductInfo.Desc_Specifications Specifications
+    FROM dbo.TakeStockItem WITH(NOLOCK)
+    LEFT JOIN dbo.Product WITH(NOLOCK)  ON	Product.Id = TakeStockItem.Product_Id
+    LEFT join dbo.ProductInfo WITH(NOLOCK)  ON	ProductInfo.Id = Product.Info_Id
+    WHERE TakeStockItem.Note_Id =@Id
+  </GetDetailItem>
+<QueryList>
+  SELECT AuditState,TakeStockNote.Id,NoteName,noteNo,Remark,Operator operatorUserName,
+  TakeTime,TakeUsers,TakeResult,TakeStockType,Orgs.Id storeHouseId,
+  Orgs.NewId storeHouseNewId,Orgs.Name storeHouseName
+  FROM TakeStockNote WITH(NOLOCK)
+  LEFT JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = TakeStockNote.StoreHouse_Id
+</QueryList>
+  <QueryItems>
+    SELECT
+    TakeStockItem.Id,Num  stockNum,TakeNum,TakeResultNum,TakeStockItem.Remark,TakeCount,ProfitLossAmount,TakeStockNote.AuditState  AuditState
+    ,TakeStockNote.storeHouse_Id storeHouseId
+    ,StoreHouse.City_Id cityId
+    ,dbo.Product.Id productId,
+    Product.NewId productNewId,
+    ProductInfo.Desc_ProductName  productName,
+    ProductInfo.Desc_Specifications specification,
+    ProductInfo.Desc_PackageQuantity packageQuantity,
+    ProductInfo.Desc_PackageUnit unit,
+    ProductInfo.Desc_BrandName brandName,
+    ProductInfo.Desc_OldCategory category,
+    ProductInfo.MonthOfShelfLife monthOfShelfLife,
+    CASE  WHEN dbo.Product.ProductType=9 THEN Shops.ShopName ELSE '易酒批' end  shopName
+    --,TakeStockProductionDate,TakeStockProductionDate
+    FROM dbo.TakeStockItem WITH(NOLOCK)
+    LEFT JOIN dbo.Product	WITH(NOLOCK)  ON Product.Id = TakeStockItem.Product_Id
+    LEFT JOIN dbo.ProductInfo  WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    LEFT JOIN dbo.TakeStockNote WITH(NOLOCK) ON TakeStockNote.Id = TakeStockItem.Note_Id
+    LEFT JOIN dbo.StoreHouse WITH(NOLOCK) ON StoreHouse.Id = TakeStockNote.StoreHouse_Id
+    LEFT JOIN dbo.Shops WITH(NOLOCK) ON Shops.Id = Product.Shop_Id
+  </QueryItems>
+  <QueryTakeStockProductionDateList>
+    SELECT  productLot_Id productLotId,ProductionDate productDate,Count,ExtendInfo locationStr
+    FROM dbo.TakeStockProductionDate WITH(NOLOCK)
+  </QueryTakeStockProductionDateList>
+</SqlResource>

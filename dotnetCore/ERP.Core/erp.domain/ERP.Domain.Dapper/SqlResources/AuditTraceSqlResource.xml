@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AuditTraceSqlResource>
+  <Select>
+    SELECT Id,SequenceNo,TraceState,UserRoleInfo_Level,UserRoleInfo_UserRole,UserRoleInfo_UserRoleName,UserName,MobileNo,Remark,AuditTime,CreateTime,LastUpdateTime,UserId,ImgIds,FileIds FROM dbo.AuditTrace WITH(NOLOCK)
+  </Select>
+  <Update>
+    UPDATE dbo.AuditTrace SET SequenceNo=@SequenceNo,TraceState=@TraceState,UserRoleInfo_Level=@UserRoleInfo_Level,UserRoleInfo_UserRole=@UserRoleInfo_UserRole,UserRoleInfo_UserRoleName=@UserRoleInfo_UserRoleName,UserName=@UserName,MobileNo=@MobileNo,Remark=@Remark,AuditTime=@AuditTime,LastUpdateTime=GETDATE(),UserId=@UserId,ImgIds=@ImgIds,FileIds=@FileIds
+    WHERE Id=@Id
+  </Update>
+  <QueryPurchaseRequisitionAuditTraces>
+    SELECT AuditTrace.Id,SequenceNo,TraceState,UserName,MobileNo,Remark,AuditTime,CreateTime,LastUpdateTime,UserId,ImgIds,FileIds,PurchaseRequisition_Id
+    ,UserRoleInfo_Level Level,UserRoleInfo_UserRoleName UserRoleName,UserRoleInfo_UserRole UserRole
+    FROM dbo.PurchaseRequisitionAuditTrace WITH(NOLOCK)
+    INNER JOIN dbo.AuditTrace WITH(NOLOCK) ON AuditTrace.Id = PurchaseRequisitionAuditTrace.Id
+    WHERE PurchaseRequisition_Id=@Id
+  </QueryPurchaseRequisitionAuditTraces>
+  <QueryPurchaseInStockNoteAuditTraces>
+    SELECT AuditTrace.Id,SequenceNo,TraceState,UserName,MobileNo,Remark,AuditTime,CreateTime,LastUpdateTime,UserId,ImgIds,FileIds,PurchaseInStockNote_Id
+    ,UserRoleInfo_Level Level,UserRoleInfo_UserRoleName UserRoleName,UserRoleInfo_UserRole UserRole
+    FROM dbo.PurchaseInStockNoteAuditTrace WITH(NOLOCK)
+    INNER JOIN dbo.AuditTrace WITH(NOLOCK) ON AuditTrace.Id = PurchaseInStockNoteAuditTrace.Id
+    WHERE PurchaseInStockNote_Id=@Id
+  </QueryPurchaseInStockNoteAuditTraces>
+  <DeletePurchaseRequisitionTraces>
+    DELETE FROM dbo.PurchaseRequisitionAuditTrace WHERE Id in @Ids
+  </DeletePurchaseRequisitionTraces>
+  <DeletePurchaseInStockNoteTraces>
+    DELETE FROM dbo.PurchaseInStockNoteAuditTrace WHERE Id in @Ids
+  </DeletePurchaseInStockNoteTraces>
+  <Delete>
+    DELETE FROM dbo.AuditTrace WHERE Id = @Id
+  </Delete>
+  <InsertPurchaseRequisitionAuditTrace>
+    INSERT INTO dbo.PurchaseRequisitionAuditTrace
+    ( Id, PurchaseRequisition_Id )
+    VALUES  (@Id,@PurchaseRequisition_Id)
+  </InsertPurchaseRequisitionAuditTrace>
+  <InsertPurchaseInStockNoteAuditTrace>
+    INSERT INTO dbo.PurchaseInStockNoteAuditTrace
+    ( Id, PurchaseInStockNote_Id )
+    VALUES  (@Id, @PurchaseInStockNote_Id)
+  </InsertPurchaseInStockNoteAuditTrace>
+  <InsertAuditTrace>
+    INSERT INTO dbo.AuditTrace
+    (Id,SequenceNo,TraceState,UserRoleInfo_Level,UserRoleInfo_UserRole,UserRoleInfo_UserRoleName,UserName,MobileNo,Remark,UserId,AuditTime,CreateTime,LastUpdateTime,ImgIds,FileIds)
+    VALUES  (@Id,@SequenceNo,@TraceState,@UserRoleInfo_Level,@UserRoleInfo_UserRole,@UserRoleInfo_UserRoleName,@UserName,@MobileNo,@Remark,@UserId,@AuditTime,GETDATE(),GETDATE(),@ImgIds,@FileIds)
+  </InsertAuditTrace>
+  <QueryPagedPurchaseInStockNoteTraces>
+    SELECT PurchaseInStockNoteAuditTrace.Id,PurchaseInStockNote_Id,SequenceNo,TraceState,UserRoleInfo_Level,UserRoleInfo_UserRole,UserRoleInfo_UserRoleName,UserName,MobileNo,Remark,AuditTime,CreateTime,LastUpdateTime,UserId,ImgIds,FileIds FROM dbo.PurchaseInStockNoteAuditTrace WITH(NOLOCK) INNER JOIN dbo.AuditTrace WITH(NOLOCK) ON AuditTrace.Id = PurchaseInStockNoteAuditTrace.Id
+  </QueryPagedPurchaseInStockNoteTraces>
+</AuditTraceSqlResource>

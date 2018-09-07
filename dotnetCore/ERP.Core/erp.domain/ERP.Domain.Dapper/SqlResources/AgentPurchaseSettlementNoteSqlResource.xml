@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<SqlResource>
+  <Select>
+    SELECT [Id]
+      ,[Count]
+      ,[SettlementCount]
+      ,[Price]
+      ,[BarePrice]
+      ,[PurchaseNoteNo]
+      ,[ProductName]
+      ,[Unit]
+      ,[Specifications]
+      ,[PackageQuantity]
+      ,[PurchaseInStockNote_Id]
+      ,[AgentCity_Id]
+      ,[AgentStoreHouse_Id]
+      ,[SettlementCity_Id]
+      ,[Product_Id]
+      ,[CreateTime]
+      ,[LastUpdateTime]
+  FROM [dbo].[AgentPurchaseSettlementNotes] WITH(NOLOCK)
+  </Select>
+  <Insert>
+  
+INSERT INTO [dbo].[AgentPurchaseSettlementNotes]
+           ([Id]
+           ,[Count]
+           ,[SettlementCount]
+           ,[Price]
+           ,[BarePrice]
+           ,[PurchaseNoteNo]
+           ,[ProductName]
+           ,[Unit]
+           ,[Specifications]
+           ,[PackageQuantity]
+           ,[PurchaseInStockNote_Id]
+           ,[AgentCity_Id]
+           ,[AgentStoreHouse_Id]
+           ,[SettlementCity_Id]
+           ,[Product_Id]
+           ,[CreateTime]
+           ,[LastUpdateTime])
+     VALUES
+           (@Id
+           ,@COUNT
+           ,@SettlementCount
+           ,@Price
+           ,@BarePrice
+           ,@PurchaseNoteNo
+           ,@ProductName
+           ,@Unit
+           ,@Specifications
+           ,@PackageQuantity
+           ,@PurchaseInStockNote_Id
+           ,@AgentCity_Id
+           ,@AgentStoreHouse_Id
+           ,@SettlementCity_Id
+           ,@Product_Id
+           ,GETDATE()
+           ,GETDATE())
+
+  </Insert>
+  <Update>
+  UPDATE [dbo].[AgentPurchaseSettlementNotes]
+   SET [Id] = @Id
+      ,[Count] = @Count
+      ,[SettlementCount] = @SettlementCount
+      ,[Price] = @Price
+      ,[BarePrice] = @BarePrice
+      ,[PurchaseNoteNo] = @PurchaseNoteNo
+      ,[ProductName] = @ProductName
+      ,[Unit] = @Unit
+      ,[Specifications] = @Specifications
+      ,[PackageQuantity] = @PackageQuantity
+      ,[PurchaseInStockNote_Id] = @PurchaseInStockNote_Id
+      ,[AgentCity_Id] = @AgentCity_Id
+      ,[AgentStoreHouse_Id] = @AgentStoreHouse_Id
+      ,[SettlementCity_Id] = @SettlementCity_Id
+      ,[Product_Id] = @Product_Id
+      ,[LastUpdateTime] = GETDATE()
+ WHERE Id=@Id
+  </Update>
+  <Delete>
+DELETE FROM [dbo].[AgentPurchaseSettlementNotes]
+      WHERE Id=@Id
+  </Delete>
+</SqlResource>

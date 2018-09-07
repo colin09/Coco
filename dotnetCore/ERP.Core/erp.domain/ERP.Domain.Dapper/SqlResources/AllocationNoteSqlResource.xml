@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[NoteNo],[State],[BusinessType],[Type],[SpecificationsCount],[UnitCount],[InStockSpecificationsCount],[InStockUnitCount],[TotalAmount],[CreateUserId],[PurchaseRequisitionNo]
+    ,[CreateTime],[LastUpdateTime],[FromCity_Id],[FromStoreHouse_Id],[Provider_Id],[PurchaseRequisition_Id],[ToCity_Id],[ToStoreHouse_Id],[OutStockSpecificationsCount],[OutStockUnitCount],[TotalPurchaseAmount]
+    ,[NotSkuGiftString],[RefuseReason],[ConfirmCityId],[ConfirmTime],[AgreeTime],
+    [FromUser_UserId] UserId,[FromUser_MobileNo] MobileNo,[FromUser_UserName] UserName,
+    [ToUser_UserId] UserId,[ToUser_UserName] UserName,[ToUser_MobileNo] MobileNo,
+    [ConfirmUser_UserId] UserId,[ConfirmUser_MobileNo] MobileNo,[ConfirmUser_UserName] UserName,
+    [ConsignorInfo_Address] Address,[ConsignorInfo_UserName] UserName,[ConsignorInfo_MobileNo] MobileNo
+    ,[ConsigneeInfo_Address] Address,[ConsigneeInfo_UserName] UserName,[ConsigneeInfo_MobileNo] MobileNo
+    ,[LogisticInfo_LogisticMode] LogisticMode,[LogisticInfo_LogisticsFee] LogisticsFee,[LogisticInfo_LogisticCompany] LogisticCompany,[LogisticInfo_LogisticNo] LogisticNo,[LogisticInfo_Remark] Remark
+    FROM [dbo].[AllocationNotes] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT
+    [AllocationNotes].Id,[AllocationNotes].NoteNo,[AllocationNotes].BusinessType,[AllocationNotes].State,[AllocationNotes].Type,[AllocationNotes].UnitCount,
+    [AllocationNotes].SpecificationsCount,InStockSpecificationsCount,InStockUnitCount,[AllocationNotes].TotalAmount,[AllocationNotes].TotalPurchaseAmount,
+    [AllocationNotes].CreateTime,[AllocationNotes].PurchaseRequisitionNo,
+    [AllocationNotes].LogisticInfo_LogisticsFee LogisticsFee,
+    [ToCity].Id Id,[ToCity].NewId NewId,[ToCity].Name Name,
+    [FromCity].Id Id,[FromCity].NewId NewId,[FromCity].Name Name,
+    [ToStoreHouse].Id Id,[ToStoreHouse].NewId NewId,[ToStoreHouse].Name Name,
+    [FromStoreHouse].Id Id,[FromStoreHouse].NewId NewId,[FromStoreHouse].Name Name,
+    [Providers].Id Id,[Providers].Name Name
+    FROM dbo.AllocationNotes WITH(NOLOCK)
+    INNER JOIN dbo.Orgs ToCity WITH(NOLOCK) ON ToCity.Id=ToCity_Id
+    INNER JOIN dbo.Orgs ToStoreHouse WITH(NOLOCK) ON ToStoreHouse.Id=ToStoreHouse_Id
+    LEFT JOIN dbo.Orgs FromCity WITH(NOLOCK) ON FromCity_Id=FromCity.Id
+    LEFT JOIN dbo.Orgs FromStoreHouse WITH(NOLOCK) ON FromStoreHouse_Id=FromStoreHouse.Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON dbo.Providers.Id=Provider_Id
+  </SelectIncludeAll>
+  <SelectWaitAllocationOutNoteIncludeAll>
+    SELECT
+    [AllocationNotes].Id,
+    [AllocationNotes].NoteNo,
+    [AllocationNotes].BusinessType,
+    [AllocationNotes].Type,
+    [AllocationNotes].TotalAmount,
+    [AllocationNotes].TotalPurchaseAmount,
+    [AllocationNotes].PurchaseRequisition_Id,
+    [AllocationNotes].PurchaseRequisitionNo,
+    [AllocationNotes].FromCity_Id,
+    [AllocationNotes].FromStoreHouse_Id,
+    [AllocationNotes].ToCity_Id,
+    [AllocationNotes].CreateTime,
+    [AllocationNotes].ConfirmCityId,
+    [AllocationNotes].State,
+    [AllocationNotes].ToStoreHouse_Id,
+    [AllocationNotes].ConsignorInfo_UserName UserName,
+    [AllocationNotes].ConsignorInfo_MobileNo MobileNo,
+    [AllocationNotes].ConsignorInfo_Address Address,
+    [AllocationNotes].ConsigneeInfo_UserName UserName,
+    [AllocationNotes].ConsigneeInfo_MobileNo MobileNo,
+    [AllocationNotes].ConsigneeInfo_Address Address,
+    [AllocationNotes].LogisticInfo_LogisticMode LogisticMode,
+    [AllocationNotes].LogisticInfo_LogisticsFee LogisticsFee,
+    [AllocationNotes].LogisticInfo_LogisticCompany LogisticCompany,
+    [AllocationNotes].LogisticInfo_LogisticNo LogisticNo,
+    [AllocationNotes].LogisticInfo_Remark Remark,
+    [Providers].Id Id,
+    [Providers].Name Name
+    FROM dbo.AllocationNotes WITH(NOLOCK)
+    INNER JOIN dbo.Orgs ToCity WITH(NOLOCK) ON ToCity.Id=ToCity_Id
+    INNER JOIN dbo.Orgs ToStoreHouse WITH(NOLOCK) ON ToStoreHouse_Id=ToStoreHouse.Id
+    LEFT JOIN dbo.Orgs FromCity WITH(NOLOCK) ON FromCity.Id=FromCity_Id
+    LEFT JOIN dbo.Orgs FromStoreHouse WITH(NOLOCK) ON FromStoreHouse.Id=FromStoreHouse_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id=AllocationNotes.Provider_Id
+  </SelectWaitAllocationOutNoteIncludeAll>
+  <SelectWaitAllocationInNoteItems>
+    SELECT [AllocationNoteItems].Id,[AllocationNoteItems].Count,
+    [AllocationNoteItems].InStockCount,[AllocationNoteItems].OutStockCount,
+    [AllocationNoteItems].AuditInStockCount,[AllocationNoteItems].SpecificationsPrice,[AllocationNoteItems].PurchaseUnitPrice,
+    [AllocationNoteItems].PurchaseSpecificationsPrice,[AllocationNoteItems].Weight,[AllocationNoteItems].Volume,
+    [AllocationNoteItems].CreateTime,[AllocationNoteItems].RelateOrderId,[AllocationNoteItems].Product_Id,[AllocationNoteItems].
+    PurchaseRequisitionItem_Id,[AllocationNoteItems].AllocationNote_Id,[AllocationNotes].Id Id,[AllocationNotes].NoteNo NoteNo,
+    [AllocationNotes].State State,[AllocationNotes].BusinessType BusinessType,[AllocationNotes].PurchaseRequisition_Id,[ToCity].Id Id,
+    [ToCity].NewId NewId,[ToCity].Name Name,[ToStoreHouse].Id Id,[ToStoreHouse].NewId NewId,[ToStoreHouse].Name Name,
+    [FromCity].Id Id,[FromCity].NewId NewId,[FromCity].Name Name,[FromStoreHouse].Id Id,[FromStoreHouse].NewId NewId,
+    [FromStoreHouse].Name Name,[Providers].Id Id,[Providers].Name Name
+    FROM dbo.AllocationNoteItems WITH(NOLOCK)
+    JOIN dbo.AllocationNotes WITH(NOLOCK) ON AllocationNotes.Id = AllocationNoteItems.AllocationNote_Id
+    LEFT JOIN dbo.Orgs ToCity WITH(NOLOCK) ON ToCity.Id=ToCity_Id
+    LEFT JOIN dbo.Orgs ToStoreHouse WITH(NOLOCK) ON ToStoreHouse_Id=ToStoreHouse.Id
+    LEFT JOIN dbo.Orgs FromCity WITH(NOLOCK) ON FromCity.Id=FromCity_Id
+    LEFT JOIN dbo.Orgs FromStoreHouse WITH(NOLOCK) ON FromStoreHouse.Id=FromStoreHouse_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id=AllocationNotes.Provider_Id
+  </SelectWaitAllocationInNoteItems>
+  <SelectItem>
+    SELECT [Id],[Count],[InStockCount],[UnitPrice],[SpecificationsPrice],[Unit],[Specifications],[TotalAmount],[CreateTime],[LastUpdateTime]
+    ,[Product_Id],[PurchaseRequisitionItem_Id],[AllocationNote_Id],[Remark],[OutStockCount],[Weight],[Volume],[PurchaseUnitPrice],[PurchaseSpecificationsPrice]
+    ,[TotalPurchaseAmount],[IsGiveaway],[AuditInStockCount],[RelateOrderId]  FROM [dbo].[AllocationNoteItems] WITH(NOLOCK)
+  </SelectItem>
+  <SelectItemIncludeAll>
+  </SelectItemIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[AllocationNotes]
+    ([Id],[NoteNo],[State],[BusinessType],[Type],[SpecificationsCount],[UnitCount],[InStockSpecificationsCount],[InStockUnitCount],[TotalAmount],[FromUser_UserId],[FromUser_MobileNo]
+    ,[FromUser_UserName],[ToUser_UserId],[ToUser_MobileNo],[ToUser_UserName],[ConsignorInfo_UserName],[ConsignorInfo_MobileNo],[ConsignorInfo_Address],[ConsigneeInfo_UserName],[ConsigneeInfo_MobileNo]
+    ,[ConsigneeInfo_Address],[CreateUserId],[PurchaseRequisitionNo],[CreateTime],[LastUpdateTime],[FromCity_Id],[FromStoreHouse_Id],[Provider_Id],[PurchaseRequisition_Id],[ToCity_Id],[ToStoreHouse_Id]
+    ,[LogisticInfo_LogisticMode],[LogisticInfo_LogisticsFee],[LogisticInfo_LogisticCompany],[LogisticInfo_LogisticNo],[LogisticInfo_Remark],[OutStockSpecificationsCount],[OutStockUnitCount]
+    ,[TotalPurchaseAmount],[NotSkuGiftString],[RefuseReason],[ConfirmCityId],[ConfirmTime],[ConfirmUser_UserId],[ConfirmUser_MobileNo],[ConfirmUser_UserName],[AgreeTime])
+    VALUES
+    (@Id,@NoteNo,@State,@BusinessType,@Type,@SpecificationsCount,@UnitCount,@InStockSpecificationsCount,@InStockUnitCount,@TotalAmount,@FromUser_UserId,@FromUser_MobileNo,@FromUser_UserName
+    ,@ToUser_UserId,@ToUser_MobileNo,@ToUser_UserName,@ConsignorInfo_UserName,@ConsignorInfo_MobileNo,@ConsignorInfo_Address,@ConsigneeInfo_UserName,@ConsigneeInfo_MobileNo,@ConsigneeInfo_Address
+    ,@CreateUserId,@PurchaseRequisitionNo,GETDATE(),GETDATE(),@FromCity_Id,@FromStoreHouse_Id,@Provider_Id,@PurchaseRequisition_Id,@ToCity_Id,@ToStoreHouse_Id,@LogisticInfo_LogisticMode,@LogisticInfo_LogisticsFee
+    ,@LogisticInfo_LogisticCompany,@LogisticInfo_LogisticNo,@LogisticInfo_Remark,@OutStockSpecificationsCount,@OutStockUnitCount,@TotalPurchaseAmount,@NotSkuGiftString,@RefuseReason
+    ,@ConfirmCityId,@ConfirmTime,@ConfirmUser_UserId,@ConfirmUser_MobileNo,@ConfirmUser_UserName,@AgreeTime)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[AllocationNoteItems]
+    ([Id],[Count],[InStockCount],[UnitPrice],[SpecificationsPrice],[Unit],[Specifications],[TotalAmount],[CreateTime],[LastUpdateTime],[Product_Id],[PurchaseRequisitionItem_Id],[AllocationNote_Id]
+    ,[Remark],[OutStockCount],[Weight],[Volume],[PurchaseUnitPrice],[PurchaseSpecificationsPrice],[TotalPurchaseAmount],[IsGiveaway],[AuditInStockCount],[RelateOrderId])
+    VALUES
+    (@Id,@Count,@InStockCount,@UnitPrice,@SpecificationsPrice,@Unit,@Specifications,@TotalAmount,GETDATE(),GETDATE(),@Product_Id,@PurchaseRequisitionItem_Id,@AllocationNote_Id
+    ,@Remark,@OutStockCount,@Weight,@Volume,@PurchaseUnitPrice,@PurchaseSpecificationsPrice,@TotalPurchaseAmount,@IsGiveaway,@AuditInStockCount,@RelateOrderId)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[AllocationNotes]
+    SET
+    [State] = @State
+    ,[BusinessType] = @BusinessType
+    ,[Type] = @Type
+    ,[SpecificationsCount] = @SpecificationsCount
+    ,[UnitCount] = @UnitCount
+    ,[InStockSpecificationsCount] = @InStockSpecificationsCount
+    ,[InStockUnitCount] = @InStockUnitCount
+    ,[TotalAmount] = @TotalAmount
+    ,[FromUser_UserId] = @FromUser_UserId
+    ,[FromUser_MobileNo] = @FromUser_MobileNo
+    ,[FromUser_UserName] = @FromUser_UserName
+    ,[ToUser_UserId] = @ToUser_UserId
+    ,[ToUser_MobileNo] = @ToUser_MobileNo
+    ,[ToUser_UserName] = @ToUser_UserName
+    ,[ConsignorInfo_UserName] = @ConsignorInfo_UserName
+    ,[ConsignorInfo_MobileNo] = @ConsignorInfo_MobileNo
+    ,[ConsignorInfo_Address] = @ConsignorInfo_Address
+    ,[ConsigneeInfo_UserName] = @ConsigneeInfo_UserName
+    ,[ConsigneeInfo_MobileNo] = @ConsigneeInfo_MobileNo
+    ,[ConsigneeInfo_Address] = @ConsigneeInfo_Address
+    ,[LastUpdateTime] = GETDATE()
+    ,[Provider_Id] = @Provider_Id
+    ,[LogisticInfo_LogisticMode] = @LogisticInfo_LogisticMode
+    ,[LogisticInfo_LogisticsFee] = @LogisticInfo_LogisticsFee
+    ,[LogisticInfo_LogisticCompany] = @LogisticInfo_LogisticCompany
+    ,[LogisticInfo_LogisticNo] = @LogisticInfo_LogisticNo
+    ,[LogisticInfo_Remark] = @LogisticInfo_Remark
+    ,[OutStockSpecificationsCount] = @OutStockSpecificationsCount
+    ,[OutStockUnitCount] = @OutStockUnitCount
+    ,[TotalPurchaseAmount] = @TotalPurchaseAmount
+    ,[NotSkuGiftString] = @NotSkuGiftString
+    ,[RefuseReason] = @RefuseReason
+    ,[ConfirmCityId] = @ConfirmCityId
+    ,[ConfirmTime] = @ConfirmTime
+    ,[ConfirmUser_UserId] = @ConfirmUser_UserId
+    ,[ConfirmUser_MobileNo] = @ConfirmUser_MobileNo
+    ,[ConfirmUser_UserName] = @ConfirmUser_UserName
+    ,[AgreeTime] = @AgreeTime
+    ,[CreateUserId]=CreateUserId
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[AllocationNoteItems]
+    SET [Count] = @Count
+    ,[InStockCount] = @InStockCount
+    ,[UnitPrice] = @UnitPrice
+    ,[SpecificationsPrice] = @SpecificationsPrice
+    ,[Unit] = @Unit
+    ,[Specifications] = @Specifications
+    ,[TotalAmount] = @TotalAmount
+    ,[LastUpdateTime] = GETDATE()
+    ,[Product_Id] = @Product_Id
+    ,[PurchaseRequisitionItem_Id] = @PurchaseRequisitionItem_Id
+    ,[AllocationNote_Id] = @AllocationNote_Id
+    ,[Remark] = @Remark
+    ,[OutStockCount] = @OutStockCount
+    ,[Weight] = @Weight
+    ,[Volume] = @Volume
+    ,[PurchaseUnitPrice] = @PurchaseUnitPrice
+    ,[PurchaseSpecificationsPrice] = @PurchaseSpecificationsPrice
+    ,[TotalPurchaseAmount] = @TotalPurchaseAmount
+    ,[IsGiveaway] = @IsGiveaway
+    ,[AuditInStockCount] = @AuditInStockCount
+    ,[RelateOrderId] = @RelateOrderId
+    WHERE Id=@Id
+  </UpdateItem>
+  <DeleteItem>
+    DELETE FROM dbo.AllocationNoteItems WHERE Id=@Id
+  </DeleteItem>
+</SqlResource>

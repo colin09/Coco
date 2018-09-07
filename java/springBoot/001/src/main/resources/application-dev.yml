@@ -1,0 +1,12 @@
+server:
+  port: 9002
+#  context-path: /cc
+
+page: 1
+pageSize: 10
+
+pageInfo:
+  index: "${page}"
+  size: "${pageSize}"
+  total: 100
+

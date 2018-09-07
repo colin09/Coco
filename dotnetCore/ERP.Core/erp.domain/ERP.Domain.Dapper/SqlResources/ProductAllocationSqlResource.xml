@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProductAllocationSqlResource>
+  <Select>
+    SELECT Id,Remark,BusinessTime,AuditState,AuditRemark,CreateTime,LastUpdateTime,City_Id,From_Id,To_Id,IsDeleted,NoteNo FROM dbo.ProductAllocations WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT dbo.ProductAllocations
+    (Id,Remark,BusinessTime,AuditState,AuditRemark,CreateTime,LastUpdateTime,City_Id,From_Id,To_Id,IsDeleted,NoteNo)
+    VALUES  (@Id,@Remark,@BusinessTime,@AuditState,@AuditRemark,GETDATE(),GETDATE(),@City_Id,@From_Id,@To_Id,@IsDeleted,@NoteNo)
+  </Insert>
+  <Update>
+    UPDATE dbo.ProductAllocations SET Remark=@Remark,BusinessTime=@BusinessTime,AuditState=@AuditState,AuditRemark=@AuditRemark,LastUpdateTime=GETDATE(),City_Id=@City_Id,From_Id=@From_Id,To_Id=@To_Id,IsDeleted=@IsDeleted,NoteNo=@NoteNo WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.ProductAllocations SET IsDeleted=1 WHERE Id=@Id
+  </Delete>
+  <SelectIncludeStoreHouse>
+    SELECT
+    [ProductAllocations].Id,[ProductAllocations].NoteNo,[ProductAllocations].AuditState,[ProductAllocations].From_Id,[ProductAllocations].City_Id,[ProductAllocations].To_Id,[ProductAllocations].IsDeleted,[FromStoreHouse].Id Id,[FromStoreHouse].NewId NewId,[FromStoreHouse].Name Name,[ToStoreHouse].Id Id,[ToStoreHouse].NewId NewId,[ToStoreHouse].Name Name
+    FROM dbo.ProductAllocations WITH(NOLOCK)
+    INNER JOIN dbo.Orgs FromStoreHouse WITH(NOLOCK) ON From_Id=FromStoreHouse.Id
+    INNER JOIN dbo.Orgs ToStoreHouse WITH(NOLOCK) ON To_Id=ToStoreHouse.Id
+  </SelectIncludeStoreHouse>
+  <SelectProductAllocationItems>
+    SELECT Id,Count,Unit,Price,CreateTime,LastUpdateTime,Product_Id,ProductAllocation_Id,Remark FROM dbo.ProductAllocationItems WITH(NOLOCK)
+  </SelectProductAllocationItems>
+  <SelectProductAllocationItemsIncludeAll>
+    SELECT
+    [ProductAllocationItems].Id,[ProductAllocationItems].Count,[ProductAllocationItems].Price,[ProductAllocationItems].Product_Id,[ProductAllocations].Id Id,[ProductAllocations].AuditState AuditState,[ProductAllocations].NoteNo NoteNo,[ProductAllocations].BusinessTime BusinessTime,[ProductAllocations].City_Id City_Id,[FromStoreHouse].Id Id,[FromStoreHouse].NewId NewId,[FromStoreHouse].Name Name,[ToStoreHouse].Id Id,[ToStoreHouse].NewId NewId,[ToStoreHouse].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_PackageUnit PackageUnit,[ProductInfo].Desc_Specifications Specifications
+    FROM dbo.ProductAllocationItems WITH(NOLOCK)
+    INNER JOIN dbo.ProductAllocations WITH(NOLOCK) ON ProductAllocations.Id = ProductAllocationItems.ProductAllocation_Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=ProductAllocations.City_Id
+    INNER JOIN dbo.Orgs FromStoreHouse WITH(NOLOCK) ON FromStoreHouse.Id=[ProductAllocations].From_Id
+    INNER JOIN dbo.Orgs ToStoreHouse WITH(NOLOCK) ON ToStoreHouse.Id=[ProductAllocations].To_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=Info_Id
+  </SelectProductAllocationItemsIncludeAll>
+  <InsertProductAllocationItem>
+    INSERT dbo.ProductAllocationItems
+    (Id,Count,Unit,Price,CreateTime,LastUpdateTime,Product_Id,ProductAllocation_Id,Remark)
+    VALUES  (@Id,@Count,@Unit,@Price,GETDATE(),GETDATE(),@Product_Id,@ProductAllocation_Id,@Remark)
+  </InsertProductAllocationItem>
+  <DeleteProductAllocationItem>
+    DELETE FROM dbo.ProductAllocationItems WHERE Id=@Id
+  </DeleteProductAllocationItem>
+  <DeleteItemsByProductAllocationId>
+    DELETE FROM dbo.ProductAllocationItems WHERE ProductAllocation_Id=@Id
+  </DeleteItemsByProductAllocationId>
+  <SelectForSCM>
+    select pa.id,pa.NoteNo,pa.AuditState,pa.BusinessTime,pa.CreateTime,fs.[Name] fromStoreHouseName,ts.[Name] toStoreHouseName,
+    pa.From_Id fromStoreHouseId,pa.To_Id toStoreHouseId
+    from [dbo].[ProductAllocations] pa WITH(NOLOCK)
+    inner join dbo.Orgs fs WITH(NOLOCK) on pa.From_Id=fs.Id
+    inner join dbo.Orgs ts WITH(NOLOCK) on pa.To_Id=ts.Id
+  </SelectForSCM>
+  <SelectForSCMBatchDetail>
+    select pai.ProductAllocation_Id,pai.Product_Id productId,pf.Desc_OldCategory category,pf.Desc_BrandName brand,pf.Desc_ProductName productName,
+    pf.Desc_Specifications specification,pf.Desc_PackageUnit packageUnit,pf.Desc_PackageQuantity packageQuantity,pai.[Count] totalCount,
+    pai.Remark,pai.Price
+    from [dbo].[ProductAllocations] pa WITH(NOLOCK)
+    inner join dbo.ProductAllocationItems pai WITH(NOLOCK) on pa.id=pai.[ProductAllocation_Id]
+    inner join dbo.Product p WITH(NOLOCK) on pai.Product_Id=p.Id
+    inner join dbo.ProductInfo pf WITH(NOLOCK) on p.Info_Id=pf.Id
+  </SelectForSCMBatchDetail>
+</ProductAllocationSqlResource>

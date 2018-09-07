@@ -1,0 +1,165 @@
+﻿@model  Dictionary<string, string>
+@{
+    ViewBag.Title = "QesAnswers";
+}
+
+<h2>问卷调查记录</h2>
+
+
+<div ng-app="qaApp">
+
+    <div class="row" ng-controller="answerCtl">
+        <div class="col-sm-2">
+            <ul>
+                @foreach (var item in Model)
+                {
+                    <li> <span ng-click="click('@item.Key')" data-id="@item.Key">@item.Value</span></li>
+                }
+            </ul>
+        </div>
+        <div class="col-sm-10">
+            <div class="plt10">
+                <p>
+                    新郎 & 新娘 ：    {{answer.groom}} & {{ answer.bride}}
+                    拍摄套系 ： {{answer.pgStyle }} 拍摄日期 ： {{answer._pgDate}}
+                </p>
+            </div>
+            <p>通过以下渠道了解到我们 ： {{answer.channel}}</p>
+            <div class="plt10">
+                <p>
+                    化妆师 ：{{answer.makeup}} 服装师 ： {{answer.dress}}
+                    摄影师 : {{answer.photo}} 摄影助理  ：{{answer.assistant}}
+                </p>
+            </div>
+            <p>联系方式 ： {{answer.name }} / {{ answer.phone}} / {{answer.address}}</p>
+            <p><hr /></p>
+
+            <div class="plt10">
+                <p>{{ques.q1.question}}</p>
+                <p>
+                    <span>{{ques.q1.items[0]}}</span>  {{answer.q_1_1}}
+                    <span>{{ques.q1.items[1]}}</span>  {{answer.q_1_2}}
+                    <span>{{ques.q1.items[2]}}</span>  {{answer.q_1_3}}
+                </p>
+            </div>
+            <div class="plt10">
+                <p>{{ques.q2.question}}</p>
+                <p>
+                    <span>{{ques.q2.items[0]}}</span>  {{answer.q_2_1}}
+                    <span>{{ques.q2.items[1]}}</span>  {{answer.q_2_2}}
+                    <span>{{ques.q2.items[2]}}</span>  {{answer.q_2_3}}
+                </p>
+            </div>
+            <div class="plt10">
+                <p>{{ques.q3.question}}</p>
+                <p>
+                    <span>{{ques.q3.items[0]}}</span>  {{answer.q_3_1}}
+                    <span>{{ques.q3.items[1]}}</span>  {{answer.q_3_2}}
+                    <span>{{ques.q3.items[2]}}</span>  {{answer.q_3_3}}
+                </p>
+            </div>
+            <div class="plt10">
+                <p>{{ques.q4.question}}</p>
+                <p>
+                    <span>{{ques.q4.items[0]}}</span>  {{answer.q_4_1}}
+                    <span>{{ques.q4.items[1]}}</span>  {{answer.q_4_2}}
+                    <span>{{ques.q4.items[2]}}</span>  {{answer.q_4_3}}
+
+                    <span>{{ques.q4.items[3]}}</span>  {{answer.q_4_4}}
+                    <span>{{ques.q4.items[4]}}</span>  {{answer.q_4_5}}
+                    <span>{{ques.q4.items[5]}}</span>  {{answer.q_4_6}}
+                </p>
+            </div>
+            <div class="plt10">
+                <p>{{ques.q5.question}}</p>
+                <p>
+                    <span>{{ques.q5.items[0]}}</span> {{ answer.q_5_1}}
+                    <span>{{ques.q5.items[1]}}</span>  {{answer.q_5_2}}
+                    <span>{{ques.q5.items[2]}}</span>  {{answer.q_5_3}}
+
+                    <span>{{ques.q5.items[3]}}</span>  {{answer.q_5_4}}
+                    <span>{{ques.q5.items[4]}}</span>  {{answer.q_5_5}}
+                    <span>{{ques.q5.items[5]}}</span>  {{answer.q_5_6}}
+                </p>
+            </div>
+            <div class="plt10">
+                <p>{{ques.q6.question}}</p><p>
+                    <span>{{ques.q6.items[0]}}</span>  {{answer.q_6_1}}
+                    <span>{{ques.q6.items[1]}}</span>  {{answer.q_6_2}}
+                    <span>{{ques.q6.items[2]}}</span>  {{answer.q_6_3}}
+
+                    <span>{{ques.q6.items[3]}}</span>  {{answer.q_6_4}}
+                    <span>{{ques.q6.items[4]}}</span>  {{answer.q_6_5}}
+                    <span>{{ques.q6.items[5]}}</span>  {{answer.q_6_6}}
+                </p>
+            </div>
+            <div class="plt10">
+                <p>{{ques.q7.question}}</p>
+                <p>
+                    <span>{{ques.q7.items[0]}}</span>  {{answer.q_7_1}}
+                    <span>{{ques.q7.items[1]}}</span>  {{answer.q_7_2}}
+                    <span>{{ques.q7.items[2]}}</span>  {{answer.q_7_3}}
+                    <span>{{ques.q7.items[3]}}</span>  {{answer.q_7_4}}
+                </p>
+            </div>
+            <div class="plt10">
+                <p>{{ques.q8.question}}</p>
+                <p>{{answer.idea}}</p>
+            </div>
+
+            <div class="plt10">
+                <p>填写时间： {{answer._createTime}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var app = angular.module('qaApp', [])
+              .controller("answerCtl",
+                  function ($scope, $http) {
+                      $scope.answer = [];
+                      $scope.click = function (id) {
+                          $http.get("/mgr/Other/GetOneAnswer?id=" + id)
+                              .success(function (json) {
+                                  if (json != undefined) {
+                                      $scope.answer = json;
+                                  }
+                              });
+                      }
+
+                      $http.get("../../scripts/js/questions.json").success(function (data) {
+                          $scope.ques = data;
+                          //Console.Write(data);
+                      });
+                  });
+
+        app.filter("getChannel", function () {
+            var filter = function (input) {
+                console.log(input);
+                var items = input.split(',');
+                var channel = "";
+                $.each(items, function (key, val) {
+                    switch (key) {
+                        case "1": channel += " / 大众点评"; break;
+                        case "2": channel += " / 百度搜索"; break;
+                        case "3": channel += " / 婚礼纪"; break;
+                        case "4": channel += " / 亲友推荐"; break;
+                        case "5": channel += " / 微信推广"; break;
+                        case "6": channel += " / 其他"; break;
+                    };
+                });
+            }
+            return filter;
+        });
+
+        $(function () {
+
+        });
+
+
+
+    </script>
+}

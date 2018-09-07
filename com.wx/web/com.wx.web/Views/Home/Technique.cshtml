@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "摄影技巧";
+}
+@section head
+{
+    <link rel="stylesheet" href="~/Content/home.css" />
+}
+<div class="container-full bc-g" ng-app="AppItemList">
+    <div class="container" ng-controller="listCtl">
+        <input type="hidden" id="hdCode" value="5" />
+        <input type="hidden" id="hdType" value="2" />
+        <input type="hidden" id="hdSource" value="0" />
+        <div class="pageTitle">
+            <span class="fs36">摄影技巧</span><br />
+            <span class="fs16">Shooting technique</span>
+        </div>
+        <ul class="techContent">
+            <li ng-repeat="el in list">
+                <img ng-src="{{el.Domain+el.Image}}" />
+                <div>
+                    <span class="pull-left">{{el.Name}}</span>
+                    <span class="fs18 pull-right">
+                    <a ng-href="Detail?code={{el.Code}}&source={{el.RelationId}}">< 点击查看 ></a></span>
+                    <span class="clear"></span>
+                </div>
+            </li>
+            <div class="clear"></div>
+        </ul>
+
+
+
+
+
+        <div class="pageFoot">
+            <span class="fs18">拍摄前做好充分的准备，这样在正式拍摄时才能展现出自己最美丽的一面 .....</span><br />
+            <span>Full preparation before filming,so as to show the most beautiful side of the official shooting ......</span>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/js/customer.js"></script>
+}
+

@@ -1,0 +1,218 @@
+﻿MongoDB C# 驱动
+
+
+MongoClient类
+
+这个类提供使用MongoDB server的基本对象。与MongoDB server服务进行链接的时候，client自动进行连接。（使用了连接池来进行更有效的连接）
+在连接一个副本集的时候，有且只用一个MongoClient实例。
+这个类的实例不会引起多线程问题。
+除非其他设置，在默认设置情况下，所有操作需要一个WriteConcern，一个写入确定语句。另外，默认情况下，所有的写操作会锁定，直到server知道要进行写操作。
+
+
+Connection strings
+
+最简单的数据库连接是使用Connection string。标准的Connection string如下：
+mongodb://[username:password@]hostname[:port][/[database][?options]]
+
+在使用认证的mongodb服务器上，username和password必须填写。
+port号码是可选的。默认的是27017.
+
+如果要连接多个服务器，可以直接填写多个服务器名（以及需要的端口号），并且以‘，’分割。如下：
+mongodb://server1,server2:27017,server2:27018
+上面这段connection string 连接了三个数据库服务，由于多数据库服务是模糊不清的，不能分辨服务是否复本集，或者是多数据库服务。drive驱动会跳过connection string的语法检查，直接连接进数据库服务器，让server自己检查他们的类别。
+
+还有一些办法在连接的时候就指定数据服务器的类别，就是在connection string里面直接描述。如下：
+mongodb://server1,server2:27017,server2:27018/?connect=replicaset
+可用的连接模式包括：automatic (默认), direct, replica set, 以及shardrouter。连接的规则如下：
+
+1、如果指定了某种连接模式，则直接使用否则使用默认的automatic。
+2、如果在connection string中有replica set name，则使用replica set模式
+3、如果connection string中仅有一个服务器，则使用direct模式
+4、另外，连接服务之后，服务决定连接的模式
+
+假设你想要直接连接入一个replica set并且无论它是否是现在的primary（也许只是想监控下它的运行状态或者进行只读语句），可以使用下面连接语句：
+mongodb://server2/?connect=direct;readpreference=nearest
+
+可以在下面的链接获取比较齐全的connection string文档
+http://www.mongodb.org/display/DOCS/Connections
+
+更加深入地额：
+http://docs.mongodb.org/manual/applications/replication/#replica-set-read-preference
+
+
+
+
+
+
+
+
+MongoDB 标准连接字符串
+mongodb://[username:password@]host1[:port1][,host2[:port2],…[,hostN[:portN]]][/[database][?options]]
+注：并非所有MongoDB驱动都支持完整的连接字符串，不支持此格式连接字串的驱动会有替代连接方案，具体请参照驱动自身的说明文档。
+
+ mongodb:// 是连接字串必须的前缀字串
+ username:password@ 可选项，连接到数据库后会尝试验证登陆
+ host1 必须的指定至少一个host
+ :portX 可选项，默认连接到27017
+ /database 如果指定username:password@，连接并验证登陆指定数据库。若不指定，默认打开admin数据库。
+ ?options 是连接选项。如果不使用/database，则前面需要加上/。所有连接选项都是键值对name=value，键值对之间通过&或;（分号）隔开
+
+连接选项包括：
+Replica set:
+replicaSet=name
+驱动会校验replica set的名字。意味着给定的hosts是主库（seed list），驱动将试图找到replica set中的所有成员。（•The driver verifies that the name of the replica set it connects to matches this name. Implies that the hosts given are a seed list, and the driver will attempt to find all members of the set.）
+
+Single server:
+slaveOk=true|false
+
+自由选项：
+safe=true|false
+ true: 驱动程序会在提交每次更新操作后执行getLastError命令以确认更新是有效的（参见w和wtimeoutMS）
+ false:驱动程序在每次更新操作后不会执行getLastError
+w=n
+ 驱动在getLastError命令加上{ w : n } 参数。意味着safe=true
+wtimeoutMS=ms
+ 驱动在getLastError命令加上{ wtimeout : ms }参数。意味着safe=true.
+fsync=true|false
+ true: 驱动在getLastError命令加上{ fsync : true } 参数。意味着safe=true.
+ false: 驱动不在getlasterror 命令加fsync参数。
+journal=true|false
+ true: 同步到 journal. 意味着safe=true.
+connectTimeoutMS=ms
+ 设置建立连接超时，单位ms
+socketTimeoutMS=ms
+ 设置socket发送或接受超时时间，单位ms
+
+这些选项都是大小写不敏感的。
+
+连接MongoDB（默认连接到localhost:27017）
+
+mongodb://localhost
+使用用户fred和密码foobar连接
+
+mongodb://fred:foobar@localhost
+使用用户fred和密码foobar连接，指定数据库baz
+
+mongodb://fred:foobar@localhost/baz
+连接到两台服务器组成的Replica Sets
+
+mongodb://example.com:27017,example2.com:27017
+连接到三台本地服务器组成的Replica Sets(分别使用27017、27018和27019端口)
+
+mongodb://localhost,localhost:27018,localhost:27019
+连接到三台服务器组成的Replica Sets，把所有写操作集中在主库，读操作分布在各丛库
+
+mongodb://host1,host2,host3/?slaveOk=true
+使用安全模式连接
+
+mongodb://localhost/?safe=true
+安全模式下连接到一组Replica Sets，等待至少两台机器同步成功，并设置两秒的超时时间
+
+mongodb://host1,host2,host3/?safe=true;w=2;wtimeoutMS=2000
+连接池（Connection Pooling）
+服务器每个TCP连接对应一个进程。强力推荐你在应用程序中实现自身的连接池。多数驱动程序也会在背后悄悄帮你做连接池。一个常见的例外是你的应用会为每个请求重新配置一个新进程譬如CGI和PH
+
+
+
+
+
+
+
+
+
+
+
+#==========================================================================================================================================================
+#windows exe 文件，导入相关
+
+ .\mongo.exe mongodb://pmp:123456@192.168.1.182/pmp
+ 
+  .\mongoimport.exe -h 192.168.1.182 -u pmp -p 123456 -d pmp -c mins -file D:\Users\Joy10\Desktop\123.csv --type csv --headerline 
+  
+  .\mongoimport.exe -h 192.168.1.182 -u pmp -p 123456 -d pmp -c mins --file D:\Users\Joy10\Desktop\123.csv --type csv --headerline --ignoreBlanks
+ 
+ 
+ utf-8 vip
+ 
+ mongoimport --help    
+options:    
+  --help                  produce help message    
+  -v [ --verbose ]        be more verbose (include multiple times for more    
+                          verbosity e.g. -vvvvv)    
+  -h [ --host ] arg       mongo host to connect to ( <set name>/s1,s2 for sets)    
+  --port arg              server port. Can also use --host hostname:port    
+  --ipv6                  enable IPv6 support (disabled by default)    
+  -u [ --username ] arg   username    
+  -p [ --password ] arg   password    
+  --dbpath arg            directly access mongod database files in the given    
+                          path, instead of connecting to a mongod  server -    
+                          needs to lock the data directory, so cannot be used    
+                          if a mongod is currently accessing the same path    
+  --directoryperdb        if dbpath specified, each db is in a separate    
+                          directory    
+  -d [ --db ] arg         database to use    
+  -c [ --collection ] arg collection to use (some commands)    
+  -f [ --fields ] arg     comma separated list of field names e.g. -f name,age    
+  --fieldFile arg         file with fields names - 1 per line    
+  --ignoreBlanks          if given, empty fields in csv and tsv will be ignored    
+  --type arg              type of file to import.  default: json (json,csv,tsv)    
+  --file arg              file to import from; if not specified stdin is used    
+  --drop                  drop collection first    
+  --headerline            CSV,TSV only - use first line as headers    
+  --upsert                insert or update objects that already exist    
+  --upsertFields arg      comma-separated fields for the query part of the    
+                          upsert. You should make sure this is indexed    
+  --stopOnError           stop importing at first error rather than continuing    
+  --jsonArray             load a json array, not one item per line. Currently    
+                          limited to 4MB.    
+						  
+						  
+						  
+sudo  ./mongoimport  -d localdb -c user  --type csv/tsc  --file user.csv  --headerline  --upsert --ignoreBlanks   -f name,age
+
+参数含义
+ 
+-d    指定把数据导入到哪一个数据库中
+ 
+-c    指定把数据导入到哪一个集合中
+ 
+--type    指定导入的数据类型   csv/tsv  逗号或者tab分割值
+ 
+--file       指定从哪一个文件中导入数据
+ 
+--headerline    仅适用于导入csv,tsv格式的数据，表示文件中的第一行作为数据头
+ 
+--upsert  以新增或者更新的方式来导入数据
+
+--f  导入字段名
+
+--ignoreBlanks 忽略空白符
+
+
+
+
+#####################################################################################
+
+cd X:\****\MongoDB\Server\Bin
+
+.\mongo.exe
+
+db.createUser({user:'root',pwd:'123456',roles:[{role:'userAdminAnyDatabase',db:'admin'},{role:'dbAdminAnyDatabase',db:'admin'},{role:'readWriteAnyDatabase',db:'admin'}]})
+
+use admin
+
+db.auth('root','123456')
+
+
+//这里很重要否则无法登录。
+use hui
+
+db.createUser({user:'hui',pwd:'123456',roles:[{role:'dbOwner',db:'hui'},'readWrite']})
+
+
+
+cmd-> regedit-> HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services->MongoDB
+（mongodb注册的名称，我的是MongoDB)
+在它的ImgPath中，我们修改一下，加入 --auth
+
+

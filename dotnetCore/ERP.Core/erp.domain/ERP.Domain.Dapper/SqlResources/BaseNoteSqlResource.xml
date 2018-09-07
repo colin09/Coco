@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[NoteType],[OperationType],[Price],[Num],[Unit],[Remark],[AuditState],[AuditRemark],[CreateTime],[LastUpdateTime],[Product_Id],[StoreHouse_Id]
+    ,[IsDeleted],[BusinessTime],[BaseNoteInfo_Id],[NoteNo],[CannotEditAndDelete],[City_Id]
+    FROM [dbo].[BaseNotes] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [BaseNotes].[Id],[BaseNotes].[NoteType],[BaseNotes].[OperationType],[BaseNotes].[Price],[BaseNotes].[Num],[BaseNotes].[Unit],[BaseNotes].[Remark],[BaseNotes].[AuditState],
+    [BaseNotes].[AuditRemark],[BaseNotes].[CreateTime],[BaseNotes].[LastUpdateTime],[BaseNotes].[Product_Id],[BaseNotes].[StoreHouse_Id],[BaseNotes].[IsDeleted],
+    [BaseNotes].[BusinessTime],[BaseNotes].[BaseNoteInfo_Id],[BaseNotes].[NoteNo],[BaseNotes].[CannotEditAndDelete],[BaseNotes].[City_Id],
+    StoreHouse.Name,StoreHouse.Id,
+    [Product].ProductType,[Product].Id,ProductInfo.MonthOfShelfLife,ProductInfo.Id,ProductInfo.Desc_ProductName ProductName,ProductInfo.Desc_OldCategory OldCategory,ProductInfo.Desc_Specifications Specifications,
+    ProductInfo.Desc_PackageUnit PackageUnit,ProductInfo.Desc_PackageQuantity PackageQuantity
+    FROM [dbo].[BaseNotes] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON StoreHouse.Id = BaseNotes.StoreHouse_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = BaseNotes.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[BaseNotes]
+    ([Id],[NoteType],[OperationType],[Price],[Num],[Unit],[Remark],[AuditState],[AuditRemark],[CreateTime],[LastUpdateTime],[Product_Id],[StoreHouse_Id],[IsDeleted]
+    ,[BusinessTime],[BaseNoteInfo_Id],[NoteNo],[CannotEditAndDelete],[City_Id])
+    VALUES
+    (@Id,@NoteType,@OperationType,@Price,@Num,@Unit,@Remark,@AuditState,@AuditRemark,GETDATE(),GETDATE(),@Product_Id,@StoreHouse_Id,@IsDeleted,@BusinessTime
+    ,@BaseNoteInfo_Id,@NoteNo,@CannotEditAndDelete,@City_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[BaseNotes]
+    SET [Price] = @Price
+    ,[Num] = @Num
+    ,[Unit] = @Unit
+    ,[Remark] = @Remark
+    ,[AuditState] = @AuditState
+    ,[AuditRemark] = @AuditRemark
+    ,[LastUpdateTime] = GETDATE()
+    ,[BusinessTime] = @BusinessTime
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.BaseNotes SET IsDeleted=1 WHERE id=@Id
+  </Delete>
+</SqlResource>

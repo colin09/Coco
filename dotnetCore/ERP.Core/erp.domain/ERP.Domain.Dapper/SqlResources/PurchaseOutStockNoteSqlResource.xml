@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[AuditState],[AuditRemark],[OutStockTime],[IsDownReason],[CreateTime],[LastUpdateTime],[City_Id],[OrgUser_Id],[Supplier_Id],[IsDeleted],[IsInternal]
+    ,[SupplierCity_Id],[Remark],[NoteNo],[StoreHouse_Id]
+    FROM [dbo].[PurchaseOutStockNotes] WITH(NOLOCK)
+  </Select>
+  <SelectItemsIncludeAll>
+    SELECT
+    [OutStockItems].Id
+    ,Num,Price,Unit,TotalAmount,Note_Id,StoreHouse_Id,Product_Id,[PurchaseOutStockNotes].Id,[PurchaseOutStockNotes].City_Id,NoteNo NoteNo,OutStockTime OutStockTime
+    ,[PurchaseOutStockNotes].AuditState AuditState,[PurchaseOutStockNotes].SupplierCity_Id SupplierCity_Id,IsDownReason IsDownReason
+    ,IsInternal IsInternal,[Orgs].Id Id,[Orgs].NewId NewId,[Orgs].Name Name,[Providers].Id Id,[Providers].Name Name,[Product].Id Id
+    ,[Product].NewId NewId,Desc_ProductName ProductName,Desc_OldCategory OldCategory,Desc_PackageQuantity PackageQuantity
+    ,Desc_PackageUnit PackageUnit,Desc_Specifications Specifications,[StoreHouseOrg].Id Id,[StoreHouseOrg].NewId NewId
+    ,StoreHouseOrg.Name Name,dbo.StoreHouse.City_Id City_Id,dbo.StoreHouse.Shop_Id Shop_Id
+    FROM dbo.OutStockItems WITH(NOLOCK)
+    INNER JOIN dbo.PurchaseOutStockNotes WITH(NOLOCK) ON PurchaseOutStockNotes.Id = OutStockItems.Note_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=[OutStockItems].Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=[Product].Info_Id
+    INNER JOIN dbo.StoreHouse WITH(NOLOCK) ON [PurchaseOutStockNotes].StoreHouse_Id=[StoreHouse].Id
+    INNER JOIN dbo.Orgs StoreHouseOrg WITH(NOLOCK) ON [StoreHouseOrg].Id=[StoreHouse].Id
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON [Orgs].Id=[PurchaseOutStockNotes].SupplierCity_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON [Providers].Id=[PurchaseOutStockNotes].Supplier_Id
+  </SelectItemsIncludeAll>
+  <SelectItems>
+    SELECT Id,Price,Num,Unit,Remark,IsGiveaway,CreateTime,LastUpdateTime,Note_Id,Product_Id,TotalAmount FROM dbo.OutStockItems WITH(NOLOCK)
+  </SelectItems>
+  <Insert>
+    INSERT INTO dbo.PurchaseOutStockNotes
+    (Id,AuditState,AuditRemark,OutStockTime,IsDownReason,City_Id,OrgUser_Id,Supplier_Id,IsDeleted,IsInternal,SupplierCity_Id,Remark,NoteNo,StoreHouse_Id,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@AuditState,@AuditRemark,@OutStockTime,@IsDownReason,@City_Id,@OrgUser_Id,@Supplier_Id,@IsDeleted,@IsInternal,@SupplierCity_Id,@Remark,@NoteNo,@StoreHouse_Id,GETDATE(),GETDATE())
+  </Insert>
+  <InsertItems>
+    INSERT dbo.OutStockItems
+    (Id,Price,Num,Unit,Remark,IsGiveaway,Note_Id,Product_Id,TotalAmount,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@Price,@Num,@Unit,@Remark,@IsGiveaway,@Note_Id,@Product_Id,@TotalAmount,GETDATE(),GETDATE())
+  </InsertItems>
+  <Update>
+    UPDATE dbo.PurchaseOutStockNotes SET AuditState =@AuditState,AuditRemark =@AuditRemark,OutStockTime=@OutStockTime,IsDownReason=@IsDownReason,City_Id=@City_Id,OrgUser_Id=@OrgUser_Id,Supplier_Id=@Supplier_Id,IsDeleted=@IsDeleted,IsInternal=@IsInternal,SupplierCity_Id =@SupplierCity_Id,Remark=@Remark,StoreHouse_Id=@StoreHouse_Id,LastUpdateTime =GETDATE() WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE dbo.OutStockItems SET Price=@Price,Num=@Num,Unit=@Unit,Remark=@Remark,IsGiveaway=@IsGiveaway,Note_Id=@Note_Id,Product_Id=@Product_Id,TotalAmount=@TotalAmount,LastUpdateTime=GETDATE()
+    WHERE Id=@Id
+  </UpdateItem>
+  <Delete>
+    UPDATE dbo.PurchaseOutStockNotes SET IsDeleted=1,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </Delete>
+  <DeleteItems>
+    DELETE FROM dbo.OutStockItems WHERE Id=@Id
+  </DeleteItems>
+  <DeleteItemsByNoteId>
+    DELETE FROM dbo.OutStockItems WHERE Note_Id=@Id
+  </DeleteItemsByNoteId>
+  <UpdateIsDownReason>
+    UPDATE dbo.PurchaseOutStockNotes SET IsDownReason=@IsDownReason,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </UpdateIsDownReason>
+  <SelectForSCM>
+    select po.Id,po.NoteNo,po.AuditState,po.IsDownReason,po.IsInternal,po.OutStockTime outStockTimeDate,
+    po.CreateTime createTimeDate,po.Remark,po.Supplier_Id supplierId,sp.[Name] supplierName,c.[Name] supplierCityName,
+    po.SupplierCity_Id supplierCityId
+    from [dbo].[PurchaseOutStockNotes] po with(nolock)
+    left join dbo.Orgs c  with(nolock) on po.SupplierCity_Id=c.Id
+    left join dbo.Providers sp  with(nolock) on po.Supplier_Id=sp.Id
+    inner join dbo.Orgs s  with(nolock) on s.Id=po.StoreHouse_Id
+  </SelectForSCM>
+  <SelectForSCMDetail>
+    select osi.[Note_Id],pf.Desc_BrandName brandName,pf.Desc_OldCategory category,osi.IsGiveaway,osi.Num,
+    pf.Desc_PackageQuantity packageQuantity,osi.Price,osi.Product_Id productId,pf.Desc_ProductName productName,
+    pf.Desc_Specifications specification,osi.Num/pf.Desc_PackageQuantity specificationNum,osi.Unit,osi.Remark
+    from [dbo].[OutStockItems] osi with(nolock)
+    inner join dbo.Product p with(nolock)  on osi.Product_Id=p.Id
+    inner join dbo.ProductInfo pf with(nolock)  on pf.Id=p.Info_Id
+  </SelectForSCMDetail>
+</SqlResource>

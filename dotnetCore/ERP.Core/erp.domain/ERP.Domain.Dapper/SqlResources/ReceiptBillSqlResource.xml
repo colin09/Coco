@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[ReceivableAmount],[ReceiptAmount],[MoneyType],[AuditState],[BusinessTime],[OverdueTime],[ReceivableBillId],[CreateTime],[LastUpdateTime],[City_Id]
+    ,[CompanyUser_Id],[IsDeleted],[AuditTime],[IsInternal],[CompanyUserCity_Id],[CashAmount],[BankAmount],[WeiXinAmount],[AlipayAmount],[OrderNo],[NoteNo],[BillNo]
+    ,[ReceivableBillNo],[CannotEditAndDelete],[AgentSettlementNote_Id]  FROM [dbo].[ReceiptBills] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [ReceiptBills].[Id],[ReceiptBills].[ReceivableAmount],[ReceiptBills].[ReceiptAmount],[ReceiptBills].[MoneyType],[ReceiptBills].[AuditState],[ReceiptBills].[BusinessTime],
+    [ReceiptBills].[OverdueTime],[ReceiptBills].[ReceivableBillId],[ReceiptBills].[CreateTime],[ReceiptBills].[LastUpdateTime],[ReceiptBills].[City_Id],[ReceiptBills].[CompanyUser_Id],
+    [ReceiptBills].[IsDeleted],[ReceiptBills].[AuditTime],[ReceiptBills].[IsInternal],[ReceiptBills].[CompanyUserCity_Id],[ReceiptBills].[CashAmount],[ReceiptBills].[BankAmount],
+    [ReceiptBills].[WeiXinAmount],[ReceiptBills].[AlipayAmount],[ReceiptBills].[OrderNo],[ReceiptBills].[NoteNo],[ReceiptBills].[BillNo],[ReceiptBills].[ReceivableBillNo],
+    [ReceiptBills].[CannotEditAndDelete],[ReceiptBills].[AgentSettlementNote_Id],
+    [User].CompanyName,[User].Id ,[User].MobileNO ,[User].TrueName ,
+    CompanyUserCity.Name,CompanyUserCity.Id,
+    Orgs.Name,Orgs.Id
+    FROM [dbo].[ReceiptBills] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = [ReceiptBills].City_Id
+    LEFT JOIN dbo.[User] WITH(NOLOCK) ON [User].Id = [ReceiptBills].CompanyUser_Id
+    LEFT JOIN dbo.Orgs CompanyUserCity WITH(NOLOCK) ON CompanyUserCity.Id = [ReceiptBills].CompanyUserCity_Id
+  </SelectIncludeAll>
+  <SelectItem>
+    SELECT [Id],[Settlement],[ReceiptPurpose],[ReceivableAmount],[ReceiptAmount],[DiscountAmount],[CounterFee],[OurBankNo],[SettlementNo],[Remark]
+    ,[CreateTime],[LastUpdateTime],[ReceiptBill_Id],[ProductId],[ReceivableBillItemId]  FROM [dbo].[ReceiptBillItems] WITH(NOLOCK)
+  </SelectItem>
+  <SelectItemIncludeAll>
+    SELECT [ReceiptBillItems].[Id],[ReceiptBillItems].[Settlement],[ReceiptBillItems].[ReceiptPurpose],[ReceiptBillItems].[ReceivableAmount],[ReceiptBillItems].[ReceiptAmount],
+    [ReceiptBillItems].[DiscountAmount],[ReceiptBillItems].[CounterFee],[ReceiptBillItems].[OurBankNo],[ReceiptBillItems].[SettlementNo],[ReceiptBillItems].[Remark],
+    [ReceiptBillItems].[CreateTime],[ReceiptBillItems].[LastUpdateTime],[ReceiptBillItems].[ReceiptBill_Id],[ReceiptBillItems].[ProductId],[ReceiptBillItems].[ReceivableBillItemId],
+    [ReceiptBills].[AuditState],[ReceiptBills].[Id],[ReceiptBills].[ReceivableAmount],[ReceiptBills].[ReceiptAmount],[ReceiptBills].[MoneyType],[ReceiptBills].[AuditState],[ReceiptBills].[BusinessTime],
+    [ReceiptBills].[OverdueTime],[ReceiptBills].[ReceivableBillId],[ReceiptBills].[CreateTime],[ReceiptBills].[LastUpdateTime],[ReceiptBills].[City_Id],[ReceiptBills].[CompanyUser_Id],
+    [ReceiptBills].[IsDeleted],[ReceiptBills].[AuditTime],[ReceiptBills].[IsInternal],[ReceiptBills].[CompanyUserCity_Id],[ReceiptBills].[CashAmount],[ReceiptBills].[BankAmount],
+    [ReceiptBills].[WeiXinAmount],[ReceiptBills].[AlipayAmount],[ReceiptBills].[OrderNo],[ReceiptBills].[NoteNo],[ReceiptBills].[BillNo],[ReceiptBills].[ReceivableBillNo],
+    [ReceiptBills].[CannotEditAndDelete],[ReceiptBills].[AgentSettlementNote_Id],
+    [User].CompanyName,[User].Id ,[User].MobileNO ,[User].TrueName ,
+    CompanyUserCity.Name,CompanyUserCity.Id,
+    Orgs.Id,Orgs.Name
+    FROM [dbo].[ReceiptBillItems] WITH(NOLOCK)
+    INNER JOIN [dbo].[ReceiptBills] WITH(NOLOCK) ON ReceiptBills.Id = ReceiptBillItems.ReceiptBill_Id
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = [ReceiptBills].City_Id
+    LEFT JOIN dbo.[User] WITH(NOLOCK) ON [User].Id = [ReceiptBills].CompanyUser_Id
+    LEFT JOIN dbo.Orgs CompanyUserCity WITH(NOLOCK) ON CompanyUserCity.Id = [ReceiptBills].CompanyUserCity_Id
+  </SelectItemIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[ReceiptBills]
+    ([Id],[ReceivableAmount],[ReceiptAmount],[MoneyType],[AuditState],[BusinessTime],[OverdueTime],[ReceivableBillId],[CreateTime],[LastUpdateTime],[City_Id],[CompanyUser_Id]
+    ,[IsDeleted],[AuditTime],[IsInternal],[CompanyUserCity_Id],[CashAmount],[BankAmount],[WeiXinAmount],[AlipayAmount],[OrderNo],[NoteNo],[BillNo],[ReceivableBillNo],[CannotEditAndDelete]
+    ,[AgentSettlementNote_Id])
+    VALUES
+    (@Id,@ReceivableAmount,@ReceiptAmount,@MoneyType,@AuditState,@BusinessTime,@OverdueTime,@ReceivableBillId,GETDATE(),GETDATE(),@City_Id,@CompanyUser_Id,@IsDeleted
+    ,@AuditTime,@IsInternal,@CompanyUserCity_Id,@CashAmount,@BankAmount,@WeiXinAmount,@AlipayAmount,@OrderNo,@NoteNo,@BillNo,@ReceivableBillNo,@CannotEditAndDelete,@AgentSettlementNote_Id)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[ReceiptBillItems]
+    ([Id],[Settlement],[ReceiptPurpose],[ReceivableAmount],[ReceiptAmount],[DiscountAmount],[CounterFee],[OurBankNo],[SettlementNo],[Remark]
+    ,[CreateTime],[LastUpdateTime],[ReceiptBill_Id],[ProductId],[ReceivableBillItemId])
+    VALUES
+    (@Id,@Settlement,@ReceiptPurpose,@ReceivableAmount,@ReceiptAmount,@DiscountAmount,@CounterFee,@OurBankNo,@SettlementNo,@Remark
+    ,GETDATE(),GETDATE(),@ReceiptBill_Id,@ProductId,@ReceivableBillItemId)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[ReceiptBills]
+    SET [ReceivableAmount] = @ReceivableAmount
+    ,[ReceiptAmount] = @ReceiptAmount
+    ,[MoneyType] = @MoneyType
+    ,[AuditState] = @AuditState
+    ,[BusinessTime] = @BusinessTime
+    ,[OverdueTime] = @OverdueTime
+    ,[LastUpdateTime] = GETDATE()
+    ,[AuditTime] = @AuditTime
+    ,[CashAmount] = @CashAmount
+    ,[BankAmount] = @BankAmount
+    ,[WeiXinAmount] = @WeiXinAmount
+    ,[AlipayAmount] = @AlipayAmount
+    ,[AgentSettlementNote_Id] = @AgentSettlementNote_Id
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[ReceiptBillItems]
+    SET [Settlement] = @Settlement
+    ,[ReceiptPurpose] = @ReceiptPurpose
+    ,[ReceivableAmount] = @ReceivableAmount
+    ,[ReceiptAmount] = @ReceiptAmount
+    ,[DiscountAmount] = @DiscountAmount
+    ,[CounterFee] = @CounterFee
+    ,[OurBankNo] = @OurBankNo
+    ,[SettlementNo] = @SettlementNo
+    ,[Remark] = @Remark
+    ,[LastUpdateTime] = GETDATE()
+    WHERE Id=@Id
+  </UpdateItem>
+  <Delete>
+    UPDATE dbo.[ReceiptBills] SET IsDeleted = 1,LastUpdateTime =GETDATE() WHERE Id=@Id
+  </Delete>
+  <DeleteItem>
+    DELETE FROM dbo.ReceiptBillItems WHERE Id=@Id
+  </DeleteItem>
+</SqlResource>

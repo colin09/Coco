@@ -1,0 +1,52 @@
+﻿
+.carousel-inner img{ width: 100%;height: 300px;}
+
+#carousel-example-generic img{/*height:750px;*/}
+
+.contact{}
+.contact ul li{float:left; }
+.contact ul li img{padding:35px 10px 35px 20px;}
+.contact ul li .btn{background:#015397; font-size:18px;color:#fff;margin-right: 100px;border-radius:10px;}
+.contact ul li .txt{padding:45px 0 0; font-size:14px; line-height:25px;}
+
+.graphy{background:url(../Images/t2.jpg) no-repeat center; height:880px;}
+.graphy .graphyT{width:100%;height:150px;background:url(../Images/t2-s.gif) bottom center no-repeat; text-align:center; padding-top:60px;}
+.graphy .graphyT strong {font: 46px "黑体";}
+.graphy .graphyC{position:relative;}
+.graphy .graphyC div{position:absolute;font-size:30px; width:150px;height:100px;text-align:center;}
+.graphy .graphyC .item1{ top:185px; left:80px;}
+.graphy .graphyC .item2{top:465px; left:130px;}
+.graphy .graphyC .item3{top:535px; left:425px;}
+
+
+
+.themeT{width:100%;height:150px;background:url(../Images/t3-s.gif) bottom center no-repeat; text-align:center; padding-top:60px;}
+.themeT strong {font: 46px "黑体";}
+.themeC {margin-bottom:35px;}
+.themeC ul li{float:left;text-align:center;}
+.themeC ul li img {width:271px; height:405px;margin:20px 5px 25px 0;}
+
+.fad1{height:600px;background:url(../Images/t4.jpg) no-repeat center;}
+.fad2{height:600px;background:url(../Images/t6.jpg) no-repeat center;}
+.fad3{height:600px;background:url(../Images/t8.jpg) no-repeat center;}
+
+
+.partraitT{width:100%;height:150px;background:url(../Images/t5-s.gif) bottom center no-repeat; text-align:center; padding-top:60px;}
+.partraitT strong {font: 46px "黑体";}
+.partraitC {margin-bottom:35px;}
+.partraitC ul li{float:left;text-align:left;}
+.partraitC ul li img {width:545px; height:450px;margin:20px 10px 25px 0;}
+.partraitC ul li span {margin:20px 15px;}
+
+.customerT{width:100%;height:150px;background:url(../Images/t7-s.gif) bottom center no-repeat; text-align:center; padding-top:60px;}
+.customerT strong {font: 46px "黑体";}
+.customerC {margin-bottom:45px;}
+.customerC ul li{float:left;}
+.customerC ul li img{margin-top:20px;}
+
+
+.serverT{width:100%;height:200px;background:url(../Images/t9.gif) top center no-repeat; text-align:center;margin-top:60px; padding-top:130px;}
+.serverT span {font-size: 22px ;}
+.serverC {margin-bottom:45px;}
+.serverC ul li{float:left;}
+.serverC ul li img{margin-top:10px; margin-right:5px;}

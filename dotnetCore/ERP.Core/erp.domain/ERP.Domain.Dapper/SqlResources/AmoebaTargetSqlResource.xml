@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AmoebaTargetSqlResource>
+  <Insert>
+    INSERT INTO [dbo].[AmoebaTarget]
+    ([Id],[CityId],[DataMonth],[InSum],
+    [SaleCount_Jiu],[SaleCount_Yinliao],[SaleCount_liangyou],[SaleCount_Rihua],[SaleCount_Qita],[SaleCount_Sum_Other],[SaleCount_Sum_All],
+    [GrossMargin_Jiu],[GrossMargin_Yinliao],[GrossMargin_liangyou],[GrossMargin_Rihua],[GrossMargin_Qita],[GrossMargin_Sum_Other],[GrossMargin_Sum_All],
+    [GrossMargin_Unit_Jiu],[GrossMargin_Unit_Yinliao],[GrossMargin_Unit_liangyou],[GrossMargin_Unit_Rihua],[GrossMargin_Unit_Qita],[GrossMargin_Unit_Avg_Other],[GrossMargin_Unit_Avg_All],
+    [OtherRevenue_Diaohuo],[OtherRevenue_Zhuanpeisong],[OtherRevenue_Weijiudai],[OtherRevenue_Yingyewai],[OutSum],
+    [FixedCharge_Fangzu],[FixedCharge_Cangguan],[FixedCharge_Gongzi],[FixedCharge_Zhejiu],[FixedCharge_Bangong],[FixedCharge_Sum],
+    [FixedCharge_Unit_Fangzu],[FixedCharge_Unit_Cangguan],[FixedCharge_Unit_Gongzi],[FixedCharge_Unit_Zhejiu],[FixedCharge_Unit_Bangong],[FixedCharge_Unit_Avg],
+    [VeriableCharge_Ticheng],[VeriableCharge_Wuliu],[VeriableCharge_Sum],[VeriableCharge_Unit_Ticheng],[VeriableCharge_Unit_Wuliu],[VeriableCharge_Unit_Avg],
+    [OtherCharge],[SplitSum],[NetProfit],
+    [UniformProcure_SaleAmount],[UniformProcure_GrossMargin],[UniformProcure_SaleCount],[UniformProcure_Uint_GrossMargin],[UniformProcure_Commissions],[UniformProcure_Split_Sum],[UniformProcure_NetProfit],
+    [Area_jinglirun],[Area_Feixiaobi],[Area_Feijianbi],[Area_Zhankuanlixi],[Area_Chuzhankuan_jinglirun],[Area_Zhouzhuanlv],[Area_Jingxianjinliu],[Area_WaibuZhankuanlv],
+    [CreateTime],[LastUpdateTime])
+    VALUES
+    (@Id,@CityId,@DataMonth,@InSum,
+    @SaleCount_Jiu,@SaleCount_Yinliao,@SaleCount_liangyou,@SaleCount_Rihua,@SaleCount_Qita,@SaleCount_Sum_Other,@SaleCount_Sum_All,
+    @GrossMargin_Jiu,@GrossMargin_Yinliao,@GrossMargin_liangyou,@GrossMargin_Rihua,@GrossMargin_Qita,@GrossMargin_Sum_Other,@GrossMargin_Sum_All,
+    @GrossMargin_Unit_Jiu,@GrossMargin_Unit_Yinliao,@GrossMargin_Unit_liangyou,@GrossMargin_Unit_Rihua,@GrossMargin_Unit_Qita,@GrossMargin_Unit_Avg_Other,@GrossMargin_Unit_Avg_All,
+    @otherRevenue_Diaohuo,@otherRevenue_Zhuanpeisong,@otherRevenue_Weijiudai,@otherRevenue_Yingyewai,@outSum,
+    @FixedCharge_Fangzu,@FixedCharge_Cangguan,@FixedCharge_Gongzi,@FixedCharge_Zhejiu,@FixedCharge_Bangong,@FixedCharge_Sum,
+    @FixedCharge_Unit_Fangzu,@FixedCharge_Unit_Cangguan,@FixedCharge_Unit_Gongzi,@FixedCharge_Unit_Zhejiu,@FixedCharge_Unit_Bangong,@FixedCharge_Unit_Avg,
+    @VeriableCharge_Ticheng,@VeriableCharge_Wuliu,@VeriableCharge_Sum,@VeriableCharge_Unit_Ticheng,@VeriableCharge_Unit_Wuliu,@VeriableCharge_Unit_Avg,
+    @otherCharge,@SplitSum,@NetProfit,
+    @UniformProcure_SaleAmount,@UniformProcure_GrossMargin,@UniformProcure_SaleCount,@UniformProcure_Uint_GrossMargin,@UniformProcure_Commissions,@UniformProcure_Split_Sum,@UniformProcure_NetProfit,
+    @Area_jinglirun,@Area_Feixiaobi,@Area_Feijianbi,@Area_Zhankuanlixi,@Area_Chuzhankuan_jinglirun,@Area_Zhouzhuanlv,@Area_Jingxianjinliu,@Area_WaibuZhankuanlv,
+    @CreateTime,@LastUpdateTime)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[AmoebaTarget] SET
+    [InSum]=@inSum,
+    [SaleCount_Jiu]=@saleCount_Jiu,[SaleCount_Yinliao]=@saleCount_Yinliao,[SaleCount_liangyou]=@saleCount_liangyou,[SaleCount_Rihua]=@saleCount_Rihua,[SaleCount_Qita]=@saleCount_Qita,[SaleCount_Sum_Other]=@saleCount_Sum_Other,[saleCount_Sum_All]=@saleCount_Sum_All,
+    [GrossMargin_Jiu]=@grossMargin_Jiu,[GrossMargin_Yinliao]=@grossMargin_Yinliao,[GrossMargin_liangyou]=@grossMargin_liangyou,[GrossMargin_Rihua]=@grossMargin_Rihua,[GrossMargin_Qita]=@grossMargin_Qita,[GrossMargin_Sum_Other]=@grossMargin_Sum_Other,[GrossMargin_Sum_All]=@grossMargin_Sum_All,
+    [GrossMargin_Unit_Jiu]=@GrossMargin_Unit_Jiu,[GrossMargin_Unit_Yinliao]=@GrossMargin_Unit_Yinliao,[GrossMargin_Unit_liangyou]=@GrossMargin_Unit_liangyou,[GrossMargin_Unit_Rihua]=@,[GrossMargin_Unit_Qita]=@,[GrossMargin_Unit_Avg_Other]=@grossMargin_Unit_Avg_Other,[GrossMargin_Unit_Avg_All]=@grossMargin_Unit_Avg_All,
+    [OtherRevenue_Diaohuo]=@otherRevenue_Diaohuo,[OtherRevenue_Zhuanpeisong]=@otherRevenue_Zhuanpeisong,[OtherRevenue_Weijiudai]=@otherRevenue_Weijiudai,[OtherRevenue_Yingyewai]=@otherRevenue_Yingyewai,[OutSum]=@outSum,
+    [FixedCharge_Fangzu]=@FixedCharge_Fangzu,[FixedCharge_Cangguan]=@FixedCharge_Cangguan,[FixedCharge_Gongzi]=@FixedCharge_Gongzi,[FixedCharge_Zhejiu]=@FixedCharge_Zhejiu,[FixedCharge_Bangong]=@FixedCharge_Bangong,[FixedCharge_Sum]=@FixedCharge_Sum,
+    [FixedCharge_Unit_Fangzu]=@FixedCharge_Unit_Fangzu,[FixedCharge_Unit_Cangguan]=@FixedCharge_Unit_Cangguan,[FixedCharge_Unit_Gongzi]=@FixedCharge_Unit_Gongzi,[FixedCharge_Unit_Zhejiu]=@FixedCharge_Unit_Zhejiu,[FixedCharge_Unit_Bangong]=@FixedCharge_Unit_Bangong,[FixedCharge_Unit_Avg]=@FixedCharge_Unit_Avg,
+    [VeriableCharge_Ticheng]=@VeriableCharge_Ticheng,[VeriableCharge_Wuliu]=@VeriableCharge_Wuliu,[VeriableCharge_Sum]=@VeriableCharge_Sum,[VeriableCharge_Unit_Ticheng]=@VeriableCharge_Unit_Ticheng,[VeriableCharge_Unit_Wuliu]=@VeriableCharge_Unit_Wuliu,[VeriableCharge_Unit_Avg]=@VeriableCharge_Unit_Avg,
+    [OtherCharge]=@OtherCharge,[SplitSum]=@SplitSum,[NetProfit]=@NetProfit,
+    [UniformProcure_SaleAmount]=@UniformProcure_SaleAmount,[UniformProcure_GrossMargin]=@UniformProcure_GrossMargin,[UniformProcure_SaleCount]=@UniformProcure_SaleCount,[UniformProcure_Uint_GrossMargin]=@UniformProcure_Uint_GrossMargin,[UniformProcure_Commissions]=@UniformProcure_Commissions,[UniformProcure_Split_Sum]=@UniformProcure_Split_Sum,[UniformProcure_NetProfit]=@UniformProcure_NetProfit,
+    [Area_jinglirun]=@Area_jinglirun,[Area_Feixiaobi]=@Area_Feixiaobi,[Area_Feijianbi]=@Area_Feijianbi,[Area_Zhankuanlixi]=@Area_Zhankuanlixi,[Area_Chuzhankuan_jinglirun]=@Area_Chuzhankuan_jinglirun,[Area_Zhouzhuanlv]=@Area_Zhouzhuanlv,[Area_Jingxianjinliu]=@Area_Jingxianjinliu,[Area_WaibuZhankuanlv]=@Area_WaibuZhankuanlv,
+    [LastUpdateTime]=@LastUpdateTime
+    WHERE ID=@id
+  </Update>
+  <Select>
+    SELECT
+    [Id],[CityId],[DataMonth],[InSum],
+    [SaleCount_Jiu],[SaleCount_Yinliao],[SaleCount_liangyou],[SaleCount_Rihua],[SaleCount_Qita],[SaleCount_Sum_Other],[SaleCount_Sum_All],
+    [GrossMargin_Jiu],[GrossMargin_Yinliao],[GrossMargin_liangyou],[GrossMargin_Rihua],[GrossMargin_Qita],[GrossMargin_Sum_Other],[GrossMargin_Sum_All],
+    [GrossMargin_Unit_Jiu],[GrossMargin_Unit_Yinliao],[GrossMargin_Unit_liangyou],[GrossMargin_Unit_Rihua],[GrossMargin_Unit_Qita],[GrossMargin_Unit_Avg_Other],[GrossMargin_Unit_Avg_All],
+    [OtherRevenue_Diaohuo],[OtherRevenue_Zhuanpeisong],[OtherRevenue_Weijiudai],[OtherRevenue_Yingyewai],[OutSum],
+    [FixedCharge_Fangzu],[FixedCharge_Cangguan],[FixedCharge_Gongzi],[FixedCharge_Zhejiu],[FixedCharge_Bangong],[FixedCharge_Sum],
+    [FixedCharge_Unit_Fangzu],[FixedCharge_Unit_Cangguan],[FixedCharge_Unit_Gongzi],[FixedCharge_Unit_Zhejiu],[FixedCharge_Unit_Bangong],[FixedCharge_Unit_Avg],
+    [VeriableCharge_Ticheng],[VeriableCharge_Wuliu],[VeriableCharge_Sum],[VeriableCharge_Unit_Ticheng],[VeriableCharge_Unit_Wuliu],[VeriableCharge_Unit_Avg],
+    [OtherCharge],[SplitSum],[NetProfit],
+    [UniformProcure_SaleAmount],[UniformProcure_GrossMargin],[UniformProcure_SaleCount],[UniformProcure_Uint_GrossMargin],[UniformProcure_Commissions],[UniformProcure_Split_Sum],[UniformProcure_NetProfit],
+    [Area_jinglirun],[Area_Feixiaobi],[Area_Feijianbi],[Area_Zhankuanlixi],[Area_Chuzhankuan_jinglirun],[Area_Zhouzhuanlv],[Area_Jingxianjinliu],[Area_WaibuZhankuanlv],
+    [CreateTime],[LastUpdateTime]
+    FROM [dbo].[AmoebaTarget] WITH(NOLOCK)
+  </Select>
+
+
+  
+</AmoebaTargetSqlResource>

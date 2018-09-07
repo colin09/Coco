@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style type="text/css">
+        .bottom {
+            position: fixed;
+            bottom: 0px;
+        }
+
+            .bottom div {
+                width: 25%;
+            }
+    </style>
+
+</head>
+<body>
+    <img class="img-responsive" src="@ViewBag.bgImage" />
+
+    <div class="container-fluid body-content">
+        @RenderBody()
+
+    </div>
+
+
+    <footer class="container-fluid bottom" style="background-color:white;">
+        <hr />
+        <div class="pull-left">
+            <img class="img-responsive" src="http://pic.pedaily.cn/resource/201206/201206071020430.png" />
+            <h4>流量充值</h4>
+        </div>
+        <div class="pull-left">
+            <img class="img-responsive" src="http://pic.pedaily.cn/resource/201206/201206071020430.png" />
+            <h4>话费充值</h4>
+        </div>
+        <div class="pull-left">
+            <img class="img-responsive" src="http://pic.pedaily.cn/resource/201206/201206071020430.png" />
+            <h4>我要推广</h4>
+        </div>
+        <div class="pull-left">
+            <img class="img-responsive" src="http://pic.pedaily.cn/resource/201206/201206071020430.png" />
+            <h4>我的账户</h4>
+        </div>
+    </footer>
+
+
+    @Scripts.Render("~/bundles/avalon")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

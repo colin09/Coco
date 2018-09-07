@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="row">
+    <div class="col-sm-3">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">公众号[FreeWind环球旅拍]</div>
+            <div class="panel-body">
+                <b>API:</b>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item" data-opt="1">Create Menu</li>
+                <li class="list-group-item" data-opt="2">Read Menu</li>
+                <li class="list-group-item">Morbi leo risus</li>
+            </ul>
+        </div>
+       
+    </div>
+    <div class="col-sm-9">
+
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $(".list-group-item").click(function () {
+                var opt = $(this).data("opt");
+                var url = "";
+                switch (opt) {
+                    case 1:
+                        url = "/system/Create";
+                        break;
+                    case 2:
+                        url = "/system/Read";
+                        break;
+                }
+
+            $.getJSON(url)
+            .done(function (json) {
+                $("#bodymodal .modal-body").text(json);
+                $("#bodymodal").modal("show");
+            })
+            .fail(function (error) {
+                console.log("Request Failed: " + error);
+            });
+
+            });
+
+        });
+
+    </script>
+}

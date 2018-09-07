@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\erp.common\ERP.Common.Infrastructure\ERP.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\ERP.Domain\ERP.Domain.csproj" />
+    <ProjectReference Include="..\ERP.Domain.Repository\ERP.Domain.Repository.csproj" />
+    <ProjectReference Include="..\ERP.Domain.IService\ERP.Domain.IService.csproj" />
+    <ProjectReference Include="..\ERP.Domain.Contract\ERP.Domain.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+CORE 2 Docs
+
+创建新的解决方案：
+    dotnet new sln
+
+创建类库项目：
+    dotnet new classlib -o library
+
+将新创建的 library.csproj 添加到解决方案：
+    dotnet sln add library/library.csproj
+
+要添加对 NuGet 包的引用：
+    dotnet add library package Newtonsoft.Json，
+    或者手动编辑 library.csproj 文件，
+
+还原依赖项，这将在库中创建 obj 文件夹：
+    dotnet restore
+
+生成库
+    dotnet build
+
+创建针对库的测试项目：
+    dotnet new xunit -o test-library
+
+向解决方案添加测试项目：
+    dotnet sln add test-library/test-library.csproj
+
+向库中添加项目引用：
+    dotnet add test-library/test-library.csproj reference library/library.csproj
+    或者可以手动编辑 test-library.csproj 文件，
+
+运行可执行文件：-p 选项用于指定主应用程序的项目
+    dotnet run -p app/app.csproj

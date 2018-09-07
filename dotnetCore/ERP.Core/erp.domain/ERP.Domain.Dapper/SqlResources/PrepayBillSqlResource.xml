@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PrepayBillSqlResource>
+  <Select>
+    SELECT Id,PrepayAmount,WriteOffAmount,WriteOffState,AuditState,AuditTime,IsDeleted,CreateTime,LastUpdateTime,City_Id,Provider_Id,PrepayBillType,Settlement,IsInternal,SupplierCity_Id,RefundAmount,Remark,PurchaseRequisitionNo,PurchaseRequisition_Id,BillNo,PurchaseUserId,PurchaseName,PurchaseMobileNo FROM dbo.PrepayBills WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [PrepayBills].Id,[PrepayBills].BillNo,[PrepayBills].IsInternal,[PrepayBills].PrepayAmount,[PrepayBills].RefundAmount,[PrepayBills].WriteOffAmount,[PrepayBills].AuditState,[PrepayBills].WriteOffState,[PrepayBills].CreateTime,[PrepayBills].Settlement,[PrepayBills].PrepayBillType,[PrepayBills].AuditTime,[City].Id Id,[City].NewId NewId,[City].Name Name,[Providers].Id Id,[Providers].Name Name,[SupplierCity].Id Id,[SupplierCity].NewId NewId,[SupplierCity].Name Name
+    FROM dbo.PrepayBills WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON [City].Id=PrepayBills.City_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Provider_Id=[Providers].Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = PrepayBills.SupplierCity_Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT TOP 1 [PrepayBills].Id,[PrepayBills].PrepayAmount,[PrepayBills].WriteOffAmount,[PrepayBills].WriteOffState,[PrepayBills].AuditState,[PrepayBills].AuditTime,[PrepayBills].IsDeleted,[PrepayBills].CreateTime,[PrepayBills].LastUpdateTime,[PrepayBills].City_Id,[PrepayBills].Provider_Id,[PrepayBills].PrepayBillType,[PrepayBills].Settlement,[PrepayBills].IsInternal,[PrepayBills].SupplierCity_Id,[PrepayBills].RefundAmount,[PrepayBills].Remark,[PrepayBills].PurchaseRequisitionNo,[PrepayBills].PurchaseRequisition_Id,[PrepayBills].BillNo,[City].Id Id,[City].NewId NewId,[City].Name Name,[Providers].Id Id,[Providers].Name Name,[SupplierCity].Id Id,[SupplierCity].NewId NewId,[SupplierCity].Name Name
+    FROM dbo.PrepayBills WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON [City].Id=PrepayBills.City_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Provider_Id=[Providers].Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = PrepayBills.SupplierCity_Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT INTO dbo.PrepayBills(Id,PrepayAmount,WriteOffAmount,WriteOffState,AuditState,AuditTime,IsDeleted,CreateTime,LastUpdateTime,City_Id,Provider_Id,PrepayBillType,Settlement,IsInternal,SupplierCity_Id,RefundAmount,Remark,PurchaseRequisitionNo,PurchaseRequisition_Id,BillNo,PurchaseUserId,PurchaseName,PurchaseMobileNo)
+    VALUES  (@Id,@PrepayAmount,@WriteOffAmount,@WriteOffState,@AuditState,@AuditTime,@IsDeleted,GETDATE(),GETDATE(),@City_Id,@Provider_Id,@PrepayBillType,@Settlement,@IsInternal,@SupplierCity_Id,@RefundAmount,@Remark,@PurchaseRequisitionNo,@PurchaseRequisition_Id,@BillNo,@PurchaseUserId,@PurchaseName,@PurchaseMobileNo)
+  </Insert>
+  <Update>
+    UPDATE dbo.PrepayBills SET PrepayAmount=@PrepayAmount,WriteOffAmount=@WriteOffAmount,WriteOffState=@WriteOffState,AuditState=@AuditState,AuditTime=@AuditTime,IsDeleted=@IsDeleted,LastUpdateTime=GETDATE(),City_Id=@City_Id,Provider_Id=@Provider_Id,PrepayBillType=@PrepayBillType,Settlement=@Settlement,IsInternal=@IsInternal,SupplierCity_Id=@SupplierCity_Id,RefundAmount=@RefundAmount,Remark=@Remark,PurchaseRequisitionNo=@PurchaseRequisitionNo,PurchaseRequisition_Id=@PurchaseRequisition_Id,BillNo=@BillNo,PurchaseUserId=@PurchaseUserId,PurchaseName=@PurchaseName,PurchaseMobileNo=@PurchaseMobileNo
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.PrepayBills SET IsDeleted=1 WHERE Id=@Id
+  </Delete>
+</PrepayBillSqlResource>

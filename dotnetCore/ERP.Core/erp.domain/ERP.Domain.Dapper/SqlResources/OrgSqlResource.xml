@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[Name],[Enable],[CreateTime],[LastUpdateTime],[NewId],[OrgType],[Address_Province] Province,[Address_City] City
+    ,[Address_County] County,[Address_DetailAddress] DetailAddress,[Address_Latitude] Latitude,[Address_Longitude] Longitude
+    FROM [dbo].[Orgs] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT dbo.Orgs     ( Id,Name,Enable ,Address_Province ,Address_City ,Address_County ,Address_DetailAddress ,Address_Latitude ,Address_Longitude ,CreateTime ,LastUpdateTime ,NewId,OrgType
+    )
+    VALUES  ( @Id,@Name,@Enable,@Address_Province,@Address_City,@Address_County,@Address_DetailAddress,@Address_Latitude,@Address_Longitude,GETDATE(),GETDATE(),@NewId,@OrgType)
+  </Insert>
+  <Update>
+    UPDATE dbo.Orgs SET Name=@Name,Enable=@Enable,Address_Province=@Address_Province,Address_City=@Address_City,Address_County=@Address_County,Address_DetailAddress=@Address_DetailAddress,Address_Latitude=@Address_Latitude,Address_Longitude=@Address_Longitude,LastUpdateTime=GETDATE(),OrgType=@OrgType
+    WHERE Id=@Id
+  </Update>
+</SqlResource>

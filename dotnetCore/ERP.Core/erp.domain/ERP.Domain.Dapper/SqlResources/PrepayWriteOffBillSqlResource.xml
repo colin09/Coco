@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[WriteOffAmount],[IsDeleted],[CreateTime],[LastUpdateTime],[Provider_Id],[City_Id],[IsInternal],[SupplierCity_Id],[BillNo]
+    FROM [dbo].[PrepayWriteOffBills] WITH(NOLOCK)
+  </Select>
+  <SelectWriteOffPrepayBillItem>
+    SELECT [Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PrepayBill_Id],[PrepayWriteOffBill_Id]
+    FROM [dbo].[WriteOffPrepayBillItems] WITH(NOLOCK)
+  </SelectWriteOffPrepayBillItem>
+  <SelectWriteOffPayableBillItem>
+    SELECT [Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PayableBill_Id],[PrepayWriteOffBill_Id]
+    FROM [dbo].[WriteOffPayableBillItems] WITH(NOLOCK)
+  </SelectWriteOffPayableBillItem>
+  <SelectIncludeAll>
+    SELECT [PrepayWriteOffBills].[Id],[PrepayWriteOffBills].[WriteOffAmount],[PrepayWriteOffBills].[IsDeleted],[PrepayWriteOffBills].[CreateTime],
+    [PrepayWriteOffBills].[LastUpdateTime],[PrepayWriteOffBills].[Provider_Id],[PrepayWriteOffBills].[City_Id],[PrepayWriteOffBills].[IsInternal],
+    [PrepayWriteOffBills].[SupplierCity_Id],[PrepayWriteOffBills].[BillNo]
+    ,Providers.Name,Providers.Id,
+    SupplierCity.Name,SupplierCity.Id,
+    Orgs.Name,Orgs.Id
+    FROM [dbo].[PrepayWriteOffBills] WITH(NOLOCK)
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = [PrepayWriteOffBills].Provider_Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = [PrepayWriteOffBills].SupplierCity_Id
+    INNER JOIN dbo.Orgs  WITH(NOLOCK) ON [PrepayWriteOffBills].City_Id=[Orgs].Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[PrepayWriteOffBills]
+    ([Id],[WriteOffAmount],[IsDeleted],[CreateTime],[LastUpdateTime],[Provider_Id],[City_Id],[IsInternal],[SupplierCity_Id],[BillNo])
+    VALUES
+    (@Id,@WriteOffAmount,@IsDeleted,GETDATE(),GETDATE(),@Provider_Id,@City_Id,@IsInternal,@SupplierCity_Id,@BillNo)
+  </Insert>
+  <InsertWriteOffPrepayBillItem>
+    INSERT INTO [dbo].[WriteOffPrepayBillItems]
+    ([Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PrepayBill_Id],[PrepayWriteOffBill_Id])
+    VALUES
+    (@Id,@WriteOffAmount,GETDATE(),GETDATE(),@PrepayBill_Id,@PrepayWriteOffBill_Id)
+  </InsertWriteOffPrepayBillItem>
+  <InsertWriteOffPayableBillItem>
+    INSERT INTO [dbo].[WriteOffPayableBillItems]
+    ([Id],[WriteOffAmount],[CreateTime],[LastUpdateTime],[PayableBill_Id],[PrepayWriteOffBill_Id])
+    VALUES
+    (@Id,@WriteOffAmount,GETDATE(),GETDATE(),@PayableBill_Id,@PrepayWriteOffBill_Id)
+  </InsertWriteOffPayableBillItem>
+  <Delete>
+    UPDATE [dbo].[PrepayWriteOffBills] SET IsDeleted = 1 WHERE Id=@Id
+  </Delete>
+</SqlResource>

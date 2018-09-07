@@ -1,0 +1,21 @@
+{% extends '__base__.html' %}
+
+{% block title %} Index {% endblock %}
+
+{% block content %}
+
+    <h1>All users</h1>
+
+
+    {% for u in users %}
+
+	<div class="row">
+
+		<div class="col-md-2">{{ u.Name }}</div>
+		<div class="col-md-2">{{ u.EMail }}</div>
+		<div class="col-md-2">{{u.CreateDate|datetime}}</div>
+
+	</div>
+	{% endfor %}
+
+{% endblock %}

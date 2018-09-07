@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT  Id, Capital, Interest, CreateTime, LastUpdateTime, City_Id, SourceCity_Id FROM
+    [dbo].[BorrowingInterests] WITH(NOLOCK)
+  </Select>
+  <SelectDTO>
+    SELECT  BorrowingInterests.Id,Capital,Interest Interests
+    ,City.Id CityId,City.Name CityName,SourceCity.Id SourceCityId,SourceCity.Name SourceCityName
+    FROM dbo.BorrowingInterests  WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs City  WITH(NOLOCK) ON City.Id = BorrowingInterests.City_Id
+    LEFT JOIN dbo.Orgs SourceCity  WITH(NOLOCK) ON	SourceCity.Id = BorrowingInterests.SourceCity_Id
+  </SelectDTO>
+  <Insert>
+    INSERT INTO [dbo].[BorrowingInterests]
+    ([Id]
+    ,[Capital]
+    ,[Interest]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[City_Id]
+    ,[SourceCity_Id])
+    VALUES
+    (@Id
+    ,@Capital
+    ,@Interest
+    ,GETDATE()
+    ,GETDATE()
+    ,@City_Id
+    ,@SourceCity_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[BorrowingInterests]
+    SET [Capital] = @Capital
+    ,[Interest] = @Interest
+    ,[LastUpdateTime] = GETDATE()
+    ,[City_Id] = @City_Id
+    ,[SourceCity_Id] = @SourceCity_Id
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM [dbo].[BorrowingInterests]
+    WHERE Id =@id
+  </Delete>
+  <UpdateInterest>
+    UPDATE [dbo].[BorrowingInterests]
+    SET [Interest] = @Interest,
+    [LastUpdateTime] = GETDATE()
+    WHERE Id=@Id
+  </UpdateInterest>
+  <InsertTeace>
+
+    INSERT INTO [dbo].[Trace]
+    ([Id]
+    ,[BusinessId]
+    ,[TraceType]
+    ,[TraceAction]
+    ,[Message]
+    ,[Remark]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[User_Id])
+    VALUES
+    (@Id
+    ,@BusinessId
+    ,@TraceType
+    ,@TraceAction
+    ,@MESSAGE
+    ,@Remark
+    ,GETDATE()
+    ,GETDATE()
+    ,@USER_ID)
+  </InsertTeace>
+</SqlResource>

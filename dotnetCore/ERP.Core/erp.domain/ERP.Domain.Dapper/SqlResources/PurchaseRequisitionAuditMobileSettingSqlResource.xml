@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT Id,FirstAuditUserMobileNos,SecondAuditUserMobileNos,UserMobile,Remark FROM dbo.PurchaseRequisitionAuditMobileSettings WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO dbo.PurchaseRequisitionAuditMobileSettings (Id,FirstAuditUserMobileNos,SecondAuditUserMobileNos,UserMobile,Remark,User_Id,CreateTime,LastUpdateTime) VALUES  (@Id,@FirstAuditUserMobileNos,@SecondAuditUserMobileNos,@UserMobile,@Remark,@User_Id,GETDATE(),GETDATE())
+  </Insert>
+  <Update>
+    UPDATE dbo.PurchaseRequisitionAuditMobileSettings SET FirstAuditUserMobileNos=@FirstAuditUserMobileNos,SecondAuditUserMobileNos=@SecondAuditUserMobileNos,UserMobile=@UserMobile,Remark=@Remark,LastUpdateTime=GETDATE(),User_Id=@User_Id WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.PurchaseRequisitionAuditMobileSettings WHERE Id=@Id
+  </Delete>
+</SqlResource>

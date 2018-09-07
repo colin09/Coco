@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[OrderNo],[State],[BusinessTime],[TotalAmount],[CreateTime],[LastUpdateTime],[FromCity_Id],[FromStoreHouse_Id],[Order_Id],[PurchaseInStockNote_Id]
+    ,[ToCity_Id],[ToOrderOutStockNote_Id],[ToStoreHouse_Id]  FROM [dbo].[AgencySaleNotes] WITH(NOLOCK)
+  </Select>
+  <SelectItem>
+    SELECT [Id],[Price],[Num],[Unit],[TotalAmount],[CreateTime],[LastUpdateTime],[FromProduct_Id],[Note_Id],[ToProduct_Id]
+    FROM [dbo].[AgencySaleNoteItems] WITH(NOLOCK)
+  </SelectItem>
+  <Insert>
+    INSERT INTO [dbo].[AgencySaleNotes]
+    ([Id],[OrderNo],[State],[BusinessTime],[TotalAmount],[CreateTime],[LastUpdateTime],[FromCity_Id],[FromStoreHouse_Id],[Order_Id]
+    ,[PurchaseInStockNote_Id],[ToCity_Id],[ToOrderOutStockNote_Id],[ToStoreHouse_Id])
+    VALUES
+    (@Id,@OrderNo,@State,@BusinessTime,@TotalAmount,GETDATE(),GETDATE(),@FromCity_Id,@FromStoreHouse_Id,@Order_Id,@PurchaseInStockNote_Id
+    ,@ToCity_Id,@ToOrderOutStockNote_Id,@ToStoreHouse_Id)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[AgencySaleNoteItems]
+    ([Id],[Price],[Num],[Unit],[TotalAmount],[CreateTime],[LastUpdateTime],[FromProduct_Id],[Note_Id],[ToProduct_Id])
+    VALUES
+    (@Id,@Price,@Num,@Unit,@TotalAmount,GETDATE(),GETDATE(),@FromProduct_Id,@Note_Id,@ToProduct_Id)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[AgencySaleNotes]
+    SET
+    [State] = @State
+    ,[BusinessTime] = @BusinessTime
+    ,[TotalAmount] = @TotalAmount
+    ,[LastUpdateTime] = GETDATE()
+    ,[PurchaseInStockNote_Id] = @PurchaseInStockNote_Id
+    ,[ToOrderOutStockNote_Id] = @ToOrderOutStockNote_Id
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[AgencySaleNoteItems]
+    SET [Price] = @Price
+    ,[Num] = @Num
+    ,[Unit] = @Unit
+    ,[TotalAmount] = @TotalAmount
+    ,[LastUpdateTime] = GETDATE()
+    ,[FromProduct_Id] = @FromProduct_Id
+    ,[Note_Id] = @Note_Id
+    ,[ToProduct_Id] = @ToProduct_Id
+    WHERE Id=@Id
+  </UpdateItem>
+</SqlResource>

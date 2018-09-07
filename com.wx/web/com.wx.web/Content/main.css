@@ -1,0 +1,21 @@
+﻿body{background: #fff;}
+.container-full{ padding: 0;margin: 0;}
+.container {width:1100px;margin: 0 auto; padding: 0;}
+.bgf{ background:#fff;}
+.container , .container-full, .jumbotron{ min-width: 1100px;/*display: none;*/}
+
+.nav {height:120px;}
+.nav li{float:left; text-align:center;width:150px; height:75px; margin:20px 0; font-size:18px; padding-top:26px; line-height:22px;}
+.nav li.logo{width:256px;padding:0;}
+.nav li.split{width:1px;background:url(../Images/menu-line.gif) center no-repeat;}
+.nav li span{font-size:12px}
+
+
+footer {height:225px;background:#015599;}
+footer .content{padding:65px 0; }
+footer .content ul li{float:left; font-size:20px;margin:0 10px;color:#fff;}
+footer .content ul li img{padding-left:5px; }
+footer .content ul li div{padding-top:15px; line-height:45px; }
+footer .content ul li div.sub{padding-top:0;line-height:35px;}
+footer .content ul li div.tel{padding-top:0;line-height:35px;font-size:26px;}
+footer .content ul li div.addr{font-size:16px; line-height:20px; padding-top:5px;}

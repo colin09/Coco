@@ -1,0 +1,42 @@
+Centos7、Node-js 
+
+1、软件环境：
+      Centos7、VMware 10.0、NodeJS v0.10.24
+2、安装过程
+    1》安装过程中需要管理员权限，及root权限，可以敲入如下命令。
+        [sharing@localhost ~]$ su root
+         回车后会出现如下提示：
+        Password: 
+        输入你设置的密码，输入过程中，终端上没有显示，但实际已经输入了。输入完后如下：
+        [root@localhost sharing]#
+    2》首先确认有nodejs编译及依赖相关软件，如果没有可通过运行以下命令安装。
+       [root@localhost sharing]# yum -y install gcc gcc-c++ openssl-devel
+    3》下载NodeJS源码包并解压。
+       [root@localhost sharing]# wget http://nodejs.org/dist/v0.10.24/node-v0.10.24.tar.gz
+       [root@localhost sharing]# tar zxvf node-v0.10.24.tar.gz
+      [root@localhost sharing]# cd node-v0.10.24
+  4》配置、编译、安装。
+      [root@localhost node-v0.10.24]# ./configure --prefix=/usr/local/node
+      [root@localhost node-v0.10.24]# make && make install
+   5》配置Node环境
+       [root@localhost node-v0.10.24]# vim /etc/profile﻿﻿
+       第一次使用vim，用得好别扭。。。vim进入profile后，我们会看到profile文件中的内容，按下键盘i进入编辑模式，然后在文本最后面写下如下内容。
+       export NODE_HOME=/usr/local/node
+      export PATH=$NODE_HOME/bin:$PATH
+      export NODE_PATH=$NODE_HOME/lib/node_modules:$PATH
+      输入完后，按Esc退出编辑模式，然后按下:wq，就会退出保存。
+      然后输入以下命令才会生效。
+      [root@localhost node-v0.10.24]# source /etc/profile
+   6》测试是否成功
+      [root@localhost node-v0.10.24]# node -v
+     v0.10.24
+      出现NodeJS版本号说明安装成功。
+   7》测试例子
+      新建一个文本，输入如下代码：
+      var http = require('http');
+      http.createServer(function (req, res) {
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('Hello Node.js\n');
+}).listen(8421, "127.0.0.1");
+      console.log('Server running at http://127.0.0.1:8421/');
+      另存为test.js，然后终端输入node test.js，用浏览器打开http://127.0.0.1:8421/，就会发现输出Hello Node.js

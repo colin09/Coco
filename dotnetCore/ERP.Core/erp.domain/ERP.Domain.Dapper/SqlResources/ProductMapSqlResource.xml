@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProductMapSqlResource>
+  <Select>
+    SELECT [Id]
+    ,[FromCityId]
+    ,[FromProductId]
+    ,[ToCityId]
+    ,[ToProductId]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    FROM [dbo].[ProductMaps] WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[ProductMaps]
+    ([Id]
+    ,[FromCityId]
+    ,[FromProductId]
+    ,[ToCityId]
+    ,[ToProductId]
+    ,[CreateTime]
+    ,[LastUpdateTime])
+    VALUES
+    (@Id
+    ,@FromCityId
+    ,@FromProductId
+    ,@ToCityId
+    ,@ToProductId
+    ,@CreateTime
+    ,@LastUpdateTime)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[ProductMaps]
+    SET [FromCityId] = @FromCityId
+    ,[FromProductId] = @FromProductId
+    ,[ToCityId] = @ToCityId
+    ,[ToProductId] = @ToProductId
+    ,[LastUpdateTime] = GETDATE()
+    WHERE  [Id] =@Id
+  </Update>
+  <Delete>
+    DELETE FROM [dbo].[ProductMaps]
+    WHERE Id=@Id
+  </Delete>
+</ProductMapSqlResource>

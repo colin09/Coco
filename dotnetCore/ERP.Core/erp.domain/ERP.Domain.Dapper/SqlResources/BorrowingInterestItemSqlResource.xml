@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id]
+    ,[Name]
+    ,[Amount]
+    ,[BorrowingInterestType]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[BorrowingInterest_Id]
+    ,[CashierDiary_Id]
+    ,[PaymentTypeSetting_Id]
+    FROM [dbo].[BorrowingInterestItems] WITH(NOLOCK)
+  </Select>
+  <SelectIncludePaymentTypeSetting>
+    SELECT BorrowingInterestItems.Id,BorrowingInterestType,Name
+    ,Amount,PaymentTypeSetting_Id PaymentTypeSettingId,PaymentTypeSettings.PaymentName PaymentTypeSettingName,BorrowingInterestItems.CreateTime
+    ,BorrowingInterest_Id BorrowingInterestId
+    FROM dbo.BorrowingInterestItems WITH(NOLOCK)
+    LEFT JOIN dbo.PaymentTypeSettings  WITH(NOLOCK) ON	PaymentTypeSettings.Id = BorrowingInterestItems.PaymentTypeSetting_Id
+  </SelectIncludePaymentTypeSetting>
+  <Insert>
+    INSERT INTO [dbo].[BorrowingInterestItems]
+    ([Id]
+    ,[Name]
+    ,[Amount]
+    ,[BorrowingInterestType]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[BorrowingInterest_Id]
+    ,[CashierDiary_Id]
+    ,[PaymentTypeSetting_Id])
+    VALUES
+    (@Id
+    ,@NAME
+    ,@Amount
+    ,@BorrowingInterestType
+    ,GETDATE()
+    ,GETDATE()
+    ,@BorrowingInterest_Id
+    ,@CashierDiary_Id
+    ,@PaymentTypeSetting_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[BorrowingInterestItems]
+    SET [Name] = @NAME
+    ,[Amount] = @Amount
+    ,[BorrowingInterestType] = @BorrowingInterestType
+    ,[LastUpdateTime] = GETDATE()
+    ,[BorrowingInterest_Id] = @BorrowingInterest_Id
+    ,[CashierDiary_Id] = @CashierDiary_Id
+    ,[PaymentTypeSetting_Id] = @PaymentTypeSetting_Id
+    WHERE ID=@id
+  </Update>
+  <Delete>
+    DELETE FROM [dbo].[BorrowingInterestItems]
+    WHERE Id =@id
+  </Delete>
+</SqlResource>

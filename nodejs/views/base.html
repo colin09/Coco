@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="learn javascript by www.liaoxuefeng.com">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/angular.min.js"></script>
+    <script src="/static/js/ngApp.js"></script>
+</head>
+
+<body ng-app="ngApp">
+    <header class="navbar navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand">Learn JavaScript</a>
+            </div>
+            <nav class="collapse navbar-collapse" id="bs-navbar">
+                <ul class="nav navbar-nav">
+                    <li><a target="_blank" href="http://www.XX.com/">Get Courses</a></li>
+                    <li><a target="_blank" href="https://github.com/XX/learn-javascript">Source Code</a></li>
+                    <li><a target="_blank" href="/canvas">Canvas</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div id="important" style="color:#cdbfe3; background-color:#6f5499; padding:30px 0; margin:-20px 0 20px 0;">
+        <div class="container">            
+            {% block title %} {% endblock %}
+            <!--<h1 style="color:#fff; font-size:60px">Getting started</h1>
+            <p style="font-size:24px; line-height:48px">Learn JavaScript, Node.js, npm, koa2, nunjucks, babel, etc. at xx.com.</p>-->
+        </div>
+    </div>
+    {% block main %} {% endblock %}
+    <footer style="background-color:#ddd; padding: 20px 0;">
+        <div class="container">
+            <p>
+                <a target="_blank" href="http://www.xx.com">Website</a> - 
+                <a target="_blank" href="https://github.com/">GitHub</a> - 
+                <a target="_blank" href="http://weibo.com/">Weibo</a>
+            </p>
+            <p>This JavaScript course is created by <a target="_blank" href="http://weibo.com/">@xxx</a>.</p>
+            <p>Code licensed <a target="_blank" href="https://github.com/michaelliao/learn-javascript/blob/master/LICENSE">Apache</a>.</p>
+        </div>
+    </footer>
+</body>
+</html>

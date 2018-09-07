@@ -1,0 +1,370 @@
+﻿linux - CentOS-7
+
+http://www.cnblogs.com/zitsing/archive/2012/05/02/2479009.html
+
+基本命令
+	logout => 注销
+	shutdown now ← 立刻关机
+	shutdown +5 ← 5分钟后关机
+	shutdown 10:30 ← 在10：30时关机
+	shutdown -r now ← 立刻关闭系统并重启
+	shutdown -r 23:59 ← 指定在23：59时重启动
+	
+	reboot -f 参数：不依正常的程序运行关机，直接关闭系统并重新启动计算机
+	reboot -I 参数：在在重新启动之前关闭所有网络接口。
+	一般只需要单独运行reboot命令就可以了
+	
+	ls（list）命令是非常有用的命令，用来显示当前目录中的文件和子目录列表
+	ls –a   ← 目录同时显示名称以“.”开头的文件
+	ls –s –S	 ← “-s”参数显示每个文件所有的空间，“-S”参数指定按所有占用空间的大小排序
+	ls –l/usr/games   ← 列出该目录的内容
+	
+	//centos下command not found :
+	export PATH=$PATH:$HOME/bin:/sbin:/bin 
+	
+	
+	cd .. ← 切换到上一层目录
+	cd / ← 切换到系统根目录
+	cd ← 切换到用户主目录
+	cd /usr/bin ← 切换到/usr/bin目录
+	
+	mkdir tool ← 创建子目录
+	rmdir tool ← 删除tool目录
+	
+	cp data1.txt data2.txt ← 将data1.txt复制成data2.txt
+	cp data3.txt /tmp/data ← 将data3复制到/tmp/data目录中
+	cp –v zip.txt zip3.txt ← 以-v显示复制过程
+	cp –v –R * backup ← 将所有文件（含子目录文件）复制到backup目录
+	
+	rm myfile ← 删除指定的文件
+	rm * ← 删除当前目录中的所有文件 
+	rm –f *.txt ← 强迫删除文件
+	rm –r data ← 删除data目录（含data目录下所有文件和子目录）
+	rm –rf tmp ← 强制删除tmp目录及该目录下所有文件及子目录
+	rm –v  ← 显示删除过程
+	
+	为了避免画面显示瞬间就闪过去，用户可以使用more命令，让画面在显示满一页时暂停，
+	此时可按空格键继续显示下一个画面，或按Q键停止显示
+	ls –al 　 more
+	单独使用more命令时，可用来显示文字文件的内容:
+	more data.txt
+	
+	cat(concatenate) 命令可以显示文件的内容（经常和more命令搭配使用），或是将数个文件合并成一个文件
+	cat preface.txt more ← 逐页显示 preface.txt的内容：
+	cat preface.txt >> outline.txt   将preface.txt 附加到outline.txt文件之后
+	cat new.txt info.txt >readme.txt   将new.txt和info.txt合并成readme.txt文件
+	
+	mv （move）命令可以将文件及目录移动到另一个目录下面，或更换文件及目录的名称
+	mv a.txt .. ← 将a.txt文件移到上层目录
+	mv z1.txt z3.txt ← 将 z1.txt改名成z3.txt
+	cd.. ← 切换到上一层目录
+	mv backup.. ← backup 目录上移一层
+	
+	pwd(print working directory)命令可显示用户当前所在的目录
+	
+	locate 命令可用来搜索包含指定条件字符串的文件或目录
+	locate zh_CN  ← 列出所有包含“zh_CN”字符串的文件和目录
+	由于locate命令是从系统中保存文件及目录名称的数据库中搜索文件，虽然系统会定时更新数据库，
+	但对于刚新增或删除的文件、目录，仍然可能会因为数据库尚未更新而无法查得，
+	此时可用root身份运行updatedb命令更新，为此数据库得内容正确。
+	
+	grep 命令可以搜索特定字符串来并显示出来，一般用来过滤先前得结果，避免显示太多不必要得信息。
+	grep text *.conf ← 搜索当前目录中扩展名为.conf且包含“text”字符串得文件
+	grep:amd.conf: ← 拒绝不符权限得操作
+	grep:diskcheck.conf: ← 拒绝不符权限得操作
+	grep:grub.conf ← 拒绝不符权限得操作
+	若您是使用一般权限的用户运行，上例的输出结果会包含很多如“拒绝不符权限的操作之类的错误信息，
+	可使用-s参数消除
+	grep –s text *.conf 
+	
+	重导(redirect)可将某命令的结果输出导文件中，它有两中命令：“>”和“>>”。
+		“>”可将结果输出到文件中，该文件原有的内容会被删除：
+		“>>”则将结果附加到文件中，原文件内容不会被清除。
+	ls –a>dir.txt ← 将ls –a命令执行结果输出到dir.txt文件。
+	cat data1.txt >> data2.txt ← 将 data1.txt 内容附加到data2.txt文件之后
+	
+	通道(pipe)命令的符号是“　”，可将某命令的结果输出给另一命令，
+	以下范例将ls命令的输出结果传给grep命令过滤：
+	ls 　 gerp conf ← 搜索并显示ls命令运行结果中包含有“conf”字符串
+	再举一个删除文件或目录的例子，可以利用yes命令重复输出“y”字符的特性，将结果传给rm命令，如此即可避免重复输入“y”：
+	yes 　 rm –r mydir
+	
+	在Linux的文字模式下要使用光盘或软盘，并不是只将光盘或软盘放入即可，用户需要运行加载的命令，才可读写数据。所谓加载就是将存储介质（如光盘和软盘）指定成系统中的某个目录（如/mnt/cdrom或mnt/floppy）。通过直接存取此加载目录，即可读写存储介质中的数据。
+	mount/dev/cdrom/mut/cdrom ← 加载光盘
+	mount/dev/fd0/mut/floppy ← 加载软盘
+	umount / mnt/cdrom ← 光盘卸载
+	umount / mnt/ ← 软盘卸载 
+	
+	在后台运行程序的&、bg命令
+	updatedb & ← 在后台执行 locate 数据库更新命令
+	bg ← 将更新操作放到后台运行
+	fg ← 放到前台执行的命令会显示出来
+	
+	nohup myserver &  此命令可使用户退出系统后，程序继续运行
+	然后用户就可以退出了，当再次登录的时候，可以用ps –aux命令看到程序仍在后台中运行
+	
+	计算机有很多程序需要周期性的被运用，例如清理磁盘中不要的暂存盘、备份系统数据、检查远程服务器的邮件等。对于这些重复性的工作，其实不需要每次都辛苦地运行这些程序。可利用任务调度命令，指定系统定期在某个时间运行这些程序，轻轻松松完成想要执行的工作
+	
+	
+	
+	tar命令位于/bin目录中，它能将用户所指定的文件或目录打包成一个文件，不过它并不做压缩。一般Unix上常用的压缩方式是先用tar命令将许多文件打包成一个文件，再以gzip等压缩命令压缩文件。tar命令参数繁多，以下举例常用参数作说明：
+	-c：创建一个新的tar文件；
+　　-v：显示运作过程信息；
+　　-f：在：指定文件名称；
+　　-z：调用gzip压缩命令执行压缩；
+　　-j：调用bzip2压缩命令执行压缩；
+　　-t：参看压缩文件内容；
+　　-x：解开tar文件。
+	
+	tar cvf data.tar * ← 将目录下所有文件打包成data.tar
+	tar cvf data.tar.gz * ← 将目录所有文件打包成data.tar再用gzip命令压缩
+	tar tvf data.tar * ← 查看data.tar文件中包括了哪些文件
+	tar xvf data.tar * ← 将data.tar解开 
+	tar –zxvf foo.tar.gz ←将文件解开至当前目录下
+	tar –jxvf linux-2.4.20tar.bz2 ←将文件解开至当前目录下
+	tar –cZvf prcture.tar.Z*.tif 将该目录下所有.tif打包并命令压缩成.tar.Z
+	
+	passwd（password）命令可让用户变更密码
+	date 命令可以显示当前日期时间
+	clock  命令也可以显示出系统当前的日期与时间，不过默认不允许一般用户执行，请用root账号执行
+	date 09091200 ← 将时间设定为9月9日12点00分
+	
+	ntpdate stdtime.microsoft.com ← 与微软校时服务器校时。
+	clock –w 命令将更改的时间写入计算机的
+	
+	
+	mkbootdisk命令创建一张新的引导盘
+	mkbootdisk ‘uname -r’  指令便可以成功的创建一张引导盘了。请保存好出盘，已备紧急之用
+	
+	
+	
+	
+	
+	
+	
+	一，如何进入文字模式
+
+　　当安装Linux时，可选择自动后要进入文字模式或时图形模式。如果选择的时文字模式则可略过此说明；若是直接进入X Window的图形模式
+
+，仍可以使用下列方式，进入文字模式：
+
+　　1，在X Window中打开文字模式窗口
+
+
+　　在默认的GNOME窗口环境为例，在X Windows 下进入文字模式最简单的方式，就是在桌面空白处单击鼠标右键，执行“新增终端命令”，打
+
+开文字模式窗口。在文字模式窗口中可以用 Shift+Page Up和Shift+Page Dwon 键来卷动窗口内容。
+
+　　2，切换虚拟主控制台进入文字模式
+
+　　Linux主机在主控制台(console)下提供了7个虚拟主控台，在每一个虚拟主控台中可以运行各自的程序。可以在登陆X Window系统后的任何时间，按下Ctrl+Alt+Fn键来切换到其他的虚拟主控台。其中的Fn是指F1～F7的功能键。
+
+　　3，启动直接进入文字模式
+
+　　要设置启动时直接进入文字模式，可以使用任何一个文本编辑器，打开/etc/inittab文件，在文件中查找“id:5:initdefault:”这一段文字，并将其改为“id:3:initdefault:”即可。
+
+　　二，/etc/inittab设置错误，导致无法启动
+
+　　若修改/etc/inittab后无法正常启动，则可以在启动时采用单人模式进入系统，重新修改inittab设置文件以解决问题。
+
+　　若使用GRUB为引导装载程序时，只要在启动显示菜单画面时，按a键，并在命令行输入一下参数以进入单人模式：
+
+　　grub append > ro root=LABEL=/s ← 只要在命令行原来的语句后，加“S”即可
+
+　　使用LILO为引导装载程序时，同样在启动显示LILO菜单画面时，按Ctrl+X键，切换到文字模式的LILO登录画面，并输入以下参数即可：
+
+　　boot: linux s ← 表示系统直接讲进入单人模式
+
+　　三，如何查询命令的用法
+
+　　在linux系统中，如果用户某命令的功能不大清楚，可以使用man命令查询帮助：
+
+　　[root@free root]# man shutdown ← 以man命令查询稍后要介绍的shutdown命令的用法。
+
+　　大多数命令的语法，还可以通过-h或—help参数查询。例如shutdown命令的语法可以运行shutdown –h或上述的man shutdown 命令查得。
+
+　　四，避免按Ctrl+Alt+Del重新启动系统
+
+　　在linux中直接按下Ctrl+Alt+Del三个键后就会重新启动，如果不希望任何人利用这组组合键随意重新启动计算机，请用文本编辑器修
+
+改/etc/inittab文件：
+
+　　#ca::ctrlaltdel:/sbin/shut down –t3 –r now ← 在此之前加上“＃”。
+
+　　存盘后重新启动计算，以后就无法用Ctrl+Alt+Del 键重新启动了。
+五，文字模式下的中文信息出现乱码，怎么办
+
+　　在此版的Red Hat Linux中，若是在X Window打开文字模式窗口，以文字模式操作，则所有中文文件名、月份，甚至部分信息都可以正常的
+
+以中文显示。但在文字模式的虚拟控制台中，这些中文信息，则会变成乱码，此时请如下操作，可将此信息改成英文显示：
+
+　　[root@free root]$ LANG=C
+
+　　[root@free root]# ls –l
+
+　　运行LANG=C命令后原来以中文显示（乱码）的部分，变成英文了
+
+　　若想改回原来的设置，则只要再执行LANG=zh_CN命令即可：
+
+　　[root@free root]$ LANG=zh_CN
+
+　　六，看不到中文文件名
+
+　　如果加载的存储介质中含有中文文件名，需要再运行mount命令，再加上“-o iocharset＝cp950”参数，这样才能看到此保存媒体内的中
+
+文文件名。例如加载光盘就可以执行以下命令：
+
+　　[root@free root]# mount –o iochatset=cp950/dev/cdrom/mnt/cdrom
+
+　　七，如何调换光盘
+
+　　当光盘已经被加载成为一个目录时，按下光驱上面的退出按钮，将无法退出光盘，必须先将光盘卸载后，才能退出光盘。
+
+　　若当前所在之处就是光盘加载目录（如/mnt/cdrom）,或有其他用户正在此目录下，将无法成功的卸载它，当然也不能退出光盘：
+
+　　[root@free root]# umount/mnt/cdrom
+
+　　umount:/mnt/cdrom: device is busy ← 此光盘正在被使用中
+
+　　先将工作目录切换到别处，或要求其他用户离开此目录，才可卸载目录并退出光盘。而更换关盘之后，记得要将光盘再次加载才能使用。
+
+　　八，允许一般用户加载光盘或软盘
+
+　　Linux 操作系统默认只允许root用户才能运行mount命令，若是一般用户执行上述命令，则会出现以下的错误信息：
+
+　　[root@free root]# mount/dev/cdrom/mut/cdrom
+
+　　mount:only root can do that ← 只有root用户才能执行此命令
+
+　　因此若要允许一般用户也能加载光盘或软盘，请修改/ect/fstab/设置文件:
+
+　　/dev/cdrom/mut/cdrom udf,iso9660 noauto,owner,kudzu,ro,user ← 若要让一般用户也加载光盘，请在此处加上“，user”项目。
+	
+
+==============>>
+Windows 删除没有权限的文件目录
+
+
+Cacls filename [/T] [/E] [/C] [/G user:perm] [/R user [...]] [/P user:perm [...]] [/D user [...]]
+
+
+
+Filename——显示访问控制列表（以下简称ACL）；
+
+/T——更改当前目录及其所有子目录中指定文件的 ACL；
+
+/E—— 编辑 ACL 而不替换；
+
+/C——在出现拒绝访问错误时继续；
+
+/G user:perm——赋予指定用户访问权限。Perm 可以是R（读取）、W（写入）、C（更改，写入）、F （完全控制）；
+
+/R user——撤销指定用户的访问权限(仅在与 /E 一起使用)；
+
+/P user:perm——替换指定用户的访问权限；
+
+/D user——拒绝指定用户的访问。
+
+
+Takeown -- 管理员重新获取先前被拒绝访问的文件访问权
+
+
+Takeown /F C:\windows\ehome /R
+Cacls c:\windows\ehome /T /E /C /G Users:F
+RD /S /Q C:\windows\ehome
+
+
+Takeown /F "C:\Program Files" /R
+Cacls "c:\Program Files" /T /E /C /G Users:F
+RD /S /Q "C:\Program Files"
+
+
+
+
+CentOS 7使用的是grub2，而在grub2中要修改的文件是/boot/grub2/grub.cfg;找到
+linux16 /vmlinuz-3.10.0-229.11.1.el7.x86_64 root=/dev/mapper/centos-root ro rd.lvm.lv=centos/root rd.lvm.lv=centos/swap crashkernel=auto rhgb quiet LANG=zh_CN.utf8 systemd.debug
+修改为（添加 vga=ask）：
+linux16 /vmlinuz-3.10.0-229.11.1.el7.x86_64 root=/dev/mapper/centos-root ro rd.lvm.lv=centos/root rd.lvm.lv=centos/swap crashkernel=auto rhgb quiet LANG=zh_CN.utf8 vga=ask systemd.debug
+
+
+
+
+
+
+CentOS的目录大体上可分为四类：管理类、用户类、应用程序类、信息类文件目录。
+
+管理类目录：
+       /boot linux 的内核及引导系统程序所需要的文件目录
+       /bin 存放标准 linux 的工具，在终端里输入ls，系统就系统将会到该目录查看是否存在该命令程序。
+       /sbin 大多是涉及系统管理的命令的存放，是超级权限用户root的可执行命令存放地，普通用户无权限执行这个目录下的命令
+       /var 这个目录的内容是经常变动的，用来存储经常被修改的文件，如日志、数据文件、邮箱等
+       /etc 主要存放系统配置方面的文件
+       /dev 主要存放与设备有关的文件
+      /mnt 这个目录一般是用于存放挂载储存设备的挂载目录的，比如有cdrom 等目录。可以参看/etc/fstab的定义
+
+用户类目录：
+       /root 系统管理员目录
+       /home 主要存放个人数据
+
+应用程序类目录：
+       /lib 该目录用来存放系统动态链接共享库，几乎所有的应用程序都会用到该目录下的共享库
+       /tmp 临时目录，有些linux会定期清理
+       /usr 存放一些不适合放在/bin 或 /etc 目录下的额外工具，如个人安装的程序或工具
+              /usr/local 主要存放那些手动安装的软件，
+              /usr/bin 用于存放程序
+              /usr/share 用于存放一些共享数据
+              /usr/lib 存放一些不能不能直接运行，但却是许多程序运行所必需的一些函数库文件
+       /opt 主要存放可选程序，直接删除程序不影响系统其设置。安装到/opt目录下的程序，它所有的数据、库文件等等都是放在同个目录下面
+
+信息类目录：
+       /lost+found 在ext2或ext3文件系统中，当系统意外崩溃或机器意外关机，而产生一些文件碎片放在这里。但当突然停电、或者非正常关机后，有些文件就临时存放在这里。
+       /proc 操作系统运行时，进程信息及内核信息（比如cpu、硬盘分区、内存信息等）存放在这里
+
+其他重要目录：
+       /etc/rc.d            放置开机和关机的脚本。
+       /etc/rc.d/init.d    放置启动脚本
+       /etc/xinetd.d      配置xinetd.conf可以配置启动其他额外服务。
+       /usr/include        一些distribution套件的头文件放置目录，安装程序时可能会用到。
+       /usr/lib              套件的程序库
+       /usr/local           默认的软件安装目录。
+       /usr/share/doc   系统说明文件的放置目录
+       /usr/share/man  程序说明文件放置目录
+       /usr/src             内核源代码目录
+       /usr/X11R6       X的存放目录
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

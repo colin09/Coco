@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\com.mh.common\com.mh.common.csproj" />
+    <ProjectReference Include="..\com.mh.model\com.mh.model.csproj" />
+    <ProjectReference Include="..\com.mh.rabbit\com.mh.rabbit.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Driver.Core" Version="2.4.4" />
+  </ItemGroup>
+</Project>

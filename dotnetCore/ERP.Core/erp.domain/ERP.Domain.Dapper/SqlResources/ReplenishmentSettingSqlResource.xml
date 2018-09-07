@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT Id,Num,ReplenishmentSettingState,CreateTime,LastUpdateTime,City_Id,ProductInfo_Id
+    FROM dbo.ReplenishmentSettings WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT ReplenishmentSettings.Id,ReplenishmentSettings.Num/ProductInfo.Desc_PackageQuantity Num,ReplenishmentSettings.ReplenishmentSettingState,ReplenishmentSettings.CreateTime,ReplenishmentSettings.LastUpdateTime ,
+    ReplenishmentSettings.City_Id,Orgs.Name Name,ReplenishmentSettings.ProductInfo_Id ProductInfoId,ProductInfo.Desc_ProductName ProductName
+    FROM dbo.ReplenishmentSettings WITH(NOLOCK)
+    LEFT JOIN dbo.Orgs WITH(NOLOCK) ON ReplenishmentSettings.City_Id = Orgs.Id
+    LEFT JOIN dbo.ProductInfo WITH(NOLOCK) ON ReplenishmentSettings.ProductInfo_Id=ProductInfo.Id
+  </SelectIncludeAll>
+  <Insert>
+    INSERT INTO dbo.ReplenishmentSettings( Id,Num,ReplenishmentSettingState,CreateTime,LastUpdateTime ,City_Id ,ProductInfo_Id )
+    VALUES (@Id,@Num,@ReplenishmentSettingState,@CreateTime,@LastUpdateTime ,@City_Id ,@ProductInfo_Id )
+  </Insert>
+  <UpdateState>
+    UPDATE dbo.ReplenishmentSettings SET ReplenishmentSettingState=@ReplenishmentSettingState
+    ,[LastUpdateTime] = GETDATE() WHERE  Id=@Id
+  </UpdateState>
+  <UpdateNum>
+    UPDATE dbo.ReplenishmentSettings SET Num=@Num
+    ,[LastUpdateTime] = GETDATE() WHERE  Id=@Id
+  </UpdateNum>
+  <Update>
+    UPDATE [dbo].[ReplenishmentSettings]
+    SET [Id] = @Id
+    ,[Num] = @Num
+    ,[ReplenishmentSettingState] = @ReplenishmentSettingState
+    ,[ProductInfo_Id] = @ProductInfo_Id
+    ,[City_Id] = @City_Id
+    ,[LastUpdateTime] = GETDATE()
+    WHERE [Id] =@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.ReplenishmentSettings WHERE  Id=@Id
+  </Delete>
+
+</SqlResource>

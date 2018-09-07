@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [City].[Id],[City].[CityMode],[Orgs].[Name],[Orgs].[Id],[Orgs].[Enable],[Orgs].[CreateTime],[Orgs].[LastUpdateTime],[Orgs].[NewId],[Orgs].[OrgType],
+    [Orgs].[Address_Province] Province,[Orgs].[Address_City] City,[Orgs].[Address_County] County,[Orgs].[Address_DetailAddress] DetailAddress,
+    [Orgs].[Address_Latitude] Latitude,[Orgs].[Address_Longitude] Longitude
+    FROM [dbo].[City] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = City.Id
+  </Select>
+  <Insert>
+    INSERT dbo.City
+    (Id,CityMode)
+    VALUES  (@Id,@CityMode)
+  </Insert>
+  <Update>
+    UPDATE dbo.City SET Id=@Id,CityMode=@CityMode
+    WHERE Id=@Id
+  </Update>
+  <GetHQCity>
+    SELECT Id,Name,NewId FROM dbo.Orgs WITH(NOLOCK) WHERE OrgType =2 AND (NewId='898' OR Name='易酒批统采')
+  </GetHQCity>
+  <GetAgentCity>
+    SELECT Id,Name,NewId FROM dbo.Orgs WITH(NOLOCK) WHERE OrgType =2 AND (NewId='897' OR Name='易酒批代理')
+  </GetAgentCity>
+  <SearchOnLine>
+    SELECT
+    [City].[Id]
+    ,[City].[CityMode]
+    ,[Orgs].[Name]
+    ,[Orgs].[NewId]
+    ,[CitySettings].[OnLineState]
+    ,[Orgs].[Address_Province] Province
+    ,[Orgs].[Address_City] City
+    ,[Orgs].[Address_County] County
+    ,[Orgs].[Address_DetailAddress] DetailAddress
+    From [dbo].[City] WITH(NOLOCK)
+    INNER JOIN [dbo].[Orgs] WITH(NOLOCK) ON [Orgs].[Id] = [City].[Id]
+    INNER JOIN [dbo].[CitySettings] WITH(NOLOCK) ON [CitySettings].[City_Id] = [City].[Id]
+  </SearchOnLine>
+  <SelectById>
+    SELECT [City].[Id],[City].[CityMode],[Orgs].[Name],[Orgs].[Id],[Orgs].[NewId],[Orgs].[OrgType],
+    [Orgs].[Address_Province] Province,[Orgs].[Address_City] City,[Orgs].[Address_County] County,[Orgs].[Address_DetailAddress] DetailAddress
+    FROM [dbo].[City] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = City.Id
+    Where [City].[Id] = @id OR [City].[NewId] = @id
+  </SelectById>
+</SqlResource>

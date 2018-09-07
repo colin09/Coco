@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ReturnOrderInStockNoteSqlResource>
+  <Select>
+    SELECT Id,Remark,BusinessTime,AuditState,AuditRemark,IsDownReason,Bonus,CouponAmount,OrderAmount,TotalAmount,CreateTime,LastUpdateTime,BrokerUser_Id,Order_Id,StoreHouse_Id,User_Id,IsDeleted,IsInternal,CompanyUserCity_Id,ReturnOrder_Id,NoteNo,OrderNo,ReturnOrderNo,City_Id,AdditionalProfit,SaleCity_Id FROM dbo.ReturnOrderInStockNotes WITH(NOLOCK)
+  </Select>
+  <SelectReturnNoteItem>
+    SELECT Id,Unit,Num,Price,DiscountAmount,AdValoremAmount,CostPrice,CreateTime,LastUpdateTime,Product_Id,ReturnOrderInStockNote_Id,
+    IsGiveaway,AdditionalProfit,SaleMode,ERPSaleMode,SaleProduct_Id FROM dbo.ReturnNoteItems WITH(NOLOCK)
+  </SelectReturnNoteItem>
+  <SelectReturnNoteItemIncludeAll>
+    SELECT
+    [ReturnNoteItems].Id,Unit,Num,Price,DiscountAmount,AdValoremAmount,CostPrice,[ReturnNoteItems].CreateTime,IsGiveaway,[ReturnNoteItems].AdditionalProfit,SaleMode,
+    ERPSaleMode,Product_Id,SaleProduct_Id,ReturnOrderInStockNotes.City_Id,ReturnOrderInStockNote_Id,[ProductInfo].Desc_ProductName ProductName,
+    [ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_PackageUnit PackageUnit,[ProductInfo].Desc_Specifications Specifications,
+    [ProductInfo].Desc_OldCategory OldCategory,[ReturnOrderInStockNotes].Id Id,[ReturnOrderInStockNotes].NoteNo NoteNo,
+    [ReturnOrderInStockNotes].OrderNo OrderNo,[ReturnOrderInStockNotes].ReturnOrderNo ReturnOrderNo,
+    [ReturnOrderInStockNotes].IsDownReason IsDownReason,[ReturnOrderInStockNotes].IsInternal IsInternal,
+    [ReturnOrderInStockNotes].AuditState AuditState,[ReturnOrderInStockNotes].Order_Id Order_Id,
+    [ReturnOrderInStockNotes].ReturnOrder_Id ReturnOrder_Id,[ReturnOrderInStockNotes].BusinessTime,
+    [City].Name CityName,[OrgUser].Id Id,[OrgUser].TrueName TrueName,[StoreHouse].Id Id,
+    [StoreHouse].Name Name,[CompanyUserCity].Id Id,[CompanyUserCity].Name Name,[User].Id Id,
+    [User].CompanyName CompanyName,[User].MobileNO MobileNO
+    FROM dbo.ReturnNoteItems WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [ReturnNoteItems].Product_Id=[Product].Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=[Product].Info_Id
+    INNER JOIN dbo.ReturnOrderInStockNotes WITH(NOLOCK) ON [ReturnOrderInStockNotes].Id=dbo.ReturnNoteItems.ReturnOrderInStockNote_Id
+    LEFT JOIN dbo.Orgs City WITH(NOLOCK) ON [ReturnOrderInStockNotes].City_Id=City.Id
+    LEFT JOIN dbo.OrgUser WITH(NOLOCK) ON [ReturnOrderInStockNotes].BrokerUser_Id=[OrgUser].Id
+    LEFT JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON [ReturnOrderInStockNotes].StoreHouse_Id=StoreHouse.Id
+    LEFT JOIN dbo.Orgs CompanyUserCity WITH(NOLOCK) ON [ReturnOrderInStockNotes].CompanyUserCity_Id=CompanyUserCity.Id
+    LEFT JOIN dbo.[User] WITH(NOLOCK) ON [User].Id=[ReturnOrderInStockNotes].User_Id
+  </SelectReturnNoteItemIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT
+    [ReturnOrderInStockNotes].Id,[ReturnOrderInStockNotes].Remark,[ReturnOrderInStockNotes].BusinessTime,
+    [ReturnOrderInStockNotes].AuditState,[ReturnOrderInStockNotes].AuditRemark,[ReturnOrderInStockNotes].IsDownReason,
+    [ReturnOrderInStockNotes].Bonus,[ReturnOrderInStockNotes].CouponAmount,[ReturnOrderInStockNotes].OrderAmount,
+    [ReturnOrderInStockNotes].TotalAmount,[ReturnOrderInStockNotes].CreateTime,[ReturnOrderInStockNotes].LastUpdateTime,
+    [ReturnOrderInStockNotes].BrokerUser_Id,[ReturnOrderInStockNotes].Order_Id,[ReturnOrderInStockNotes].StoreHouse_Id,
+    [ReturnOrderInStockNotes].User_Id,[ReturnOrderInStockNotes].IsDeleted,[ReturnOrderInStockNotes].IsInternal,
+    [ReturnOrderInStockNotes].CompanyUserCity_Id,[ReturnOrderInStockNotes].ReturnOrder_Id,[ReturnOrderInStockNotes].NoteNo,
+    [ReturnOrderInStockNotes].OrderNo,[ReturnOrderInStockNotes].ReturnOrderNo,[ReturnOrderInStockNotes].City_Id,
+    [ReturnOrderInStockNotes].AdditionalProfit,[ReturnOrderInStockNotes].SaleCity_Id,City.Name CityName,[StoreHouse].Id Id,
+    [StoreHouse].NewId NewId,[StoreHouse].Name Name,[User].Id Id,[User].NewId NewId,[User].CompanyName CompanyName,[User].MobileNO MobileNO,
+    [CompanyUserCity].Id Id,[CompanyUserCity].NewId NewId,[CompanyUserCity].Name Name,[OrgUser].Id Id,[OrgUser].NewId NewId,
+    [OrgUser].TrueName TrueName,[ReturnNoteItems].Id Id,[ReturnNoteItems].Unit Unit,[ReturnNoteItems].Num Num,[ReturnNoteItems].Price Price,
+    [ReturnNoteItems].DiscountAmount DiscountAmount,[ReturnNoteItems].AdValoremAmount AdValoremAmount,[ReturnNoteItems].CostPrice CostPrice,
+    [ReturnNoteItems].CreateTime CreateTime,[ReturnNoteItems].LastUpdateTime LastUpdateTime,[ReturnNoteItems].Product_Id Product_Id,
+    [ReturnNoteItems].ReturnOrderInStockNote_Id ReturnOrderInStockNote_Id,[ReturnNoteItems].IsGiveaway IsGiveaway,
+    [ReturnNoteItems].AdditionalProfit AdditionalProfit,[ReturnNoteItems].SaleMode SaleMode,
+    [ReturnNoteItems].ERPSaleMode ERPSaleMode,[ReturnNoteItems].SaleProduct_Id SaleProduct_Id,[ProductInfo].Desc_ProductName ProductName,
+    [ProductInfo].Desc_PackageQuantity PackageQuantity,[ProductInfo].Desc_PackageUnit PackageUnit,[ProductInfo].Desc_Specifications Specifications,
+    [ProductInfo].Desc_OldCategory OldCategory
+    FROM dbo.ReturnOrderInStockNotes WITH(NOLOCK)
+    INNER JOIN dbo.ReturnNoteItems WITH(NOLOCK) ON [ReturnOrderInStockNotes].Id=[ReturnNoteItems].ReturnOrderInStockNote_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=[ReturnNoteItems].Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=[Product].Info_Id
+    LEFT JOIN dbo.Orgs CompanyUserCity WITH(NOLOCK) ON [ReturnOrderInStockNotes].CompanyUserCity_Id=CompanyUserCity.Id
+    LEFT JOIN dbo.Orgs StoreHouse WITH(NOLOCK) ON [ReturnOrderInStockNotes].StoreHouse_Id=StoreHouse.Id
+    LEFT JOIN dbo.[User] WITH(NOLOCK) ON [User].Id=[ReturnOrderInStockNotes].User_Id
+    LEFT JOIN dbo.OrgUser WITH(NOLOCK) ON [ReturnOrderInStockNotes].BrokerUser_Id=OrgUser.Id
+    LEFT JOIN dbo.Orgs City WITH(NOLOCK) ON [ReturnOrderInStockNotes].City_Id=City.Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT INTO dbo.ReturnOrderInStockNotes(Id,Remark,BusinessTime,AuditState,AuditRemark,IsDownReason,Bonus,CouponAmount,OrderAmount,TotalAmount,BrokerUser_Id,Order_Id,StoreHouse_Id,User_Id,IsDeleted,IsInternal,CompanyUserCity_Id,ReturnOrder_Id,NoteNo,OrderNo,ReturnOrderNo,City_Id,AdditionalProfit,SaleCity_Id,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@Remark,@BusinessTime,@AuditState,@AuditRemark,@IsDownReason,@Bonus,@CouponAmount,@OrderAmount,@TotalAmount,@BrokerUser_Id,@Order_Id,@StoreHouse_Id,@User_Id,@IsDeleted,@IsInternal,@CompanyUserCity_Id,@ReturnOrder_Id,@NoteNo,@OrderNo,@ReturnOrderNo,@City_Id,@AdditionalProfit,@SaleCity_Id,GETDATE(),GETDATE())
+  </Insert>
+  <InsertReturnNoteItem>
+    INSERT dbo.ReturnNoteItems(Id,Unit,Num,Price,DiscountAmount,AdValoremAmount,CostPrice,Product_Id,ReturnOrderInStockNote_Id,IsGiveaway,AdditionalProfit,SaleMode,ERPSaleMode,SaleProduct_Id,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@Unit,@Num,@Price,@DiscountAmount,@AdValoremAmount,@CostPrice,@Product_Id,@ReturnOrderInStockNote_Id,@IsGiveaway,@AdditionalProfit,@SaleMode,@ERPSaleMode,@SaleProduct_Id,GETDATE(),GETDATE())
+  </InsertReturnNoteItem>
+  <Update>
+    UPDATE dbo.ReturnOrderInStockNotes
+    SET Remark=@Remark,BusinessTime=@BusinessTime,AuditState=@AuditState,AuditRemark=@AuditRemark,IsDownReason=@IsDownReason,Bonus=@Bonus,CouponAmount=@CouponAmount,OrderAmount=@OrderAmount,TotalAmount=@TotalAmount,BrokerUser_Id=@BrokerUser_Id,Order_Id=@Order_Id,StoreHouse_Id=@StoreHouse_Id,User_Id=@User_Id,IsDeleted=@IsDeleted,IsInternal=@IsInternal,CompanyUserCity_Id=@CompanyUserCity_Id,ReturnOrder_Id=@ReturnOrder_Id,NoteNo=@NoteNo,OrderNo=@OrderNo,ReturnOrderNo=@ReturnOrderNo,City_Id=@City_Id,AdditionalProfit=@AdditionalProfit,SaleCity_Id=@SaleCity_Id,LastUpdateTime=GETDATE()
+    WHERE Id=@Id
+  </Update>
+  <UpdateReturnNoteItem>
+    UPDATE dbo.ReturnNoteItems SET Unit=@Unit,Num=@Num,Price=@Price,DiscountAmount=@DiscountAmount,AdValoremAmount=@AdValoremAmount,CostPrice=@CostPrice,Product_Id=@Product_Id,ReturnOrderInStockNote_Id=@ReturnOrderInStockNote_Id,IsGiveaway=@IsGiveaway,AdditionalProfit=@AdditionalProfit,SaleMode=@SaleMode,ERPSaleMode=@ERPSaleMode,SaleProduct_Id=@SaleProduct_Id,LastUpdateTime=GETDATE()
+    WHERE Id=@Id
+  </UpdateReturnNoteItem>
+  <Delete>
+    UPDATE dbo.ReturnOrderInStockNotes SET IsDeleted=1,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </Delete>
+  <DeleteReturnNoteItem>
+    DELETE  FROM dbo.ReturnNoteItems WHERE Id=@Id
+  </DeleteReturnNoteItem>
+  <DeleteReturnItemsByReturnOrderInStockNoteId>
+    DELETE  FROM dbo.ReturnNoteItems WHERE ReturnOrderInStockNote_Id=@Id
+  </DeleteReturnItemsByReturnOrderInStockNoteId>
+  <UpdateIsDownReason>
+    UPDATE dbo.ReturnOrderInStockNotes SET IsDownReason = @IsDownReason,LastUpdateTime= GETDATE() WHERE id=@Id
+  </UpdateIsDownReason>
+</ReturnOrderInStockNoteSqlResource>

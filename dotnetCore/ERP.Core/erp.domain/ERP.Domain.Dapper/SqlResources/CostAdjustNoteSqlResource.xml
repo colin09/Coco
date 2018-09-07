@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CostAdjustNoteSqlResource>
+  <Select>
+    SELECT Id,AdjustAmount,AuditState,AuditRemark,IsDeleted,CreateTime,LastUpdateTime,Product_Id,StoreHouse_Id,City_Id,BusinessTime FROM dbo.CostAdjustNotes WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [CostAdjustNotes].Id,[CostAdjustNotes].AdjustAmount,[CostAdjustNotes].AuditState,[CostAdjustNotes].AuditRemark,[CostAdjustNotes].IsDeleted,[CostAdjustNotes].CreateTime,[CostAdjustNotes].Product_Id,[CostAdjustNotes].StoreHouse_Id,[CostAdjustNotes].BusinessTime,[StoreHouse].Id Id,[StoreHouseOrg].NewId NewId,[StoreHouseOrg].Name Name,[City].Id Id,[City].NewId NewId,[City].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_ProductName ProductName FROM dbo.CostAdjustNotes WITH(NOLOCK)
+    INNER JOIN dbo.StoreHouse WITH(NOLOCK) ON StoreHouse.Id = CostAdjustNotes.StoreHouse_Id
+    INNER JOIN dbo.Orgs StoreHouseOrg WITH(NOLOCK) ON StoreHouseOrg.Id=dbo.StoreHouse.Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=CostAdjustNotes.City_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = CostAdjustNotes.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON Info_Id=ProductInfo.Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT
+    [CostAdjustNotes].Id,[CostAdjustNotes].AdjustAmount,[CostAdjustNotes].AuditState,[CostAdjustNotes].AuditRemark,[CostAdjustNotes].IsDeleted,[CostAdjustNotes].CreateTime,[CostAdjustNotes].Product_Id,[CostAdjustNotes].StoreHouse_Id,[CostAdjustNotes].BusinessTime,[StoreHouse].Id Id,[StoreHouseOrg].NewId NewId,[StoreHouseOrg].Name Name,StoreHouse.Shop_Id,Product.City_Id,[City].Id Id,[City].NewId NewId,[City].Name Name,[Product].Id Id,[Product].NewId NewId,[ProductInfo].Id Id,[ProductInfo].NewId NewId,[ProductInfo].Desc_ProductName ProductName
+    FROM dbo.CostAdjustNotes WITH(NOLOCK)
+    INNER JOIN dbo.StoreHouse WITH(NOLOCK) ON StoreHouse.Id = CostAdjustNotes.StoreHouse_Id
+    INNER JOIN dbo.Orgs StoreHouseOrg WITH(NOLOCK) ON StoreHouseOrg.Id=dbo.StoreHouse.Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id=CostAdjustNotes.City_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = CostAdjustNotes.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON Info_Id=ProductInfo.Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT dbo.CostAdjustNotes
+    (Id,AdjustAmount,AuditState,AuditRemark,IsDeleted,CreateTime,LastUpdateTime,Product_Id,StoreHouse_Id,City_Id,BusinessTime)
+    VALUES  (@Id,@AdjustAmount,@AuditState,@AuditRemark,@IsDeleted,GETDATE(),GETDATE(),@Product_Id,@StoreHouse_Id,@City_Id,@BusinessTime)
+  </Insert>
+  <Update>
+    UPDATE dbo.CostAdjustNotes SET AdjustAmount=@AdjustAmount,AuditState=@AuditState,AuditRemark=@AuditRemark,IsDeleted=@IsDeleted,Product_Id=@Product_Id,StoreHouse_Id=@StoreHouse_Id,BusinessTime=@BusinessTime,City_Id=@City_Id,LastUpdateTime=GETDATE()
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.CostAdjustNotes set IsDeleted=1,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </Delete>
+</CostAdjustNoteSqlResource>

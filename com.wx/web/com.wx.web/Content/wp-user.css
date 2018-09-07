@@ -1,0 +1,41 @@
+﻿.container{ padding: 0;margin: 0;}
+
+
+header{}
+.user-info{width: 100%;height: 140px;background: url(../images/s9.jpg) repeat-x;position: relative;margin: 0 auto;}
+.user-info img{ width: 100px;height: 100px;position: absolute;left: 20px;top: 20px;border-radius: 50px;}
+.user-info .info{position: absolute;left: 140px;top: 20px;color: #fff;}
+.user-info .info .name{ font-size: 18px;line-height: 35px;}
+.user-info .info .desc{ font-size: 12px;line-height: 25px;margin-right: 20px;}
+
+.user-opt ul li{height: 35px;border-top: 1px #dfdfdf solid;padding-left: 20px;line-height: 38px;color: #252525;font-size: 0.8em;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+.user-opt ul li span { color: #00f;margin: 0 5px;}
+.user-opt ul li .point{ color: gray;float: right;margin: 15px 15px 0 0;}
+
+
+
+
+
+
+#questionnaire{font-family: Arial, Verdana,"微软雅黑","宋体";font-size:18px; margin:0;padding:0;}
+#questionnaire .bc-b{ background: #0486bf; color:#fff; margin:5px 0; line-height:1.7; padding:5px;}
+#questionnaire .bc-r{ background: #fe5265; color:#fff; margin:5px 0; line-height:1.7; padding:5px;}
+#questionnaire .bc-w{ background: #fff; color:#0486bf; margin:5px 0; line-height:1.7; padding:5px;}
+#questionnaire ul li {float:left; margin:5px 15px;}
+#questionnaire textarea{width:100%; background-color:transparent;max-width:98%;}
+#questionnaire .imgTop{background:url(../Images/queTop.jpg) center no-repeat; height:312px;margin:-5px 0;}
+#questionnaire .imgFoot{background:url(../Images/queFoot.jpg) center no-repeat;height:385px;margin:5px 0;}
+#questionnaire p {text-indent:40px;}
+#questionnaire input{border:none; background-color:transparent; border-bottom:solid 1px #fff; }
+#questionnaire .bc-w input{ border-bottom:solid 1px #0486bf;}
+
+#questionnaire .qesTitle{text-align:center; height:130px;}
+#questionnaire .qesTitle h1{font-size:36px; height:50px;}
+#questionnaire .qesTitle span{position:relative;top:-35px;background-color:#0486bf;}
+
+
+
+
+
+
+

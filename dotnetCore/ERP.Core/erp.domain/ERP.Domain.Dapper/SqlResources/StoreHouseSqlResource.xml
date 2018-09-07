@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [StoreHouse].[Id],[StoreHouse].[City_Id],[StoreHouse].[IsSupplierStore],[StoreHouse].[StoreHouseType],[StoreHouse].[Shop_Id]
+    ,[Orgs].[Name],[Orgs].[Id],[Orgs].[Enable],[Orgs].[CreateTime],[Orgs].[LastUpdateTime],[Orgs].[NewId],[Orgs].[OrgType],[Orgs].[Address_Province] Province
+    ,[Orgs].[Address_City] City,[Orgs].[Address_County] County,[Orgs].[Address_DetailAddress] DetailAddress,[Orgs].[Address_Latitude] Latitude,[Orgs].[Address_Longitude] Longitude
+    FROM [dbo].[StoreHouse] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = StoreHouse.Id
+  </Select>
+  <SelectIncludeCity>
+    SELECT [StoreHouse].[Id],[StoreHouse].[City_Id],[StoreHouse].[IsSupplierStore],[StoreHouse].[StoreHouseType],[StoreHouse].[Shop_Id]
+    ,[Orgs].[Name],[Orgs].[Enable],[Orgs].[CreateTime],[Orgs].[LastUpdateTime],[Orgs].[NewId],[Orgs].[OrgType],[Orgs].[Address_Province] Province
+    ,[Orgs].[Address_City] City,[Orgs].[Address_County] County,[Orgs].[Address_DetailAddress] DetailAddress,[Orgs].[Address_Latitude] Latitude,[Orgs].[Address_Longitude] Longitude,
+    [City].Id,[City].CityMode,[CityOrgs].[Name],[CityOrgs].[Enable],[CityOrgs].[CreateTime],[CityOrgs].[LastUpdateTime],[CityOrgs].[NewId],[CityOrgs].[OrgType],[CityOrgs].[Address_Province] Province
+    ,[CityOrgs].[Address_City] City,[CityOrgs].[Address_County] County,[CityOrgs].[Address_DetailAddress] DetailAddress,[CityOrgs].[Address_Latitude] Latitude,[CityOrgs].[Address_Longitude] Longitude
+    FROM [dbo].[StoreHouse] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = StoreHouse.Id
+    INNER JOIN dbo.City WITH(NOLOCK) ON City.Id = StoreHouse.City_Id
+    INNER JOIN dbo.Orgs CityOrgs WITH(NOLOCK) ON CityOrgs.Id = City.Id
+  </SelectIncludeCity>
+  <Insert>
+    INSERT INTO dbo.StoreHouse
+    (Id,City_Id,IsSupplierStore,StoreHouseType,Shop_Id)
+    VALUES  (@Id,@City_Id,@IsSupplierStore,@StoreHouseType,@Shop_Id)
+  </Insert>
+  <Update>
+    UPDATE dbo.StoreHouse SET City_Id=@City_Id,IsSupplierStore=@IsSupplierStore,StoreHouseType=@StoreHouseType,Shop_Id=@Shop_Id WHERE Id=@Id
+  </Update>
+  <GetHQStoreHouse>
+    SELECT Id,Name,NewId FROM dbo.orgs WITH(NOLOCK)  WHERE id='4917206766895255881' and OrgType =3
+  </GetHQStoreHouse>
+  <GetHQAgentStoreHouse>
+    SELECT Id,Name,NewId FROM dbo.orgs WITH(NOLOCK) WHERE NewId='8971' and OrgType =3
+  </GetHQAgentStoreHouse>
+   <GetStoreHouseAddress>
+    SELECT
+    [StoreHouse].[Id]
+    ,[StoreHouse].[City_Id]
+    ,[Orgs].[Name]
+    ,[Orgs].[NewId]
+    ,[Orgs].[Address_Province] Province
+    ,[Orgs].[Address_City] City
+    ,[Orgs].[Address_County] County
+    ,[Orgs].[Address_DetailAddress] DetailAddress
+    From [dbo].[StoreHouse] WITH(NOLOCK)
+    INNER JOIN [dbo].[Orgs] WITH(NOLOCK) ON [Orgs].[Id] = [StoreHouse].[City_Id]
+  </GetStoreHouseAddress>
+  <Exists>
+    SELECT COUNT(1) FROM [dbo].[StoreHouse] WITH(NOLOCK) INNER JOIN dbo.Orgs WITH(NOLOCK) ON Orgs.Id = StoreHouse.Id
+    WHERE (Orgs.Id=@id OR Orgs.NewId=@id) and Orgs.Enable=@enable
+  </Exists>
+</SqlResource>

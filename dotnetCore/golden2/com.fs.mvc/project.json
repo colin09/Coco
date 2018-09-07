@@ -1,0 +1,11 @@
+{
+    "publishOptions": {
+        "include": [
+            "wwwroot",
+            "Views",
+            //"Areas/**/Views",
+            "web.config"
+        ]
+    }
+}
+

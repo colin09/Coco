@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RaffleInTicketSqlResource>
+  <Select>
+    SELECT [Id]
+    ,[NoteNo]
+    ,[State]
+    ,[AuditState]
+    ,[TicketNo]
+    ,[InCount]
+    ,[InPrice]
+    ,[ActualInPrice]
+    ,[InAmount]
+    ,[Remark]
+    ,[OrderNo]
+    ,[IsParticularProduct]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[ActualProduct_Id]
+    ,[City_Id]
+    ,[Product_Id]
+    ,[RaffleOutTicket_Id]
+    ,[ReceivableBill_Id]
+    ,[StoreHouse_Id]
+    FROM [dbo].[RaffleInTickets]  WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO [dbo].[RaffleInTickets]
+    ([Id]
+    ,[NoteNo]
+    ,[State]
+    ,[AuditState]
+    ,[TicketNo]
+    ,[InCount]
+    ,[InPrice]
+    ,[ActualInPrice]
+    ,[InAmount]
+    ,[Remark]
+    ,[OrderNo]
+    ,[IsParticularProduct]
+    ,[CreateTime]
+    ,[LastUpdateTime]
+    ,[ActualProduct_Id]
+    ,[City_Id]
+    ,[Product_Id]
+    ,[RaffleOutTicket_Id]
+    ,[ReceivableBill_Id]
+    ,[StoreHouse_Id])
+    VALUES
+    (@Id,
+    @NoteNo,
+    @State,@AuditState, 
+    @TicketNo,
+    @InCount, 
+    @InPrice, 
+    @ActualInPrice, 
+    @InAmount, 
+    @Remark, 
+    @OrderNo, 
+    @IsParticularProduct, 
+    @CreateTime, 
+    @LastUpdateTime, 
+    @ActualProduct_Id, 
+    @City_Id, 
+    @Product_Id, 
+    @RaffleOutTicket_Id, 
+    @ReceivableBill_Id, 
+    @StoreHouse_Id)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[RaffleInTickets]
+    SET [NoteNo] = @NoteNo
+    ,[State] = @State
+    ,[AuditState] = @AuditState
+    ,[TicketNo] = @TicketNo
+    ,[InCount] = @InCount
+    ,[InPrice] = @InPrice
+    ,[ActualInPrice] = @ActualInPrice
+    ,[InAmount] = @InAmount
+    ,[Remark] = @Remark
+    ,[OrderNo] = @OrderNo
+    ,[IsParticularProduct] = @IsParticularProduct
+    ,[LastUpdateTime] =GETDATE()
+    ,[ActualProduct_Id] = @ActualProduct_Id
+    ,[City_Id] = @City_Id
+    ,[Product_Id] = @Product_Id
+    ,[RaffleOutTicket_Id] = @RaffleOutTicket_Id
+    ,[ReceivableBill_Id] = @ReceivableBill_Id
+    ,[StoreHouse_Id] = @StoreHouse_Id
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.RaffleInTickets WHERE Id=@Id
+  </Delete>
+  <SelectList>
+    SELECT [RaffleInTickets].[Id]
+    ,[RaffleInTickets].[NoteNo]
+    ,[RaffleInTickets].[OrderNo]
+    ,[RaffleInTickets].[TicketNo]
+    ,[RaffleInTickets].[State]
+    ,[RaffleInTickets].[AuditState]
+    ,[RaffleInTickets].[InCount]
+    ,[RaffleInTickets].[InAmount]
+    ,[RaffleInTickets].[CreateTime]
+    ,[RaffleInTickets].[LastUpdateTime]
+    ,[RaffleInTickets].[Remark]
+    ,[RaffleInTickets].[IsParticularProduct]
+    ,[RaffleInTickets].[Product_Id]
+    ,[RaffleInTickets].[City_Id]
+    ,[RaffleInTickets].[StoreHouse_Id]
+    ,[Product].[Id]
+    ,CASE WHEN  [Product].[ProductName] IS NULL OR  [Product].[ProductName] ='' THEN [ProductInfo].Desc_ProductName ELSE  [Product].[ProductName] end ProductName
+    ,[ProductInfo].[Desc_Specifications] Specifications
+    ,[ProductInfo].[Desc_PackageUnit] PackageUnit
+    ,[ProductInfo].[Desc_PackageQuantity] PackageQuantity
+    ,[ActualProduct].[Id]
+    ,CASE WHEN  [ActualProduct].[ProductName] IS NULL OR  [ActualProduct].[ProductName] ='' THEN ActualInfo.Desc_ProductName ELSE  [ActualProduct].[ProductName] end ProductName
+    ,[ActualInfo].[Desc_Specifications] Specifications
+    ,[ActualInfo].[Desc_PackageUnit] PackageUnit
+    ,[ActualInfo].[Desc_PackageQuantity] PackageQuantity
+    ,[Orgs].[Address_Province] Province
+    ,[Orgs].[Address_City] City
+    ,[Orgs].[Address_County] County
+    ,[Orgs].[Id]
+    ,[Orgs].[Name]
+    ,[StoreHouseOrg].[Name]
+    ,[RaffleOutTickets].[ExpireTime]
+    FROM [dbo].[RaffleInTickets]  WITH(NOLOCK)
+    INNER JOIN [dbo].[Product] WITH(NOLOCK) ON [RaffleInTickets].[Product_Id] = [Product].[Id]
+    INNER JOIN [dbo].[ProductInfo] WITH(NOLOCK) ON [ProductInfo].[Id] = [Product].[Info_Id]
+    INNER JOIN [dbo].[Product] AS ActualProduct WITH(NOLOCK) ON [RaffleInTickets].[ActualProduct_Id] = [ActualProduct].[Id]
+    INNER JOIN [dbo].[ProductInfo] AS ActualInfo WITH(NOLOCK) ON [ActualInfo].[Id] = [ActualProduct].[Info_Id]
+    INNER JOIN [dbo].[Orgs] WITH(NOLOCK) ON [Orgs].[Id] = [RaffleInTickets].[City_Id]
+    INNER JOIN [dbo].[StoreHouse] WITH(NOLOCK) ON [StoreHouse].[Id] = [RaffleInTickets].[StoreHouse_Id]
+    INNER JOIN [dbo].[Orgs] AS StoreHouseOrg WITH(NOLOCK) ON [StoreHouseOrg].[Id] = [StoreHouse].[Id]
+    INNER JOIN [dbo].[RaffleOutTickets] WITH(NOLOCK) ON [RaffleOutTickets].[Id] = [RaffleInTickets].[RaffleOutTicket_Id]
+  </SelectList>
+  <SelectTicketDetail>
+    SELECT [RaffleInTickets].[Id]
+    ,[RaffleInTickets].[NoteNo]
+    ,[RaffleInTickets].[OrderNo]
+    ,[RaffleInTickets].[State]
+    ,[RaffleInTickets].[AuditState]
+    ,[RaffleInTickets].[InCount]
+    ,[RaffleInTickets].[InAmount]
+    ,[RaffleInTickets].[IsParticularProduct]
+    ,[RaffleInTickets].[InPrice]
+    ,[RaffleInTickets].[ActualInPrice]
+    ,[Product].[Id]
+    ,CASE WHEN  [Product].[ProductName] IS NULL OR  [Product].[ProductName] ='' THEN [ProductInfo].Desc_ProductName ELSE  [Product].[ProductName] end ProductName
+    ,[ProductInfo].[Desc_Specifications] Specifications
+    ,[ProductInfo].[Desc_PackageUnit] PackageUnit
+    ,[ProductInfo].[Desc_PackageQuantity] PackageQuantity
+    ,[ActualProduct].[Id]
+    ,CASE WHEN  [ActualProduct].[ProductName] IS NULL OR  [ActualProduct].[ProductName] ='' THEN ActualInfo.Desc_ProductName ELSE  [ActualProduct].[ProductName] end ProductName
+    ,[ActualInfo].[Desc_Specifications] Specifications
+    ,[ActualInfo].[Desc_PackageUnit] PackageUnit
+    ,[ActualInfo].[Desc_PackageQuantity] PackageQuantity
+    ,[RaffleOutTickets].[Id]
+    ,[RaffleOutTickets].[ExpireTime]
+    FROM [dbo].[RaffleInTickets]  WITH(NOLOCK)
+    INNER JOIN [dbo].[Product] WITH(NOLOCK) ON [RaffleInTickets].[Product_Id] = [Product].[Id]
+    INNER JOIN [dbo].[ProductInfo] WITH(NOLOCK) ON [ProductInfo].[Id] = [Product].[Info_Id]
+    INNER JOIN [dbo].[Product] AS ActualProduct WITH(NOLOCK) ON [RaffleInTickets].[ActualProduct_Id] = [ActualProduct].[Id]
+    INNER JOIN [dbo].[ProductInfo] AS ActualInfo WITH(NOLOCK) ON [ActualInfo].[Id] = [ActualProduct].[Info_Id]
+    INNER JOIN [dbo].[RaffleOutTickets] WITH(NOLOCK) ON [RaffleOutTickets].[Id] = [RaffleInTickets].[RaffleOutTicket_Id]
+  </SelectTicketDetail>
+  <SelectRaffleInTicketList>
+    SELECT  [RaffleInTickets].[Id]
+    ,[RaffleInTickets].[NoteNo]
+    ,[RaffleInTickets].[OrderNo]
+    ,[RaffleInTickets].[TicketNo]
+    ,[RaffleInTickets].[State]
+    ,[RaffleInTickets].[AuditState]
+    ,[RaffleInTickets].[InCount]
+    ,[RaffleInTickets].[InAmount]
+    ,[RaffleInTickets].[CreateTime]
+    ,[RaffleInTickets].[Remark]
+    ,[RaffleInTickets].[IsParticularProduct]
+    ,[RaffleOutTickets].[ExpireTime]
+    ,Product.Id productId
+    ,CASE WHEN  [Product].[ProductName] IS NULL OR  [Product].[ProductName] ='' THEN [ProductInfo].Desc_ProductName ELSE  [Product].[ProductName] end ProductName
+    ,[ProductInfo].[Desc_Specifications] Specifications
+    ,[ProductInfo].[Desc_PackageUnit] Unit
+    ,[ProductInfo].[Desc_PackageQuantity] PackageQuantity
+    ,CASE WHEN  [ActualProduct].[ProductName] IS NULL OR  [ActualProduct].[ProductName] ='' THEN ActualInfo.Desc_ProductName ELSE  [ActualProduct].[ProductName] end actualProductName
+    ,[ActualInfo].[Desc_Specifications] actualSpecifications
+    ,[ActualInfo].[Desc_PackageUnit] actualUnit
+    ,[ActualInfo].[Desc_PackageQuantity] actualPackageQuantity
+    ,[Orgs].[Address_Province] Province
+    ,[Orgs].[Address_City] City
+    ,[Orgs].[Address_County] County
+    ,[Orgs].[Id] cityId
+    ,[Orgs].[Name] CityName
+    ,[StoreHouseOrg].[Name]StoreHouseName
+    ,[StoreHouseOrg].Id storeHouseId,
+    [StoreHouseOrg].NewId  storeHouseNewId,
+    inPrice, actualInPrice
+    FROM [dbo].[RaffleInTickets]  WITH(NOLOCK)
+    INNER JOIN [dbo].[Product] WITH(NOLOCK) ON [RaffleInTickets].[Product_Id] = [Product].[Id]
+    INNER JOIN [dbo].[ProductInfo] WITH(NOLOCK) ON [ProductInfo].[Id] = [Product].[Info_Id]
+    INNER JOIN [dbo].[Product] AS ActualProduct WITH(NOLOCK) ON [RaffleInTickets].[ActualProduct_Id] = [ActualProduct].[Id]
+    INNER JOIN [dbo].[ProductInfo] AS ActualInfo WITH(NOLOCK) ON [ActualInfo].[Id] = [ActualProduct].[Info_Id]
+    INNER JOIN [dbo].[Orgs] WITH(NOLOCK) ON [Orgs].[Id] = [RaffleInTickets].[City_Id]
+    INNER JOIN [dbo].[StoreHouse] WITH(NOLOCK) ON [StoreHouse].[Id] = [RaffleInTickets].[StoreHouse_Id]
+    INNER JOIN [dbo].[Orgs] AS StoreHouseOrg WITH(NOLOCK) ON [StoreHouseOrg].[Id] = [StoreHouse].[Id]
+    INNER JOIN [dbo].[RaffleOutTickets] WITH(NOLOCK) ON [RaffleOutTickets].[Id] = [RaffleInTickets].[RaffleOutTicket_Id]
+  </SelectRaffleInTicketList>
+  
+
+</RaffleInTicketSqlResource>
+

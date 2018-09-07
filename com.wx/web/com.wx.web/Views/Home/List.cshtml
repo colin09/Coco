@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "详细";
+}
+
+@section head
+{
+    <link rel="stylesheet" href="~/Content/home.css" />
+    <style rel="stylesheet">
+    </style>
+}
+
+<input type="hidden" id="hdCode" value="@ViewBag.Code" />
+<input type="hidden" id="hdSource" value="@ViewBag.Source" />
+<input type="hidden" id="hdType" ms-value="pageDetail" value="3" />
+<div>
+
+    <div class="container pageList" >
+
+        <input type="hidden" id="hdCode" value="@ViewBag.Code" />
+        <input type="hidden" id="hdSource" value="@ViewBag.Source" />
+        <input type="hidden" id="hdType" ms-value="pageDetail" value="3" />
+
+        <div class="title">
+            @ViewBag.Caption
+        </div>
+        <div class="contact">
+            咨询电话：<red>027-8470 4919</red>
+        </div>
+        <ul id="list" class="grid">
+            @foreach (var item in ViewBag.List)
+            {
+                <li class="grid-item">
+                    <div>
+                        <img src="@item.Domain@item.Image"/>
+                        <div class="imgDesc">
+                            @item.Desc
+                        </div>
+                    </div>
+                </li>
+            }
+
+            <div class="clear"></div>
+        </ul>
+    </div>
+</div>
+
+@section scripts{
+
+    @*<script src="http://cdn.bootcss.com/angular-ui-router/0.3.1/angular-ui-router.js"></script>
+        <script src="~/Scripts/angular-waterfall.js"></script>
+        <script src="~/Scripts/js/customer.js"></script>
+    <script src="~/Scripts/jquery.wookmark.min.js"></script>*@
+    <script src="~/Scripts/masonry.pkgd.min.js"></script>
+    <script>
+        $(function() {
+            //$('#list li').wookmark();
+            $('.grid').masonry({
+                itemSelector: '.grid-item',
+                columnWidth: 366
+            });
+        });
+    </script>
+}

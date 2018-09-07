@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ShopBaseNoteSqlResource>
+  <Select>
+    SELECT Id,NoteNo,BusinessTime,NoteType,OperationType,Price,Num,Unit,Remark,AuditState,AuditRemark,IsDownReason,IsDeleted,CannotEditAndDelete,CreateTime,LastUpdateTime,BaseNoteInfo_Id,Product_Id,StoreHouse_Id FROM dbo.ShopBaseNotes WITH(NOLOCK)
+  </Select>
+  <Insert>
+    INSERT INTO dbo.ShopBaseNotes (Id,NoteNo,BusinessTime,NoteType,OperationType,Price,Num,Unit,Remark,AuditState,AuditRemark,IsDownReason,IsDeleted,CannotEditAndDelete,CreateTime,LastUpdateTime,BaseNoteInfo_Id,Product_Id,StoreHouse_Id)
+    VALUES  (@Id,@NoteNo,@BusinessTime,@NoteType,@OperationType,@Price,@Num,@Unit,@Remark,@AuditState,@AuditRemark,@IsDownReason,@IsDeleted,@CannotEditAndDelete,GETDATE(),GETDATE(),@BaseNoteInfo_Id,@Product_Id,@StoreHouse_Id)
+  </Insert>
+  <Update>
+    UPDATE dbo.ShopBaseNotes SET NoteNo=@NoteNo,BusinessTime=@BusinessTime,NoteType=@NoteType,OperationType=@OperationType,Price=@Price,Num=@Num,Unit=@Unit,Remark=@Remark,AuditState=@AuditState,AuditRemark=@AuditRemark,IsDownReason=@IsDownReason,IsDeleted=@IsDeleted,CannotEditAndDelete=@CannotEditAndDelete,LastUpdateTime=GETDATE(),BaseNoteInfo_Id=@BaseNoteInfo_Id,Product_Id=@Product_Id,StoreHouse_Id=@StoreHouse_Id
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    UPDATE dbo.ShopBaseNotes SET IsDeleted=1 WHERE Id=@Id
+  </Delete>
+  <SelectIncludeAll>
+    SELECT
+    [ShopBaseNotes].Id,[ShopBaseNotes].NoteNo,[ShopBaseNotes].NoteType,[ShopBaseNotes].Num,[ShopBaseNotes].OperationType,[ShopBaseNotes].Price,[ShopBaseNotes].Product_Id ProductId,[ShopBaseNotes].Unit,[ShopBaseNotes].Remark,[ShopBaseNotes].AuditState,[ShopBaseNotes].AuditRemark,[ShopBaseNotes].CreateTime,[ShopBaseNotes].BusinessTime,[Product].ProductType,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_OldCategory Category,[ProductInfo].Desc_Specifications Specifications,[ProductInfo].Desc_PackageQuantity PackageQuantity,[Shops].Name Shop,[StoreHouse].Id StoreHouseId,[StoreHouseOrg].Name StoreHouseName,[City].Id StoreHouseCityId,[City].Name City
+    FROM dbo.ShopBaseNotes WITH(NOLOCK)
+    INNER JOIN dbo.StoreHouse WITH(NOLOCK) ON StoreHouse_Id=[StoreHouse].Id
+    INNER JOIN dbo.Orgs StoreHouseOrg WITH(NOLOCK) ON [StoreHouseOrg].Id=[StoreHouse].Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON [City].Id=[StoreHouse].City_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=[ShopBaseNotes].Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=Info_Id
+    LEFT JOIN dbo.Shops WITH(NOLOCK) ON [Shops].Id=[Product].Shop_Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT TOP 1
+    [ShopBaseNotes].Id,[ShopBaseNotes].NoteNo,[ShopBaseNotes].BusinessTime,[ShopBaseNotes].NoteType,[ShopBaseNotes].OperationType,[ShopBaseNotes].Price,[ShopBaseNotes].Num,[ShopBaseNotes].Unit,[ShopBaseNotes].Remark,[ShopBaseNotes].AuditState,[ShopBaseNotes].AuditRemark,[ShopBaseNotes].IsDownReason,[ShopBaseNotes].CreateTime,[ShopBaseNotes].LastUpdateTime,[Product].Id ProductId,[Product].ProductType,[ProductInfo].Desc_ProductName ProductName,[ProductInfo].Desc_OldCategory Category,[ProductInfo].Desc_Specifications Specifications,[ProductInfo].Desc_PackageQuantity PackageQuantity,[Shops].Name ShopName,[StoreHouse].Id StoreHouseId,[StoreHouseOrg].Name StoreHouseName,[City].Name City
+    FROM dbo.ShopBaseNotes WITH(NOLOCK)
+    INNER JOIN dbo.StoreHouse WITH(NOLOCK) ON StoreHouse_Id=[StoreHouse].Id
+    INNER JOIN dbo.Orgs StoreHouseOrg WITH(NOLOCK) ON [StoreHouseOrg].Id=[StoreHouse].Id
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON [City].Id=[StoreHouse].City_Id
+    INNER JOIN dbo.Product WITH(NOLOCK) ON [Product].Id=[ShopBaseNotes].Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON [ProductInfo].Id=Info_Id
+    LEFT JOIN dbo.Shops WITH(NOLOCK) ON [Shops].Id=[Product].Shop_Id
+    WHERE [ShopBaseNotes].Id=@Id
+  </FirstOrDefaultIncludeAll>
+</ShopBaseNoteSqlResource>

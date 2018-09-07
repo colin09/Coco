@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CityBankSqlResource>
+  <Select>
+    SELECT [Id],[BankNo],[State],[CreateTime],[LastUpdateTime],[City_Id],[Name]  FROM [dbo].[CityBanks] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT CityBanks.Id,BankNo,CityBanks.State,CityBanks.Name,City_Id,Orgs.Name Name FROM dbo.CityBanks WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON City_Id=[Orgs].Id
+  </SelectIncludeAll>
+  <FirstOrDefaultIncludeAll>
+    SELECT CityBanks.Id,BankNo,CityBanks.State,CityBanks.Name,City_Id,Orgs.Name Name FROM dbo.CityBanks WITH(NOLOCK)
+    INNER JOIN dbo.Orgs WITH(NOLOCK) ON City_Id=[Orgs].Id WHERE [CityBanks].Id=@Id
+  </FirstOrDefaultIncludeAll>
+  <Insert>
+    INSERT INTO dbo.CityBanks
+    (Id,BankNo,State,City_Id,Name,CreateTime,LastUpdateTime)
+    VALUES  (@Id,@BankNo,@State,@City_Id,@Name,GETDATE(),GETDATE())
+  </Insert>
+  <Update>
+    UPDATE dbo.CityBanks SET BankNo=@BankNo,State=@State,LastUpdateTime=GETDATE(),Name=@Name WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.CityBanks WHERE Id=@Id
+  </Delete>
+</CityBankSqlResource>

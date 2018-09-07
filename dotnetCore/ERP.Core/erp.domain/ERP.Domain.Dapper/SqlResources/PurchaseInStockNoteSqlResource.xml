@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[AuditState],[InStockTime],[IsDownReason],[CreateTime],[LastUpdateTime],[City_Id],[OrgUser_Id],[Supplier_Id],[AuditRemark],[IsDeleted],[IsInternal],[SupplierCity_Id]
+    ,[Remark],[Version],[IsFromAgencySaleNote],[IsFromCityAllocation],[BatchNo],[PurchaseRequisitionNo],[PurchaseName],[PurchaseMobileNo],[WhetherSmsNotify],[PurchaseRequisition_Id]
+    ,[PurchaseUserId],[NoteNo],[Operators],[IsHidden],[PurchaseBusinessType],[AllocationNoteNo],[AllocationNote_Id],[CannotEditAndDelete],[IsNotSyncStock],[HasCreateRelatedNote],[NeedPurchaseAudit]
+    ,[HandlingCost],[LogisticsFee],[NeedAuditUserRole],[AuditTime],[StoreHouse_Id],[VerificationDate],[RebateTotalAmount],[IsCreateRebateBill]  FROM [dbo].[PurchaseInStockNotes] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeAll>
+    SELECT [PurchaseInStockNotes].[Id],[PurchaseInStockNotes].[AuditState],[PurchaseInStockNotes].[InStockTime],[PurchaseInStockNotes].[IsDownReason],
+    [PurchaseInStockNotes].[CreateTime],[PurchaseInStockNotes].[City_Id],[PurchaseInStockNotes].[Supplier_Id],[PurchaseInStockNotes].[IsInternal],
+    [PurchaseInStockNotes].[SupplierCity_Id],[PurchaseInStockNotes].[IsFromAgencySaleNote],
+    [PurchaseInStockNotes].[IsFromCityAllocation],[PurchaseInStockNotes].[BatchNo],[PurchaseInStockNotes].[PurchaseRequisitionNo],
+    [PurchaseInStockNotes].[NoteNo],[PurchaseInStockNotes].[PurchaseBusinessType],
+    [PurchaseInStockNotes].[AllocationNoteNo],[PurchaseInStockNotes].[AllocationNote_Id],[PurchaseInStockNotes].[CannotEditAndDelete],[PurchaseInStockNotes].[StoreHouse_Id],
+    [PurchaseInStockNotes].[VerificationDate],[PurchaseInStockNotes].[RebateTotalAmount],[PurchaseInStockNotes].[IsCreateRebateBill],
+    Providers.Name,Providers.Id,
+    SupplierCity.Name,SupplierCity.Id
+    FROM [dbo].[PurchaseInStockNotes] WITH(NOLOCK)
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = PurchaseInStockNotes.Supplier_Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = PurchaseInStockNotes.SupplierCity_Id
+  </SelectIncludeAll>
+  <SelectItem>
+    SELECT [Id],[Price],[Num],[Unit],[Remark],[IsGiveaway],[CreateTime],[LastUpdateTime],[Note_Id],[Product_Id],[TotalAmount],[ProductionDate],[ExpirationDate],[Sequence],[GoodsPosition]
+    ,[WhetherRebate],[RelatedProductIds],[PurchaseRequisitionItem_Id],[AllocationNoteItem_Id],[EditPrice],[EditTotalAmount],[RequisitionPrice],[NeedPriceAudit],[BulkProductStockCount]
+    ,[OrdinaryStockCount],[RebateType],[BarePrice],[EditBarePrice],[SingleRebate],[RebatePolicy],[RebateTotalAmount],[EditRebateTotalAmount],[ProductionDateByFinancial]
+    FROM [dbo].[InStockItems] WITH(NOLOCK)
+  </SelectItem>
+  <SelectItemIncludeAll>
+    SELECT [InStockItems].[Id],[InStockItems].[Price],[InStockItems].[Num],[InStockItems].[Unit],[InStockItems].[IsGiveaway],
+    [InStockItems].[CreateTime],[InStockItems].[Note_Id],[InStockItems].[Product_Id],[InStockItems].[TotalAmount],
+    [InStockItems].[RebateType],[InStockItems].[BarePrice],[InStockItems].[EditBarePrice],[InStockItems].[SingleRebate],[InStockItems].[RebatePolicy],
+    [InStockItems].[RebateTotalAmount],[InStockItems].[EditRebateTotalAmount],
+    [Product].ProductType,[Product].Id,ProductInfo.MonthOfShelfLife,ProductInfo.Id,ProductInfo.Desc_ProductName ProductName,ProductInfo.Desc_OldCategory OldCategory,ProductInfo.Desc_Specifications Specifications,
+    ProductInfo.Desc_PackageUnit PackageUnit,ProductInfo.Desc_PackageQuantity PackageQuantity,
+    [PurchaseInStockNotes].[Id],[PurchaseInStockNotes].[AuditState],[PurchaseInStockNotes].[InStockTime],[PurchaseInStockNotes].[IsDownReason],
+    [PurchaseInStockNotes].[CreateTime],[PurchaseInStockNotes].[City_Id],[PurchaseInStockNotes].[Supplier_Id],[PurchaseInStockNotes].[IsInternal],
+    [PurchaseInStockNotes].[SupplierCity_Id],[PurchaseInStockNotes].[IsFromAgencySaleNote],
+    [PurchaseInStockNotes].[IsFromCityAllocation],[PurchaseInStockNotes].[BatchNo],[PurchaseInStockNotes].[PurchaseRequisitionNo],
+    [PurchaseInStockNotes].[NoteNo],[PurchaseInStockNotes].[PurchaseBusinessType],
+    [PurchaseInStockNotes].[AllocationNoteNo],[PurchaseInStockNotes].[AllocationNote_Id],[PurchaseInStockNotes].[CannotEditAndDelete],[PurchaseInStockNotes].[StoreHouse_Id],
+    Providers.Name,Providers.Id,
+    SupplierCity.Name,SupplierCity.Id
+    FROM [dbo].[InStockItems] WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = InStockItems.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    INNER JOIN dbo.PurchaseInStockNotes WITH(NOLOCK) ON PurchaseInStockNotes.Id = InStockItems.Note_Id
+    LEFT JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = PurchaseInStockNotes.Supplier_Id
+    LEFT JOIN dbo.Orgs SupplierCity WITH(NOLOCK) ON SupplierCity.Id = PurchaseInStockNotes.SupplierCity_Id
+  </SelectItemIncludeAll>
+  <Insert>
+    INSERT INTO [dbo].[PurchaseInStockNotes]
+    ([Id],[AuditState],[InStockTime],[IsDownReason],[CreateTime],[LastUpdateTime],[City_Id],[OrgUser_Id],[Supplier_Id],[AuditRemark],[IsDeleted],[IsInternal],[SupplierCity_Id],[Remark]
+    ,[Version],[IsFromAgencySaleNote],[IsFromCityAllocation],[BatchNo],[PurchaseRequisitionNo],[PurchaseName],[PurchaseMobileNo],[WhetherSmsNotify],[PurchaseRequisition_Id],[PurchaseUserId]
+    ,[NoteNo],[Operators],[IsHidden],[PurchaseBusinessType],[AllocationNoteNo],[AllocationNote_Id],[CannotEditAndDelete],[IsNotSyncStock],[HasCreateRelatedNote],[NeedPurchaseAudit],[HandlingCost]
+    ,[LogisticsFee],[NeedAuditUserRole],[AuditTime],[StoreHouse_Id],[VerificationDate],[RebateTotalAmount],[IsCreateRebateBill])
+    VALUES
+    (@Id,@AuditState,@InStockTime,@IsDownReason,@CreateTime,@LastUpdateTime,@City_Id,@OrgUser_Id,@Supplier_Id,@AuditRemark,@IsDeleted,@IsInternal,@SupplierCity_Id,@Remark,@Version,@IsFromAgencySaleNote
+    ,@IsFromCityAllocation,@BatchNo,@PurchaseRequisitionNo,@PurchaseName,@PurchaseMobileNo,@WhetherSmsNotify,@PurchaseRequisition_Id,@PurchaseUserId,@NoteNo,@Operators,@IsHidden,@PurchaseBusinessType,@AllocationNoteNo
+    ,@AllocationNote_Id,@CannotEditAndDelete,@IsNotSyncStock,@HasCreateRelatedNote,@NeedPurchaseAudit,@HandlingCost,@LogisticsFee,@NeedAuditUserRole,@AuditTime,@StoreHouse_Id,
+    @VerificationDate,@RebateTotalAmount,@IsCreateRebateBill)
+  </Insert>
+  <InsertItem>
+    INSERT INTO [dbo].[InStockItems]
+    ([Id],[Price],[Num],[Unit],[Remark],[IsGiveaway],[CreateTime],[LastUpdateTime],[Note_Id],[Product_Id],[TotalAmount],[ProductionDate],[ExpirationDate],[Sequence]
+    ,[GoodsPosition],[WhetherRebate],[RelatedProductIds],[PurchaseRequisitionItem_Id],[AllocationNoteItem_Id],[EditPrice],[EditTotalAmount],[RequisitionPrice],[NeedPriceAudit],[BulkProductStockCount]
+    ,[OrdinaryStockCount],[RebateType],[BarePrice],[EditBarePrice],[SingleRebate],[RebatePolicy],[RebateTotalAmount],[EditRebateTotalAmount],[ProductionDateByFinancial])
+    VALUES
+    (@Id,@Price,@Num,@Unit,@Remark,@IsGiveaway,GETDATE(),GETDATE(),@Note_Id,@Product_Id,@TotalAmount,@ProductionDate,@ExpirationDate,@Sequence,@GoodsPosition,@WhetherRebate,@RelatedProductIds
+    ,@PurchaseRequisitionItem_Id,@AllocationNoteItem_Id,@EditPrice,@EditTotalAmount,@RequisitionPrice,@NeedPriceAudit,@BulkProductStockCount,@OrdinaryStockCount
+    ,@RebateType,@BarePrice,@EditBarePrice,@SingleRebate,@RebatePolicy,@RebateTotalAmount,@EditRebateTotalAmount,@ProductionDateByFinancial)
+  </InsertItem>
+  <Update>
+    UPDATE [dbo].[PurchaseInStockNotes]
+    SET [AuditState] = @AuditState,[InStockTime] = @InStockTime,[IsDownReason] = @IsDownReason,[LastUpdateTime] = GETDATE(),[OrgUser_Id] = @OrgUser_Id,[Supplier_Id] = @Supplier_Id
+    ,[AuditRemark] = @AuditRemark,[IsInternal] = @IsInternal,[SupplierCity_Id] = @SupplierCity_Id,[Remark] = @Remark,[Version] = @Version,[WhetherSmsNotify] = @WhetherSmsNotify,[Operators] = @Operators
+    ,[HasCreateRelatedNote] = @HasCreateRelatedNote,[HandlingCost] = @HandlingCost,[LogisticsFee] = @LogisticsFee,[NeedAuditUserRole] = @NeedAuditUserRole,[AuditTime] = @AuditTime,[StoreHouse_Id] = @StoreHouse_Id
+    ,[VerificationDate] = @VerificationDate,[RebateTotalAmount] = @RebateTotalAmount,[IsCreateRebateBill] = @IsCreateRebateBill
+    WHERE Id=@Id
+  </Update>
+  <UpdateItem>
+    UPDATE [dbo].[InStockItems]
+    SET [Price] = @Price,[Num] = @Num,[Unit] = @Unit,[Remark] = @Remark,[IsGiveaway] = @IsGiveaway,[LastUpdateTime] = GETDATE(),[Product_Id] = @Product_Id,[TotalAmount] = @TotalAmount
+    ,[ProductionDate] = @ProductionDate,[ExpirationDate] = @ExpirationDate,[Sequence] = @Sequence,[GoodsPosition] = @GoodsPosition,[WhetherRebate] = @WhetherRebate,[RelatedProductIds] = @RelatedProductIds
+    ,[EditPrice] = @EditPrice,[EditTotalAmount] = @EditTotalAmount,[RequisitionPrice] = @RequisitionPrice,[NeedPriceAudit] = @NeedPriceAudit,[BulkProductStockCount] = @BulkProductStockCount
+    ,[OrdinaryStockCount] = @OrdinaryStockCount,[RebateType] = @RebateType
+    ,[BarePrice] = @BarePrice
+    ,[EditBarePrice] = @EditBarePrice
+    ,[SingleRebate] = @SingleRebate
+    ,[RebatePolicy] = @RebatePolicy
+    ,[RebateTotalAmount] = @RebateTotalAmount
+    ,[ProductionDateByFinancial] = @ProductionDateByFinancial
+    ,[EditRebateTotalAmount] = @EditRebateTotalAmount  WHERE Id=@Id
+  </UpdateItem>
+  <Delete>
+    UPDATE dbo.PurchaseInStockNotes SET IsDeleted= 1,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </Delete>
+  <DeleteNoteItem>
+    DELETE FROM dbo.InStockItems WHERE Id=@Id
+  </DeleteNoteItem>
+  <UpdateIsDownReason>
+    UPDATE dbo.PurchaseInStockNotes SET IsDownReason=@IsDownReason,LastUpdateTime=GETDATE() WHERE Id=@Id
+  </UpdateIsDownReason>
+  <UpdateIsCreateRebateBill>
+    UPDATE dbo.PurchaseInStockNotes SET IsCreateRebateBill=@IsCreateRebateBill,LastUpdateTime =GETDATE() WHERE Id=@Id
+  </UpdateIsCreateRebateBill>
+  <GetProductPurchaseHistory>
+    SELECT InStockTime PurchaseDateTime,Providers.Name ProviderName,InStockItems.Price*ProductInfo.Desc_PackageQuantity PurchasePrice FROM dbo.InStockItems WITH(NOLOCK)
+    INNER JOIN dbo.Product WITH(NOLOCK) ON Product.Id = InStockItems.Product_Id
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = Product.Info_Id
+    INNER JOIN dbo.PurchaseInStockNotes WITH(NOLOCK) ON PurchaseInStockNotes.Id = InStockItems.Note_Id
+    INNER JOIN dbo.Providers WITH(NOLOCK) ON Providers.Id = PurchaseInStockNotes.Supplier_Id
+  </GetProductPurchaseHistory>
+  <SelectForSCM>
+    select p.Id,p.CreateTime,p.InStockTime,p.BatchNo,p.NoteNo inStockNo,p.PurchaseUserId,p.PurchaseName,p.PurchaseMobileNo,
+    p.AuditState,p.WhetherSmsNotify,p.IsDownReason,p.PurchaseRequisition_Id purchaseRequisitionId,p.PurchaseRequisitionNo,
+    (CASE WHEN p.IsInternal=1 THEN p.SupplierCity_Id ELSE p.Supplier_Id END ) supplierId
+    ,(CASE WHEN p.IsInternal=1 THEN supplierCity.Name ELSE pr.[Name] END ) supplierName
+    ,p.Operators,p.IsInternal,p.City_Id cityId,c.[Name] cityName,p.Remark,
+    p.IsFromAgencySaleNote,p.AllocationNote_Id allocationNoteId,p.AllocationNoteNo,p.PurchaseBusinessType,p.CannotEditAndDelete,
+    p.HasCreateRelatedNote
+    from [dbo].[PurchaseInStockNotes] p WITH(NOLOCK)
+    inner join [dbo].[Orgs] c WITH(NOLOCK) on p.City_Id=c.Id
+    inner join [dbo].[Orgs] s WITH(NOLOCK) on s.Id=p.StoreHouse_Id
+    left join [dbo].[Providers] pr WITH(NOLOCK) on p.Supplier_Id=pr.Id
+    left join dbo.Orgs supplierCity WITH(NOLOCK) ON p.SupplierCity_Id = supplierCity.Id
+  </SelectForSCM>
+  <SelectForSCMDetial>
+    select i.Id,pf.Desc_BrandName brandName,pf.Desc_OldCategory category,i.GoodsPosition,i.Num _num,i.Unit,
+    pf.Desc_Specifications specification,i.OrdinaryStockCount _OrdinaryStockCount,i.BulkProductStockCount,pf.Desc_PackageQuantity packageQuantity,
+    i.Remark,i.IsGiveaway,i.Product_Id productId,p.newid productSkuId,pf.Desc_ProductName productName,pis.StoreHouse_Id storeHouseId,
+    s.[Name] storeHouseName,i.PurchaseRequisitionItem_Id purchaseRequisitionItemId,i.AllocationNoteItem_Id allocationNoteItemId,
+    i.ProductionDate,i.ExpirationDate,I.Note_Id
+    from [dbo].[InStockItems] i WITH(NOLOCK)
+    inner join [dbo].[PurchaseInStockNotes] pis WITH(NOLOCK) on pis.id=i.Note_Id
+    inner join dbo.Product p WITH(NOLOCK) on i.Product_Id=p.Id
+    inner join dbo.ProductInfo pf WITH(NOLOCK) on pf.Id=p.Info_Id
+    inner join dbo.Orgs s WITH(NOLOCK) on s.id=pis.StoreHouse_Id
+  </SelectForSCMDetial>
+  <GetUnAuditExceptionPurchaseInStockCount>
+    SELECT COUNT(1) FROM dbo.PurchaseInStockNoteAuditTrace WITH(NOLOCK)
+    INNER JOIN dbo.PurchaseInStockNotes WITH(NOLOCK) ON PurchaseInStockNotes.Id = PurchaseInStockNoteAuditTrace.PurchaseInStockNote_Id AND AuditState=5 --异常审核
+    INNER JOIN dbo.AuditTrace WITH(NOLOCK) ON AuditTrace.Id = PurchaseInStockNoteAuditTrace.Id AND TraceState = 1 --待审核
+    AND PurchaseInStockNotes.NeedAuditUserRole= AuditTrace.UserRoleInfo_UserRole
+    WHERE (NeedAuditUserRole='FirstAuditUser' AND PurchaseMobileNo IN @FirstMobileNos
+    AND PurchaseInStockNotes.City_Id IN @FirstCityIds AND LEN(UserName)=0 )
+    OR (NeedAuditUserRole='SecondAuditUser'  AND PurchaseMobileNo IN @SecondMobileNos
+    AND PurchaseInStockNotes.City_Id IN @SecondCityIds AND LEN(UserName)=0)
+    OR (UserName LIKE '%'+@MobileNo+'%')
+  </GetUnAuditExceptionPurchaseInStockCount>
+  
+  <QueryInStockItemDetail>    DECLARE @Category NVARCHAR(64)
+    DECLARE @Specifications NVARCHAR(64)
+    DECLARE @PackageQuantity INT =0
+    DECLARE @Unit NVARCHAR(32)
+    DECLARE @ProductName NVARCHAR(255)
+    DECLARE @ProductInfoId NVARCHAR(64)
+
+    DECLARE @StoreHouseName NVARCHAR(64)
+    DECLARE @Remark NVARCHAR(255)
+    DECLARE @TotalAmount DECIMAL(38,6)=0
+    DECLARE @Price DECIMAL(38,6)=0
+    DECLARE @IsGiveaway BIT =0
+
+    DECLARE @AllocationNoteId NVARCHAR(64)
+
+    DECLARE @PurchaseRequisitionCount INT =0
+    DECLARE @AllocationCount INT=0
+    DECLARE @NotInStockCount INT =0
+    DECLARE @CurrentInStockCount INT=0
+    DECLARE @InStockCount INT =0
+    DECLARE @BusinessType INT =0
+
+    SELECT @ProductName=info.Desc_ProductName,@Specifications=info.Desc_Specifications,@Unit=info.Desc_PackageUnit,
+    @PackageQuantity=info.Desc_PackageQuantity,@Category=info.Desc_OldCategory,@ProductInfoId=info.Id
+    FROM dbo.Product p  WITH(NOLOCK)
+    LEFT JOIN dbo.ProductInfo info WITH(NOLOCK) ON p.Info_Id = info.Id WHERE p.Id=@ProductId
+
+    SELECT TOP 1 @PurchaseRequisitionId=n.PurchaseRequisition_Id,@AllocationNoteId=n.AllocationNote_Id,@StoreHouseName=o.Name,
+    @Remark =i.Remark,@TotalAmount =i.TotalAmount,@Price=i.Price,@IsGiveaway =i.IsGiveaway,@CurrentInStockCount=i.Num,@BusinessType=n.PurchaseBusinessType
+    FROM dbo.InStockItems i WITH(NOLOCK)
+    LEFT JOIN dbo.PurchaseInStockNotes n WITH(NOLOCK) ON i.Note_Id=n.Id
+    LEFT JOIN dbo.Orgs o WITH(NOLOCK) ON n.StoreHouse_Id =o.Id
+    WHERE i.Product_Id = @ProductId AND n.Id = @PurchaseInStockNoteId AND n.IsDeleted=0
+
+    IF(@PurchaseRequisitionId IS NOT NULL)
+    BEGIN
+    SELECT @PurchaseRequisitionCount=PurchaseRequisitionCount,@InStockCount=AuditPurchaseCount,
+    @NotInStockCount=PurchaseRequisitionCount-AuditPurchaseCount
+    FROM dbo.PurchaseRequisitionItems WITH(NOLOCK)
+    WHERE PurchaseRequisition_Id = @PurchaseRequisitionId AND Product_Id =@ProductId AND IsGiveaway =@IsGiveaway
+
+    END
+    ELSE IF (@AllocationNoteId IS NOT NULL)
+    BEGIN
+    SELECT @AllocationCount=Count,@InStockCount=AuditInStockCount,
+    @NotInStockCount=Count-AuditInStockCount
+    FROM dbo.AllocationNoteItems i WITH(NOLOCK)
+    LEFT JOIN dbo.Product p WITH(NOLOCK) ON i.Product_Id = p.Id
+    WHERE AllocationNote_Id = @AllocationNoteId AND p.Info_Id=@ProductInfoId AND IsGiveaway =@IsGiveaway
+    END
+
+    SELECT
+    @Category Category, @Specifications Specifications , @PackageQuantity PackageQuantity , @Unit Unit , @ProductName ProductName ,
+    @StoreHouseName StoreName , @Remark Remark, @TotalAmount TotalAmount , @Price Price, @IsGiveaway IsGiveaway ,
+    @PurchaseRequisitionId PurchaseRequisitionId, @AllocationNoteId AllocationNoteId, @PurchaseRequisitionCount PurchaseRequisitionCount,
+    @AllocationCount AllocationCount , @NotInStockCount NotInStockCount , @CurrentInStockCount CurrentInStockCount, @InStockCount InStockCount,
+    @ProductId Id,@PurchaseInStockNoteId PurchaseInStockNoteId,@BusinessType BusinessType
+  </QueryInStockItemDetail>
+    <QueryPurchaseInStockNoteAuditTraces>
+    SELECT b.InStockTime,a.Num/d.Desc_PackageQuantity SpecificationsNum,a.Num%d.Desc_PackageQuantity UnitNum,
+    a.Num Num,'件' Specifications,'瓶' Unit,
+    a.Sequence,b.Id PurchaseInStockNoteId,AuditState=b.AuditState
+    FROM dbo.InStockItems a  WITH(NOLOCK)
+    LEFT JOIN dbo.PurchaseInStockNotes b  WITH(NOLOCK) ON a.Note_Id=b.Id
+    LEFT JOIN dbo.Product c WITH(NOLOCK) ON a.Product_Id=c.Id
+    LEFT JOIN dbo.ProductInfo d  WITH(NOLOCK) ON d.Id=c.Info_Id
+    WHERE a.Product_Id=@ProductId AND a.Note_Id=@PurchaseInStockNoteId ORDER BY b.InStockTime DESC
+  </QueryPurchaseInStockNoteAuditTraces>
+</SqlResource>

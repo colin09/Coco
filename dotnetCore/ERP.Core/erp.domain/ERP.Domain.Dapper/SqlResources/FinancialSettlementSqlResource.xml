@@ -1,0 +1,377 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SqlResource>
+  <Select>
+    SELECT [Id],[Year],[Month],[StartDate],[EndDate],[State],[CreateTime],[LastUpdateTime],[City_Id],[FinancialSettlementCheck_Id]
+    FROM [dbo].[FinancialSettlements] WITH(NOLOCK)
+  </Select>
+  <SelectIncludeCity>
+    SELECT [FinancialSettlements].[Id],[FinancialSettlements].[Year],[FinancialSettlements].[Month],[FinancialSettlements].[StartDate],[FinancialSettlements].[EndDate],
+    [FinancialSettlements].[State],[FinancialSettlements].[CreateTime],[FinancialSettlements].[LastUpdateTime],[FinancialSettlements].[City_Id],
+    [FinancialSettlements].[FinancialSettlementCheck_Id],City.Name
+    FROM [dbo].[FinancialSettlements] WITH(NOLOCK)
+    INNER JOIN dbo.Orgs City WITH(NOLOCK) ON City.Id = FinancialSettlements.City_Id
+  </SelectIncludeCity>
+  <Insert>
+    INSERT INTO [dbo].[FinancialSettlements]
+    ([Id],[Year],[Month],[StartDate],[EndDate],[State],[CreateTime],[LastUpdateTime],[City_Id],[FinancialSettlementCheck_Id])
+    VALUES
+    (@Id,@Year,@Month,@StartDate,@EndDate,@State,GETDATE(),GETDATE(),@City_Id,@FinancialSettlementCheck_Id)
+  </Insert>
+  <InsertCheck>
+    INSERT INTO dbo.FinancialSettlementChecks
+    ( Id ,JD_OrderAmount ,JD_CostAmount ,JD_OrderAmountInternal ,JD_CostAmountInternal ,JD_OrderDiscountAmount ,JD_StoreAmount ,
+    JD_PayableAmount ,JD_PayableAmountInternal ,JD_ReceivableAmountInternal ,OrderTotalAmount ,OrderDiscountAmount ,OrderAmount ,
+    ReturnOrderTotalAmount ,ReturnOrderDiscountAmount ,ReturnOrderAmount ,SaleCostAmount ,NopaidAmount ,OrderAmountInternal ,
+    ReturnOrderAmountInternal ,SaleCostAmountInternal ,NotReceiptAmountInternal ,NopaidAmountInternal ,BalanceAmount ,
+    PrizeInAmount ,PrizeOutAmount ,DamageAmount ,OtherAmount ,CheckInAmount ,CheckOutAmount ,CostAdjustAmount ,CreateTime ,LastUpdateTime
+    )
+    VALUES  (
+    @Id ,@JD_OrderAmount ,@JD_CostAmount ,@JD_OrderAmountInternal ,@JD_CostAmountInternal ,@JD_OrderDiscountAmount ,
+    @JD_StoreAmount ,@JD_PayableAmount ,@JD_PayableAmountInternal ,@JD_ReceivableAmountInternal ,@OrderTotalAmount ,
+    @OrderDiscountAmount ,@OrderAmount ,@ReturnOrderTotalAmount ,@ReturnOrderDiscountAmount ,@ReturnOrderAmount ,
+    @SaleCostAmount ,@NopaidAmount ,@OrderAmountInternal ,@ReturnOrderAmountInternal ,@SaleCostAmountInternal ,
+    @NotReceiptAmountInternal ,@NopaidAmountInternal ,@BalanceAmount ,@PrizeInAmount ,@PrizeOutAmount ,@DamageAmount ,
+    @OtherAmount ,@CheckInAmount ,@CheckOutAmount ,@CostAdjustAmount ,getdate() ,getdate()
+    )
+  </InsertCheck>
+  <GetCheckById>
+    SELECT [Id],[JD_OrderAmount],[JD_CostAmount],[JD_OrderAmountInternal],[JD_CostAmountInternal],[JD_OrderDiscountAmount]
+    ,[JD_StoreAmount],[JD_PayableAmount],[JD_PayableAmountInternal],[JD_ReceivableAmountInternal],[OrderTotalAmount]
+    ,[OrderDiscountAmount],[OrderAmount],[ReturnOrderTotalAmount],[ReturnOrderDiscountAmount],[ReturnOrderAmount],[SaleCostAmount]
+    ,[NopaidAmount],[OrderAmountInternal],[ReturnOrderAmountInternal],[SaleCostAmountInternal],[NotReceiptAmountInternal],[NopaidAmountInternal]
+    ,[BalanceAmount],[PrizeInAmount],[PrizeOutAmount],[DamageAmount],[OtherAmount],[CheckInAmount],[CheckOutAmount],[CostAdjustAmount],[CreateTime]
+    ,[LastUpdateTime]  FROM [dbo].[FinancialSettlementChecks] With(NOLOCK) WHERE Id = @Id
+  </GetCheckById>
+  <Update>
+    UPDATE [dbo].[FinancialSettlements] SET [State] = @State,[LastUpdateTime] = GETDATE(),[FinancialSettlementCheck_Id] = @FinancialSettlementCheck_Id WHERE Id=@Id
+  </Update>
+  <UpdateState>
+    UPDATE [dbo].[FinancialSettlements] SET [State] = @State,[LastUpdateTime] = GETDATE() WHERE Id=@Id
+  </UpdateState>
+  <UpdateFinancialSettlementCheckId>
+    UPDATE [dbo].[FinancialSettlements] SET [LastUpdateTime] = GETDATE(),[FinancialSettlementCheck_Id] = @FinancialSettlementCheck_Id WHERE Id=@Id
+  </UpdateFinancialSettlementCheckId>
+  
+  <GetUnCreateNoteOrderCount>
+    --订单
+    SELECT COUNT(1) FROM dbo.Orders o WITH(NOLOCK)
+    WHERE o.City_Id = @City_Id AND o.CompleteTime BETWEEN @BeginTime and @EndTime and HasCreateNote = 0
+  </GetUnCreateNoteOrderCount>
+  <GetUnCreateNoteReturnOrderCount>
+    --退货单
+    SELECT COUNT(1) FROM dbo.ReturnOrders ro WITH(NOLOCK)
+    LEFT JOIN dbo.Orders o  WITH(NOLOCK) ON ro.Order_Id = o.Id
+    WHERE o.City_Id = @City_Id  AND ReturnOrderTime_CompleteTime BETWEEN @BeginTime and @EndTime and HasCreateReturnNote=0
+  </GetUnCreateNoteReturnOrderCount>
+  <Get_PurchaseInStockNote_UNAudit_Count>
+    --采购入库单
+    SELECT COUNT(1) FROM dbo.PurchaseInStockNotes WITH(NOLOCK)  WHERE City_Id = @City_Id AND IsDeleted=0 AND  AuditState&lt;&gt;9
+    AND InStockTime BETWEEN @BeginTime and @EndTime
+  </Get_PurchaseInStockNote_UNAudit_Count>
+  <GetPurchaseOutStockNoteUnAuditCount>
+    --采购退货单
+    SELECT COUNT(1) FROM dbo.PurchaseOutStockNotes WITH(NOLOCK) WHERE City_Id = @City_Id AND IsDeleted=0 AND  AuditState&lt;&gt;9
+    AND OutStockTime BETWEEN @BeginTime and @EndTime
+  </GetPurchaseOutStockNoteUnAuditCount>
+  <GetOrderOutStockNoteUnAuditCount>
+    --销售出库单
+    SELECT COUNT(1) FROM dbo.OrderOutStockNote n  WITH(NOLOCK)
+    WHERE n.City_Id=@City_Id AND IsDeleted=0 AND  AuditState &lt;&gt; 9
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetOrderOutStockNoteUnAuditCount>
+  <GetReturnOrderInStockNotesUnAuditCount>
+    --退货入库单
+    SELECT COUNT(1) FROM dbo.ReturnOrderInStockNotes n  WITH(NOLOCK)
+    WHERE  n.City_Id=@City_Id AND IsDeleted=0 AND AuditState &lt;&gt; 9
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetReturnOrderInStockNotesUnAuditCount>
+  <Get_PurchaseInStockNote_UNCreateNote_Count>
+    --未下推采购入库单
+    SELECT COUNT(1) FROM dbo.PurchaseInStockNotes  WITH(NOLOCK)  WHERE City_Id = @City_Id AND IsDeleted=0 AND AuditState = 9 AND IsDownReason =0
+    AND InStockTime BETWEEN @BeginTime and @EndTime
+  </Get_PurchaseInStockNote_UNCreateNote_Count>
+  <GetPurchaseOutStockNoteUNCreateNoteCount>
+    --未下推采购退货单
+    SELECT COUNT(1) FROM dbo.PurchaseOutStockNotes  WITH(NOLOCK) WHERE IsDeleted=0 AND City_Id = @City_Id AND AuditState = 9 AND IsDownReason =0
+    AND OutStockTime BETWEEN @BeginTime and @EndTime
+  </GetPurchaseOutStockNoteUNCreateNoteCount>
+  <GetOrderOutStockNoteUNCreateNoteCount>
+    --未下推销售出库单
+    SELECT COUNT(1) FROM dbo.OrderOutStockNote n  WITH(NOLOCK)
+    WHERE IsDeleted=0 AND n.City_Id=@City_Id AND  AuditState = 9 AND IsDownReason =0
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetOrderOutStockNoteUNCreateNoteCount>
+  <GetReturnOrderInStockNotesUNCreateNoteCount>
+    --未下推退货入库单
+    SELECT COUNT(1) FROM dbo.ReturnOrderInStockNotes n  WITH(NOLOCK)
+    WHERE IsDeleted=0 AND n.City_Id=@City_Id AND AuditState = 9 AND IsDownReason =0
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetReturnOrderInStockNotesUNCreateNoteCount>
+  <GetStockCheckUnAuditCount>
+    --库存盘点
+    SELECT COUNT(1) FROM dbo.BaseNotes n WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse sh WITH(NOLOCK)  ON n.StoreHouse_Id = sh.Id
+    WHERE IsDeleted=0 AND sh.City_Id=@City_Id AND OperationType=4 AND AuditState &lt;&gt; 9
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetStockCheckUnAuditCount>
+  <GetDamageNoteUnAuditCount>
+    --破损出库单
+    SELECT COUNT(1) FROM dbo.BaseNotes n WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse sh WITH(NOLOCK)  ON n.StoreHouse_Id = sh.Id
+    WHERE IsDeleted=0 AND sh.City_Id=@City_Id AND OperationType=6 AND AuditState &lt;&gt; 9
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetDamageNoteUnAuditCount>
+  <GetOtherNoteUnAuditCount>
+    --其他盘点单
+    SELECT COUNT(1) FROM dbo.BaseNotes n WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse sh  WITH(NOLOCK) ON n.StoreHouse_Id = sh.Id
+    WHERE IsDeleted=0 AND sh.City_Id=@City_Id AND OperationType IN (7,8,9)AND AuditState &lt;&gt; 9
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetOtherNoteUnAuditCount>
+  <GetProductAllocationUnAuditCount>
+    --物料调拨单
+    SELECT COUNT(1) FROM dbo.ProductAllocations WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 9
+    AND BusinessTime BETWEEN @BeginTime and @EndTime
+  </GetProductAllocationUnAuditCount>
+  <GetReceivableBillUnAuditCount>
+    --应收单
+    SELECT COUNT(1) FROM dbo.ReceivableBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetReceivableBillUnAuditCount>
+  <GetReceiptBillUnAuditCount>
+    --收款单
+    SELECT COUNT(1) FROM dbo.ReceiptBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetReceiptBillUnAuditCount>
+  <GetPreReceiptBillUnAuditCount>
+    --预收单
+    SELECT COUNT(1) FROM dbo.PreReceiptBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetPreReceiptBillUnAuditCount>
+  <GetPreReceiptRefundBillUnAuditCount>
+    --预收退款单
+    SELECT COUNT(1) FROM dbo.PreReceiptRefundBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetPreReceiptRefundBillUnAuditCount>
+  <GetPayableBillUnAuditCount>
+    --应付单
+    SELECT COUNT(1) FROM dbo.PayableBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetPayableBillUnAuditCount>
+  <GetPaymentBillUnAuditCount>
+    --付款单
+    SELECT COUNT(1) FROM dbo.PaymentBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetPaymentBillUnAuditCount>
+  <GetPrepayBillUnAuditCount>
+    --预付单
+    SELECT COUNT(1) FROM dbo.PrepayBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetPrepayBillUnAuditCount>
+  <GetPrepayRefundBillUnAuditCount>
+    --预付退款单
+    SELECT COUNT(1) FROM dbo.PrepayRefundBills WITH(NOLOCK)
+    WHERE City_Id = @City_Id AND IsDeleted = 0 AND AuditState &lt;&gt; 2
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetPrepayRefundBillUnAuditCount>
+  <GetCostAdjustNoteUnAuditCount>
+    --成本调整单
+    SELECT COUNT(1) FROM dbo.CostAdjustNotes n WITH(NOLOCK)
+    LEFT JOIN  dbo.StoreHouse sh ON n.StoreHouse_Id = sh.Id
+    WHERE sh.City_Id = @City_Id AND IsDeleted = 0  AND AuditState &lt;&gt; 9
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetCostAdjustNoteUnAuditCount>
+  <GetCheckForSettlement>
+    --非集团内部销售
+    DECLARE @orderTotalAmount DECIMAL(38,6)
+    DECLARE @orderDiscountAmount DECIMAL(38,6)
+    DECLARE @orderAmount DECIMAL(38,6)
+    DECLARE @rewardBonusAmount DECIMAL(38,6) --兑奖红包金额
+    --非集团内部销售退货
+    DECLARE @returnOrderTotalAmount DECIMAL(38,6)
+    DECLARE @returnOrderDiscountAmount DECIMAL(38,6)
+    DECLARE @returnOrderAmount DECIMAL(38,6)
+    --非集团内部总成本
+    DECLARE @saleCostAmount DECIMAL(38,6)
+
+    --非集团内部应收未付
+    DECLARE @nopaidAmount DECIMAL(38,6)
+
+    --集团内部销售、退货
+    DECLARE @orderAmountInternal DECIMAL(38,6)
+    DECLARE @returnOrderAmountInternal DECIMAL(38,6)
+    DECLARE @saleCostAmountInternal DECIMAL(38,6)
+
+    DECLARE @notReceiptAmountInternal DECIMAL(38,6)
+    DECLARE @nopaidAmountInternal DECIMAL(38,6)
+
+    --结存相关
+    DECLARE @balanceAmount DECIMAL(38,6)
+    DECLARE @prizeInAmount DECIMAL(38,6)
+    DECLARE @prizeOutAmount DECIMAL(38,6)
+    DECLARE @damageAmount DECIMAL(38,6)
+    DECLARE @otherAmount DECIMAL(38,6)
+    DECLARE @checkInAmount DECIMAL(38,6)
+    DECLARE @checkOutAmount DECIMAL(38,6)
+    DECLARE @costAdjustAmount DECIMAL(38,6)
+
+    --非集团内部销售单据
+    SELECT
+    @orderDiscountAmount = SUM(ni.DiscountAmount),
+    @rewardBonusAmount = SUM(ni.UseRewardBonusAmount),
+    @orderAmount = SUM(ni.AdValoremAmount),
+    @saleCostAmount=SUM(ISNULL(	ni.CostPrice*ni.Num,0))
+    FROM dbo.NoteItems ni WITH (NOLOCK)
+    LEFT JOIN dbo.OrderOutStockNote o WITH (NOLOCK) ON ni.OrderOutStockNote_Id = o.Id
+    INNER JOIN dbo.StoreHouse sh WITH (NOLOCK) ON o.StoreHouse_Id = sh.Id  AND sh.City_Id=@cityId
+    WHERE
+    o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsInternal = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+
+    SET @orderTotalAmount = @orderAmount + @orderDiscountAmount
+    SET @orderDiscountAmount = @orderDiscountAmount - @rewardBonusAmount
+    SET @orderAmount = @orderAmount + @rewardBonusAmount
+
+    --非集团内部销售退货单
+    SELECT
+    @returnOrderDiscountAmount = SUM(ni.DiscountAmount),
+    @returnOrderAmount = SUM(ni.AdValoremAmount),
+    @saleCostAmount=@saleCostAmount - ISNULL(SUM(ni.CostPrice*ni.Num),0)
+    FROM dbo.ReturnNoteItems ni WITH (NOLOCK)
+    LEFT JOIN dbo.ReturnOrderInStockNotes o WITH (NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id
+    INNER JOIN dbo.StoreHouse sh WITH (NOLOCK) ON o.StoreHouse_Id = sh.Id AND sh.City_Id=@cityId
+    WHERE
+    o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsInternal = 0
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+
+    SET @returnOrderTotalAmount = @returnOrderAmount + @returnOrderDiscountAmount
+
+    --非集团内部应付未付款
+    SELECT @nopaidAmount=ISNULL(SUM(AdValoremAmount - HasPaymentAmount),0) FROM dbo.PayableBills
+    WHERE City_Id=@cityId AND IsDeleted = 0 AND IsInternal=0 AND IsPayment=0 AND AuditState=2
+    AND ((YEAR(BusinessTime)=@year AND MONTH(BusinessTime)&lt;=@month) OR YEAR(BusinessTime)&lt;@year)
+    ----扣除3月产生的付款单 未审核的金额
+    --SELECT @nopaidAmount = @nopaidAmount - (ISNULL(p.PayableAmount,0)) FROM dbo.PaymentBills p
+    --LEFT JOIN dbo.PayableBills pb WITH(NOLOCK) ON p.PayableBill_Id=pb.Id
+    --WHERE p.City_Id=@cityId AND p.IsDeleted= 0 AND p.IsInternal= 0 AND p.AuditState IN (1,3)
+    --AND ((YEAR(pb.BusinessTime)=@year AND MONTH(pb.BusinessTime)&lt;=@month) OR YEAR(pb.BusinessTime)&lt;@year)
+
+    --集团内部销售单据
+    SELECT
+    @orderAmountInternal = ISNULL(SUM(ni.DiscountAmount+ni.AdValoremAmount),0),
+    @saleCostAmountInternal=ISNULL(SUM(ni.CostPrice*ni.Num),0)
+    FROM dbo.NoteItems ni WITH (NOLOCK)
+    LEFT JOIN dbo.OrderOutStockNote o WITH (NOLOCK) ON ni.OrderOutStockNote_Id = o.Id
+    INNER JOIN dbo.StoreHouse sh WITH (NOLOCK) ON o.StoreHouse_Id = sh.Id  AND sh.City_Id=@cityId
+    WHERE
+    o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsInternal = 1
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+
+    --集团内部销售退货单
+    SELECT
+    @returnOrderAmountInternal = ISNULL(SUM(ni.DiscountAmount + ni.AdValoremAmount),0),
+    @saleCostAmountInternal=@saleCostAmountInternal - ISNULL(SUM(ni.CostPrice*ni.Num),0)
+    FROM dbo.ReturnNoteItems ni WITH (NOLOCK)
+    LEFT JOIN dbo.ReturnOrderInStockNotes o WITH (NOLOCK) ON ni.ReturnOrderInStockNote_Id = o.Id
+    INNER JOIN dbo.StoreHouse sh WITH (NOLOCK) ON o.StoreHouse_Id = sh.Id AND sh.City_Id=@cityId
+    WHERE
+    o.AuditState=9   --统计已核算单据
+    AND o.IsDeleted =0 AND o.IsInternal = 1
+    AND (YEAR(o.BusinessTime)=@Year AND MONTH(o.BusinessTime)=@Month)
+
+    --集团内部应付未付款
+    SELECT @nopaidAmountInternal=ISNULL(SUM(AdValoremAmount - HasPaymentAmount),0) FROM dbo.PayableBills  WITH(NOLOCK)
+    WHERE City_Id=@cityId AND IsDeleted = 0 AND IsInternal=1 AND IsPayment=0  AND AuditState=2
+    AND ((YEAR(BusinessTime)=@year AND MONTH(BusinessTime)&lt;=@month) OR YEAR(BusinessTime)&lt;@year)
+    ----扣除3月产生的付款单 未审核的金额
+    --SELECT @nopaidAmountInternal = @nopaidAmountInternal - (ISNULL(p.PayableAmount,0)) FROM dbo.PaymentBills p
+    --LEFT JOIN dbo.PayableBills pb WITH(NOLOCK) ON p.PayableBill_Id=pb.Id
+    --WHERE p.City_Id=@cityId AND p.IsDeleted= 0 AND p.IsInternal= 1 AND p.AuditState IN (1,3)
+    --AND ((YEAR(pb.BusinessTime)=@year AND MONTH(pb.BusinessTime)&lt;=@month) OR YEAR(pb.BusinessTime)&lt;@year)
+
+    --集团内部应收未收款
+    SELECT @notReceiptAmountInternal=ISNULL(SUM(PaidInAmount - HasReceiptAmount),0) FROM dbo.ReceivableBills  WITH(NOLOCK)
+    WHERE City_Id=@cityId AND IsDeleted = 0 AND HasReceipt=0 AND IsInternal=1  AND AuditState=2 AND ReceivableBillType&lt;&gt; 2 --剔除应收返利单
+    AND ((YEAR(BusinessTime)=@year AND MONTH(BusinessTime)&lt;=@month) OR YEAR(BusinessTime)&lt;@year)
+    ----扣除3月产生的付款单 未审核的金额
+    --SELECT @notReceiptAmountInternal = @notReceiptAmountInternal - (ISNULL(ReceivableAmount,0)) FROM dbo.ReceiptBills
+    --WHERE City_Id=@cityId AND IsDeleted= 0 AND IsInternal= 1 AND AuditState IN (1,3)
+    --AND ((YEAR(BusinessTime)=@year AND MONTH(BusinessTime)&lt;=@month) OR YEAR(BusinessTime)&lt;@year)
+
+    --期初结存 = 0,采购入库单 = 1,销售出库单 = 2,退货入库单 = 21,采购退货单 = 11,物料调拨单 = 12,盘盈单 = 3,盘亏单 = 4,
+    --破损出库 = 5,招待 = 51,福利 = 52,客情 = 53,兑奖出库 = 6,兑奖入库 = 7,成本调整单 = 8,期末结存 = 9
+
+    --结存相关
+    SELECT @balanceAmount= ISNULL(SUM(BalanceAmount),0) FROM dbo.FinancialStocks WITH(NOLOCK)
+    WHERE City_Id=@cityId AND Year=@year AND Month=@month AND type=9
+
+    SELECT @prizeOutAmount=ISNULL(SUM(ps.PrizeNoteAmount),0) FROM dbo.ProductStocks ps WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse sh WITH(NOLOCK) ON ps.StoreHouse_Id=sh.Id
+    WHERE sh.City_Id=@cityId
+
+    SET @prizeInAmount = 0
+
+    SELECT @prizeOutAmount=@prizeOutAmount + ISNULL(SUM(IncomeAmount),0)-ISNULL(SUM(SendoutAmount),0) FROM dbo.FinancialStocks  WITH(NOLOCK)
+    WHERE City_Id=@cityId AND ((Year=@year AND Month&gt;@month) OR Year &gt;@year) AND type IN (6,7)
+
+    SELECT @damageAmount= ISNULL(SUM(SendoutAmount),0) FROM dbo.FinancialStocks  WITH(NOLOCK)
+    WHERE City_Id=@cityId AND Year=@year AND Month=@month AND type=5
+    SELECT @otherAmount= ISNULL(SUM(SendoutAmount),0) FROM dbo.FinancialStocks  WITH(NOLOCK)
+    WHERE City_Id=@cityId AND Year=@year AND Month=@month AND type IN (51,52,53)
+    SELECT @checkInAmount= ISNULL(SUM(IncomeAmount),0) FROM dbo.FinancialStocks  WITH(NOLOCK)
+    WHERE City_Id=@cityId AND Year=@year AND Month=@month AND type=3
+    SELECT @checkOutAmount= ISNULL(SUM(SendoutAmount),0) FROM dbo.FinancialStocks  WITH(NOLOCK)
+    WHERE City_Id=@cityId AND Year=@year AND Month=@month AND type=4
+
+    SELECT @costAdjustAmount = ISNULL(SUM(n.AdjustAmount),0) FROM dbo.CostAdjustNotes n WITH(NOLOCK)
+    LEFT JOIN dbo.StoreHouse sh ON n.StoreHouse_Id = sh.Id
+    WHERE  sh.City_Id=@cityId  AND n.IsDeleted=0  AND AuditState=9
+    AND YEAR(n.BusinessTime)=@year AND MONTH(n.BusinessTime)=@month
+
+    SELECT
+    @orderTotalAmount OrderTotalAmount,
+    @orderDiscountAmount OrderDiscountAmount,
+    @orderAmount OrderAmount,
+    @returnOrderTotalAmount ReturnOrderTotalAmount,
+    @returnOrderDiscountAmount ReturnOrderDiscountAmount,
+    @returnOrderAmount ReturnOrderAmount,
+    @saleCostAmount SaleCostAmount,
+    @nopaidAmount NopaidAmount,
+    @orderAmountInternal OrderAmountInternal,
+    @returnOrderAmountInternal ReturnOrderAmountInternal,
+    @saleCostAmountInternal SaleCostAmountInternal,
+    @notReceiptAmountInternal NotReceiptAmountInternal,
+    @nopaidAmountInternal NopaidAmountInternal,
+    @balanceAmount BalanceAmount,
+    @prizeInAmount PrizeInAmount,
+    @prizeOutAmount PrizeOutAmount,
+    @damageAmount DamageAmount,
+    @otherAmount OtherAmount,
+    @checkInAmount CheckInAmount,
+    @checkOutAmount  CheckOutAmount,
+    @costAdjustAmount CostAdjustAmount
+  </GetCheckForSettlement>
+  <GetUnAuditRaffleInTicketCount>
+    SELECT COUNT(1) FROM dbo.RaffleInTickets WITH(NOLOCK)
+    WHERE City_Id=@City_Id AND AuditState=0
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetUnAuditRaffleInTicketCount>
+  <GetUnCreateReceivableCount>
+    --返利采购入库单未创建返利应收单
+    SELECT COUNT(1) FROM dbo.PurchaseInStockNotes WITH(NOLOCK)
+    WHERE  City_Id= @City_Id AND IsDeleted=0
+    AND RebateTotalAmount>0 AND IsCreateRebateBill=0
+    AND CreateTime BETWEEN @BeginTime and @EndTime
+  </GetUnCreateReceivableCount>
+</SqlResource>

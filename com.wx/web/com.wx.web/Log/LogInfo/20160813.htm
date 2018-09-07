@@ -1,0 +1,336 @@
+ INFO  ：2016-08-13 10:34:20,045 [7] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-13 10:34:20,172 [7] <HR /> <BR>
+ INFO  ：2016-08-13 10:34:20,173 [7] 获取用户Cookie失败，跳转到登录。 <BR>
+ INFO  ：2016-08-13 10:34:45,864 [7] System.Data.Entity.Core.ProviderIncompatibleException: 访问数据库时出错。这通常意味着与数据库的连接失败。请检查连接字符串是否正确，以及是否正使用适当的 DbContext 构造函数指定它或者在应用程序的配置文件中找到它。有关 DbContext 和连接的信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=386386。有关失败的详细信息，请参阅内部异常。 ---> System.Data.Entity.Core.ProviderIncompatibleException: 提供程序未返回 ProviderManifestToken 字符串。 ---> MySql.Data.MySqlClient.MySqlException: Unable to connect to any of the specified MySQL hosts.
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 MySql.Data.MySqlClient.MySqlProviderServices.GetDbProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.<>c__DisplayClass1.<ResolveManifestToken>b__0(Tuple`3 k)
+   在 System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.ResolveManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbConnectionExtensions.GetProviderInfo(DbConnection connection, DbProviderManifest& providerManifest)
+   在 System.Data.Entity.DbModelBuilder.Build(DbConnection providerConnection)
+   在 System.Data.Entity.Internal.LazyInternalContext.CreateModel(LazyInternalContext internalContext)
+   在 System.Data.Entity.Internal.RetryLazy`2.GetValue(TInput input)
+   在 System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   在 System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   在 System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   在 System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   在 com.wx.sqldb.repository.BaseRepository`1.Where(Expression`1 whereLambda) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.sqldb\repository\BaseRepository.cs:行号 101
+   在 com.wx.service.service.StoreService.GetList(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.service\service\StoreService.cs:行号 26
+   在 com.wx.web.Areas.mgr.Controllers.StoreController.List(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\web\com.wx.web\Areas\mgr\Controllers\StoreController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult) <BR>
+ INFO  ：2016-08-13 10:37:28,957 [6] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-13 10:37:28,970 [6] <HR /> <BR>
+ INFO  ：2016-08-13 10:37:28,971 [6] 获取用户Cookie失败，跳转到登录。 <BR>
+ INFO  ：2016-08-13 10:37:44,540 [6] System.Data.Entity.Core.ProviderIncompatibleException: 访问数据库时出错。这通常意味着与数据库的连接失败。请检查连接字符串是否正确，以及是否正使用适当的 DbContext 构造函数指定它或者在应用程序的配置文件中找到它。有关 DbContext 和连接的信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=386386。有关失败的详细信息，请参阅内部异常。 ---> System.Data.Entity.Core.ProviderIncompatibleException: 提供程序未返回 ProviderManifestToken 字符串。 ---> MySql.Data.MySqlClient.MySqlException: Unable to connect to any of the specified MySQL hosts.
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 MySql.Data.MySqlClient.MySqlProviderServices.GetDbProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.<>c__DisplayClass1.<ResolveManifestToken>b__0(Tuple`3 k)
+   在 System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.ResolveManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbConnectionExtensions.GetProviderInfo(DbConnection connection, DbProviderManifest& providerManifest)
+   在 System.Data.Entity.DbModelBuilder.Build(DbConnection providerConnection)
+   在 System.Data.Entity.Internal.LazyInternalContext.CreateModel(LazyInternalContext internalContext)
+   在 System.Data.Entity.Internal.RetryLazy`2.GetValue(TInput input)
+   在 System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   在 System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   在 System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   在 System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   在 com.wx.sqldb.repository.BaseRepository`1.Where(Expression`1 whereLambda) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.sqldb\repository\BaseRepository.cs:行号 101
+   在 com.wx.service.service.StoreService.GetList(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.service\service\StoreService.cs:行号 26
+   在 com.wx.web.Areas.mgr.Controllers.StoreController.List(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\web\com.wx.web\Areas\mgr\Controllers\StoreController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult) <BR>
+ INFO  ：2016-08-13 15:10:27,908 [100] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-13 15:10:27,919 [100] <HR /> <BR>
+ INFO  ：2016-08-13 15:10:27,920 [100] 获取用户Cookie失败，跳转到登录。 <BR>
+ INFO  ：2016-08-13 15:10:43,340 [100] System.Data.Entity.Core.ProviderIncompatibleException: 访问数据库时出错。这通常意味着与数据库的连接失败。请检查连接字符串是否正确，以及是否正使用适当的 DbContext 构造函数指定它或者在应用程序的配置文件中找到它。有关 DbContext 和连接的信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=386386。有关失败的详细信息，请参阅内部异常。 ---> System.Data.Entity.Core.ProviderIncompatibleException: 提供程序未返回 ProviderManifestToken 字符串。 ---> MySql.Data.MySqlClient.MySqlException: Unable to connect to any of the specified MySQL hosts.
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 MySql.Data.MySqlClient.MySqlProviderServices.GetDbProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.<>c__DisplayClass1.<ResolveManifestToken>b__0(Tuple`3 k)
+   在 System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.ResolveManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbConnectionExtensions.GetProviderInfo(DbConnection connection, DbProviderManifest& providerManifest)
+   在 System.Data.Entity.DbModelBuilder.Build(DbConnection providerConnection)
+   在 System.Data.Entity.Internal.LazyInternalContext.CreateModel(LazyInternalContext internalContext)
+   在 System.Data.Entity.Internal.RetryLazy`2.GetValue(TInput input)
+   在 System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   在 System.Data.Entity.Internal.InternalContext.Initialize()
+   在 System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   在 System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   在 System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   在 com.wx.sqldb.repository.BaseRepository`1.Where(Expression`1 whereLambda) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.sqldb\repository\BaseRepository.cs:行号 101
+   在 com.wx.service.service.StoreService.GetList(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.service\service\StoreService.cs:行号 26
+   在 com.wx.web.Areas.mgr.Controllers.StoreController.List(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\web\com.wx.web\Areas\mgr\Controllers\StoreController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult) <BR>
+ INFO  ：2016-08-13 15:16:24,403 [91] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-13 15:16:24,403 [91] <HR /> <BR>
+ INFO  ：2016-08-13 15:16:24,403 [91] 获取用户Cookie失败，跳转到登录。 <BR>
+ INFO  ：2016-08-13 15:16:39,407 [91] System.Data.Entity.Core.ProviderIncompatibleException: 访问数据库时出错。这通常意味着与数据库的连接失败。请检查连接字符串是否正确，以及是否正使用适当的 DbContext 构造函数指定它或者在应用程序的配置文件中找到它。有关 DbContext 和连接的信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=386386。有关失败的详细信息，请参阅内部异常。 ---> System.Data.Entity.Core.ProviderIncompatibleException: 提供程序未返回 ProviderManifestToken 字符串。 ---> MySql.Data.MySqlClient.MySqlException: Unable to connect to any of the specified MySQL hosts.
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 MySql.Data.MySqlClient.MySqlProviderServices.GetDbProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.<>c__DisplayClass1.<ResolveManifestToken>b__0(Tuple`3 k)
+   在 System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.ResolveManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbConnectionExtensions.GetProviderInfo(DbConnection connection, DbProviderManifest& providerManifest)
+   在 System.Data.Entity.DbModelBuilder.Build(DbConnection providerConnection)
+   在 System.Data.Entity.Internal.LazyInternalContext.CreateModel(LazyInternalContext internalContext)
+   在 System.Data.Entity.Internal.RetryLazy`2.GetValue(TInput input)
+   在 System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   在 System.Data.Entity.Internal.InternalContext.Initialize()
+   在 System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   在 System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   在 System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   在 com.wx.sqldb.repository.BaseRepository`1.Where(Expression`1 whereLambda) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.sqldb\repository\BaseRepository.cs:行号 101
+   在 com.wx.service.service.StoreService.GetList(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.service\service\StoreService.cs:行号 26
+   在 com.wx.web.Areas.mgr.Controllers.StoreController.List(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\web\com.wx.web\Areas\mgr\Controllers\StoreController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult) <BR>
+ INFO  ：2016-08-13 16:15:54,126 [134] base.Init,read cookie ==>  <BR>
+ INFO  ：2016-08-13 16:15:54,140 [134] <HR /> <BR>
+ INFO  ：2016-08-13 16:15:54,142 [134] 获取用户Cookie失败，跳转到登录。 <BR>
+ INFO  ：2016-08-13 16:16:09,576 [134] System.Data.Entity.Core.ProviderIncompatibleException: 访问数据库时出错。这通常意味着与数据库的连接失败。请检查连接字符串是否正确，以及是否正使用适当的 DbContext 构造函数指定它或者在应用程序的配置文件中找到它。有关 DbContext 和连接的信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=386386。有关失败的详细信息，请参阅内部异常。 ---> System.Data.Entity.Core.ProviderIncompatibleException: 提供程序未返回 ProviderManifestToken 字符串。 ---> MySql.Data.MySqlClient.MySqlException: Unable to connect to any of the specified MySQL hosts.
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 MySql.Data.MySqlClient.MySqlProviderServices.GetDbProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.Common.DbProviderServices.GetProviderManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Utilities.DbProviderServicesExtensions.GetProviderManifestTokenChecked(DbProviderServices providerServices, DbConnection connection)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.<>c__DisplayClass1.<ResolveManifestToken>b__0(Tuple`3 k)
+   在 System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   在 System.Data.Entity.Infrastructure.DefaultManifestTokenResolver.ResolveManifestToken(DbConnection connection)
+   在 System.Data.Entity.Utilities.DbConnectionExtensions.GetProviderInfo(DbConnection connection, DbProviderManifest& providerManifest)
+   在 System.Data.Entity.DbModelBuilder.Build(DbConnection providerConnection)
+   在 System.Data.Entity.Internal.LazyInternalContext.CreateModel(LazyInternalContext internalContext)
+   在 System.Data.Entity.Internal.RetryLazy`2.GetValue(TInput input)
+   在 System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   在 System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   在 System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   在 System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   在 com.wx.sqldb.repository.BaseRepository`1.Where(Expression`1 whereLambda) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.sqldb\repository\BaseRepository.cs:行号 101
+   在 com.wx.service.service.StoreService.GetList(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\server\com.wx.service\service\StoreService.cs:行号 26
+   在 com.wx.web.Areas.mgr.Controllers.StoreController.List(Int32 page, Int32 pageSize) 位置 C:\Users\CoCO\Desktop\com.wx\web\com.wx.web\Areas\mgr\Controllers\StoreController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult) <BR>
+ INFO  ：2016-08-13 18:18:24,668 [161] {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:18:24,772 [125] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:18:24,806 [125] <HR /> <BR>
+ INFO  ：2016-08-13 18:18:51,806 [125] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:18:51,807 [125] <HR /> <BR>
+ INFO  ：2016-08-13 18:18:56,956 [134] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:18:56,956 [134] <HR /> <BR>
+ INFO  ：2016-08-13 18:18:57,945 [164] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:18:57,946 [164] <HR /> <BR>
+ INFO  ：2016-08-13 18:18:58,297 [162] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:18:58,298 [162] <HR /> <BR>
+ INFO  ：2016-08-13 18:28:10,508 [160] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:28:10,509 [160] <HR /> <BR>
+ INFO  ：2016-08-13 18:29:53,491 [125] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:29:53,568 [125] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:03,040 [154] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:03,041 [154] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:07,315 [168] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:07,316 [168] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:27,867 [152] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:27,868 [152] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:29,310 [136] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:29,311 [136] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:29,487 [157] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:29,488 [157] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:32,875 [153] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:32,876 [153] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:33,029 [136] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:33,030 [136] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:38,494 [152] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:38,495 [152] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:38,673 [153] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:38,674 [153] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:40,036 [157] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:40,037 [157] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:40,196 [125] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:40,196 [125] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:41,445 [157] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:41,445 [157] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:41,657 [154] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:41,657 [154] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:44,227 [152] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:44,228 [152] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:47,773 [125] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:47,775 [125] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:47,940 [153] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:47,940 [153] <HR /> <BR>
+ INFO  ：2016-08-13 18:32:51,507 [157] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:32:51,508 [157] <HR /> <BR>
+ INFO  ：2016-08-13 18:34:27,159 [159] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 18:34:27,159 [159] <HR /> <BR>
+ INFO  ：2016-08-13 19:01:14,379 [151] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 19:01:14,380 [151] <HR /> <BR>
+ INFO  ：2016-08-13 19:03:30,125 [119] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 19:03:30,125 [119] <HR /> <BR>
+ INFO  ：2016-08-13 19:03:43,578 [144] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 19:03:43,579 [144] <HR /> <BR>
+ INFO  ：2016-08-13 19:03:50,338 [165] base.Init,read cookie ==> {"id":1,"name":"admin","nickName":"admin","logo":" ","openId":"","mobile":"18800009999","userLevel":0} <BR>
+ INFO  ：2016-08-13 19:03:50,339 [165] <HR /> <BR>

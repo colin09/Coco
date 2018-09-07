@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AmoebaImprovementSqlResource>
+  <Insert>
+    INSERT INTO [dbo].[AmoebaImprovement]
+    ([Id],[CityId],[DataMonth],[DataAlias],[Improvement],[CreateTime],[LastUpdateTime])
+    VALUES
+    (@Id,@CityId,@DataMonth,@DataAlias,@Improvement,@CreateTime,@LastUpdateTime)
+  </Insert>
+  <Update>
+    UPDATE [dbo].[AmoebaImprovement] SET
+    CityId=@cityId,DataMonth=@dataMonth,DataAlias=@dataAlias,Improvement=@improvement,LastUpdateTime=@lastUpdateTime
+    WHERE ID=@id
+  </Update>
+  <Select>
+    SELECT
+    Id,CityId,DataMonth,DataAlias,Improvement,CreateTime,LastUpdateTime
+    FROM [dbo].[AmoebaImprovement] WITH(NOLOCK)
+  </Select>
+
+
+  
+</AmoebaImprovementSqlResource>

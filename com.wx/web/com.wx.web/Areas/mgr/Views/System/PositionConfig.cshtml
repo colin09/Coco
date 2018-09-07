@@ -1,0 +1,171 @@
+﻿@using com.wx.service.models
+@model List<com.wx.service.models.PositionModel>
+@{
+    ViewBag.Title = "PositionConfig";
+}
+
+<h2>页面配置</h2><br />
+
+<div ng-app="positionApp">
+    <div class="row" ng-controller="positionController">
+        <div class="col-sm-2">
+            <ul class="ml25">
+                @foreach (var config in Model)
+            {
+                    <li ng-click="getList(@config.Id)">@config.Name [@config.EnName]</li>
+                }
+            </ul>
+        </div>
+        <div class="col-sm-10">
+            <div>
+                <input type="hidden" id="configCode" />
+            </div>
+            <div>
+                <h3>首页</h3>
+                <table class="table table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th class="w220">名称</th>
+                        @*<th>EN名称</th> 
+                            <th>别名</th>*@
+                        <th>Image</th>
+                        <td>Desc</td>
+                        <td>Type</td>
+                        <td> ...</td>
+                    </tr>
+                    <tr ng-repeat="el in indexList">
+                        <th>{{$index+1}}</th>
+                        <td>{{el.Name}}</td>
+                        @*<td>{{el.EnName}}</td>
+                            <td>{{el.Alias}}</td>*@
+                        <td>{{el.Image}}</td>
+                        <td>{{el.Desc}}</td>
+                        <td>{{el.Type}}</td>
+                        <td>
+                            <button ms-click="showImg(el)">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            </button>
+                            <button ms-click="del(el)">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                <h3>专题页</h3>
+                <table class="table table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th class="w220">名称</th>
+                        @*<th>EN名称</th>
+                            <th>别名</th>*@
+                        <th>Image</th>
+                        <td>Desc</td>
+                        <td>Type</td>
+                        <td> ...</td>
+                    </tr>
+                    <tr ng-repeat="el in modelList">
+                        <th>{{$index+1}}</th>
+                        <td>{{el.Name}}</td>
+                        @*<td>{{el.EnName}}</td>
+                            <td>{{el.Alias}}</td>*@
+                        <td>{{el.Image}}</td>
+                        <td>{{el.Desc}}</td>
+                        <td>{{el.Type}}</td>
+                        <td>
+                            <button ms-click="showImg(el)">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            </button>
+                            <button ms-click="del(el)">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                <h3>详细页</h3>
+                <div ng-repeat="rl in relationlist">
+                    <div>
+                        <strong>[Top Context]</strong>
+                        <div class="imgDesc" ng-bind-html="topItems[0].Desc | filter:{RelationId:rl}">
+                        </div>
+                    </div>
+                    <div>
+                        <strong>[Bottom Context]</strong>
+                        <div class="imgDesc" ng-bind-html="bottomItems[0].Desc | filter:{RelationId:rl}">
+                        </div>
+                    </div>
+
+                    <table class="table table-striped">
+                        <tr>
+                            <th>#</th>
+                            <th class="w220">名称</th>
+                            @*<th>EN名称</th>
+                                <th>别名</th>*@
+                            <th>Image</th>
+                            <td>Desc</td>
+                            <td>Type</td>
+                            <td> ...</td>
+                        </tr>
+                        <tr ng-repeat="el in detailList | filter:{RelationId:rl}">
+                            <th>{{$index+1}}</th>
+                            <td>{{el.Name}}</td>
+                            @*<td>{{el.EnName}}</td>
+                                <td>{{el.Alias}}</td>*@
+                            <td>{{el.Image}}</td>
+                            <td>
+                                <div class="imgDesc" ng-bind-html="el.Desc">
+                                </div>
+                            </td>
+                            <td>{{el.Type}}</td>
+                            <td>
+                                <button ms-click="showImg(el)">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                </button>
+                                <button ms-click="del(el)">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>#<input type="hidden" id="newId" /></th>
+                    <td><input type="text" ms-duplex-string="nName" placeholder="name" /></td>
+                    <td><input type="text" ms-duplex-string="nEnName" placeholder="enName" /></td>
+                    <td><input type="text" ms-duplex-string="nAlias" placeholder="alias" /></td>
+                    <td><input type="text" ms-duplex-string="nImage" placeholder="image" /></td>
+                    <td><input type="text" ms-duplex-string="nDesc" placeholder="desc" /></td>
+                    <td><input type="text" ms-duplex-string="nType" placeholder="type" /></td>
+                    <td>
+                        <button ms-click="create">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                        <button ms-click="reset">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        </button>
+                        <button ms-click="edit">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="~/Scripts/js/m-position.js"></script>
+}
+
+
+

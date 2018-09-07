@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PurchaseRequisitionGlobalAuditSettingSqlResource>
+  <Select>
+    SELECT Id,Name,SettingType,FirstAuditUserMobileNos,SecondAuditUserMobileNos,Remark,CreateTime,LastUpdateTime,AuditRuleName FROM dbo.PurchaseRequisitionGlobalAuditSettings WITH(NOLOCK)
+  </Select>
+  <FirstOrDefault>
+    SELECT Id,Name,SettingType,FirstAuditUserMobileNos,SecondAuditUserMobileNos,Remark,CreateTime,LastUpdateTime,AuditRuleName FROM dbo.PurchaseRequisitionGlobalAuditSettings WITH(NOLOCK)
+  </FirstOrDefault>
+  <Insert>
+    INSERT INTO dbo.PurchaseRequisitionGlobalAuditSettings
+    (Id,Name,SettingType,FirstAuditUserMobileNos,SecondAuditUserMobileNos,Remark,CreateTime,LastUpdateTime,AuditRuleName)
+    VALUES  (@Id,@Name,@SettingType,@FirstAuditUserMobileNos,@SecondAuditUserMobileNos,@Remark,GETDATE(),GETDATE(),@AuditRuleName)
+  </Insert>
+  <Update>
+    UPDATE dbo.PurchaseRequisitionGlobalAuditSettings SET Name=@Name,SettingType=@SettingType,FirstAuditUserMobileNos=@FirstAuditUserMobileNos,SecondAuditUserMobileNos=@SecondAuditUserMobileNos,Remark=@Remark,LastUpdateTime=GETDATE(),AuditRuleName=@AuditRuleName
+    WHERE Id=@Id
+  </Update>
+  <Delete>
+    DELETE FROM dbo.PurchaseRequisitionGlobalAuditSettings WHERE Id=@Id
+  </Delete>
+  <SelectAuditSettingItems>
+    SELECT Id,[Key],SettingType,CreateTime,LastUpdateTime,AuditSetting_Id FROM dbo.AuditSettingItems WITH(NOLOCK)
+  </SelectAuditSettingItems>
+  <SelectProductInfoAuditSettingItems>
+    SELECT ProductInfoAuditSettingItems.Id,ProductInfoAuditSettingItems.CreateTime,ProductInfoAuditSettingItems.LastUpdateTime,AuditSetting_Id,ProductInfo_Id,ProductInfo.Id Id,NewId NewId,Desc_OwnProductType OwnProductType,ProductInfoState ProductInfoState,Desc_OldCategory OldCategory,Desc_BrandName BrandName,Desc_ProductName ProductName,Desc_Specifications Specifications,Desc_Category Category,Desc_PackageQuantity PackageQuantity,Desc_PackageUnit PackageUnit
+    FROM dbo.ProductInfoAuditSettingItems WITH(NOLOCK)
+    INNER JOIN dbo.ProductInfo WITH(NOLOCK) ON ProductInfo.Id = ProductInfoAuditSettingItems.ProductInfo_Id
+  </SelectProductInfoAuditSettingItems>
+  <DeleteAuditSettingItems>
+    DELETE FROM dbo.AuditSettingItems WHERE Id=@Id
+  </DeleteAuditSettingItems>
+  <DeleteAuditSettingItemsByAuditSettingId>
+    DELETE FROM dbo.AuditSettingItems WHERE AuditSetting_Id=@AuditSettingId
+  </DeleteAuditSettingItemsByAuditSettingId>
+  <DeleteProductInfoAuditSettingItems>
+    DELETE FROM dbo.ProductInfoAuditSettingItems WHERE Id=@Id
+  </DeleteProductInfoAuditSettingItems>
+  <DeleteProductInfoAuditSettingItemsByAuditSettingId>
+    DELETE FROM dbo.ProductInfoAuditSettingItems WHERE AuditSetting_Id=@AuditSettingId
+  </DeleteProductInfoAuditSettingItemsByAuditSettingId>
+  <InsertAuditSettingItems>
+    INSERT INTO dbo.AuditSettingItems
+    (Id,[Key],SettingType,CreateTime,LastUpdateTime,AuditSetting_Id)
+    VALUES  (@Id,@Key,@SettingType,GETDATE(),GETDATE(),@AuditSetting_Id)
+  </InsertAuditSettingItems>
+  <InsertProductInfoAuditSettingItems>
+    INSERT INTO dbo.ProductInfoAuditSettingItems
+    (Id,CreateTime,LastUpdateTime,AuditSetting_Id,ProductInfo_Id)
+    VALUES  (@Id,GETDATE(),GETDATE(),@AuditSetting_Id,@ProductInfo_Id)
+  </InsertProductInfoAuditSettingItems>
+</PurchaseRequisitionGlobalAuditSettingSqlResource>
