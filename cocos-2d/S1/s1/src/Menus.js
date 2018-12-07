@@ -12,20 +12,20 @@ var Menus = cc.Layer.extend({
         lc.y = 0;
         this.addChild(lc, 1);
 
-        var toolLayer = new cc.LayerColor(cc.color(255, 0, 0, 80), size.width, 120);
-        toolLayer.x = 0;
-        toolLayer.y = size.height - 120;
-        this.addChild(toolLayer, 1);
+        var background = new cc.LayerColor(cc.color(255, 0, 0, 80), size.width, 120);
+        background.x = 0;
+        background.y = size.height - 120;
+        this.addChild(background, 301);
 
-        var progreamTookit = new ProgramMenu();
-        progreamTookit.x = 0;
-        progreamTookit.y = size.height - 30;
-        this.addChild(progreamTookit, 2);
+        var programTookit = new ProgramMenu();
+        programTookit.x = 0;
+        programTookit.y = size.height - 30;
+        this.addChild(programTookit, 310);
 
 
-        var progreamTookit = new ProgramItemMenu();
-        progreamTookit.x = 0;
-        progreamTookit.y = size.height - 60;
-        this.addChild(progreamTookit, 2);
+        var programItemTookit = new ProgramItemMenu();
+        programItemTookit.x = 0;
+        programItemTookit.y = size.height - 60;
+        this.addChild(programItemTookit, 320);
     }
 })

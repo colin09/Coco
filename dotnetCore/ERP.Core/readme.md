@@ -50,3 +50,15 @@ Project
 
 Micro-Service:
     http://localhost:5006/.well-known/openid-configuration
+
+
+
+EF Code First
+    enable-migrations
+    add-migration xxx
+    update-database
+
+
+    dotnet ef migrations add xxx
+    dotnet ef database update  -> up()
+    dotnet ef migrations remove   -> down()

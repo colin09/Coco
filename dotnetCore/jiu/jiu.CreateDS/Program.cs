@@ -31,13 +31,20 @@ namespace jiu.CreateDS
             /*
                 dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories FDBSetting
                 dotnet run CreateService LDTech.ERP.Domain.SettingServices FDBSetting
+                
+                dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories.HQSettlementModule HQSettlementNote
+                dotnet run CreateService LDTech.ERP.Domain.SettingServices.HQSettlementModule HQSettlementNote
+
+                
+                dotnet run CreateService LDTech.ERP.Domain.BasicBusinessServices 
+                dotnet run CreateService LDTech.ERP.Domain.BusinessServices 
+                dotnet run CreateService LDTech.ERP.Domain.Services 
+                dotnet run CreateService LDTech.ERP.Domain.SettingServices 
             
              */
 
             var exe = assembly.CreateInstance($"jiu.CreateDS.executer.{key}") as iExecuter;
             exe.Execute(args);
-
-
         }
 
 

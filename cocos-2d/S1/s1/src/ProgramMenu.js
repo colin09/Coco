@@ -28,15 +28,25 @@ var ProgramMenu = cc.Layer.extend({
 
         //var label = cc.LabelBMFont.create("new Page", "Arial");
         //var item1 = cc.MenuItemLabel.create("newPage", function (sender) {
-        var item1 = cc.MenuItemFont.create("newPage", function (sender) {
+        var item1 = cc.MenuItemFont.create("NEWPAGE", function (sender) {
             var id = new Date().getTime();
             cc.log("newPage, Id :" + id);
         }, this);
-        var item2 = cc.MenuItemFont.create("down", function (sender) {
+        var item2 = cc.MenuItemFont.create("MOVEDOWN", function (sender) {
             cc.log("program[?] down");
         }, this);
-        var item3 = cc.MenuItemFont.create("remove", function (sender) {
+        var item3 = cc.MenuItemFont.create("CLEAR", function (sender) {
             cc.log("program[?] remove");
+            var children = cc.director.getRunningScene().getChildByTag(1).getChildByTag(103).getChildByTag(900).children;
+            if (children != null) {
+                for (var i = children.length-1; i >= 0; i--) {
+                    children[i].removeFromParent();
+                }
+                /*
+                $.each(children, function (index, item) {
+                    item.removeFromParent();
+                });*/
+            }
         }, this);
 
         item1.attr({ anchorX: 0, anchorY: 0, x: 2, y: 0 });

@@ -141,7 +141,7 @@ var ProgramItemMenu = cc.Layer.extend({
         this._screen = cc.director.getRunningScene().getChildByTag(1).getChildByTag(103).getChildByTag(900);
         this._screenWidth = this._screen.widht;
         this._screenHeight = this._screen.height;
-        this._screen.addChild(sprite, 10);
+        this._screen.addChild(sprite, 210);
     }
 
 });

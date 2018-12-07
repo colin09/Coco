@@ -62,16 +62,31 @@ cc.Element = cc.Class.extend({
         return layer;
     },
     createSprite: function () {
-        var sprite = null;
+        //var sprite = null;
         /**
             Text / Image / Video / Time 
             Clock / Calendar / DataList / 
             Weather / News / Stock /
             Flash / PPT /
-         */
+         */ // 创建纹理
+        var texture = cc.textureCache.addImage(res.empty);
+        //指定纹理创建精灵
+        //var sp1 = new cc.Sprite(texture);
+        //指定纹理和裁剪的矩形区域来创建精灵
+        var sprite = new cc.Sprite(texture, cc.rect(0, 0, this._size.width, this._size.height));
+        sprite.setPosition(this._position);
+        sprite.setAnchorPoint(this._anchorPoint);
+        sprite.name = this._type + "_" + new Date().getTime();
+        //执行动画
+        var animation = this.createSpriteAnimation();
+        sprite.runAction(cc.Animate.create(animation).repeatForever());
+        return sprite;
+    },
+    createSpriteAnimation: function () {
+        var animationRes = "res/run/run-";
         switch (this._type.toLowerCase()) {
-            case "text":
-            case "image":
+            case "text": animationRes = "res/run/run-"; break;
+            case "image": animationRes = "res/horse/horse-"; break;
             case "video":
             case "time":
 
@@ -85,34 +100,18 @@ cc.Element = cc.Class.extend({
 
             case "flash":
             case "ppt":
-                sprite = this.createTextSprite();
                 break;
         }
-        sprite.setPosition(this._position);
-        sprite.setAnchorPoint(this._anchorPoint);
-        sprite.name = this._type + "_" + new Date().getTime();
-        return sprite;
-    },
-    createTextSprite: function () {
-        // 创建纹理
-        var texture = cc.textureCache.addImage(res.empty);
-        //指定纹理创建精灵
-        //var sp1 = new cc.Sprite(texture);
-        //指定纹理和裁剪的矩形区域来创建精灵
-        var sprite = new cc.Sprite(texture, cc.rect(0, 0, this._size.width, this._size.height));
-
-
 
         var animation = cc.Animation.create();
         animation.setDelayPerUnit(0.1);
         //动画播放完成是否保持在第一帧
         animation.setRestoreOriginalFrame(true);
         //添加动画的每一帧
-        for(var a = 1; a < 17; a++){
-            animation.addSpriteFrameWithFile("/res/run/run-"+a+".png");
+        for (var a = 1; a < 17; a++) {
+            animation.addSpriteFrameWithFile(animationRes + a + ".png");
         }
-        sprite.runAction(cc.Repeat.create(cc.Animate.create(animation)));
-        return sprite;
+        return animation;
     },
     addTouchEventListenser: function (layer) {
         var that = this;
@@ -151,9 +150,10 @@ cc.Element = cc.Class.extend({
 
                     cc.log(layer.name + ", pos.x=" + pos.x + ",pos.y=" + pos.y);
                     cc.log("_offset , pos.x=" + pos.x + ",pos.y=" + pos.y);
+                    return true;
                 }
 
-                return true;
+                return false;
             }
         });
         cc.eventManager.addListener(touchListener, layer);

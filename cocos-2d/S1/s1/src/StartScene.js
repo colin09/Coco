@@ -13,37 +13,15 @@ var StartLayer = cc.Layer.extend({
             y: size.height / 2,
             name: "bgSprite"
         });
-        this.addChild(this.bgSprite, 0, 101);
+        this.addChild(this.bgSprite, 1, 101);
 
         var toolkit = new Menus();
-        this.addChild(toolkit, 10, 102);
+        this.addChild(toolkit, 300, 102);
 
         var screen = new Screen1();
-        this.addChild(screen, 10, 103);
+        this.addChild(screen, 200, 103);
 
-        this.test();
-
-
-
-
-        /*
-        //add toolkit
-        var toolLayer = new cc.LayerColor(cc.color(255, 0, 0, 80), size.width, 75);
-        toolLayer.x = 0;
-        toolLayer.y = size.height - 75 - 2;
-        this.addChild(toolLayer, 1);
-        //add program
-        var programLayer = new cc.LayerColor(cc.color(0, 0, 255, 80), size.width, size.height-80);
-        programLayer.x = 0;
-        programLayer.y = 0;
-        this.addChild(programLayer, 2);
-
-        */
-
-
-
-
-
+        //this.test();
         return true;
     },
     test: function () {
@@ -76,3 +54,22 @@ var StartScene = cc.Scene.extend({
         this.addChild(layer, 1, 1);
     }
 });
+
+
+/**
+ * 
+ * z-index:
+ *  bgSprite: 1
+ * 
+ *  toolkit(Menus): 300
+ *      background: 301
+ *      programTookit: 310
+ *      programItemTookit: 320
+ * 
+ *  screen: 200
+ *      background: 201
+ *      element: 210
+ *          sprite: 220
+ * 
+ * 
+ */
