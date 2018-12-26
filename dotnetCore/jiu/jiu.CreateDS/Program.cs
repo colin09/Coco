@@ -40,6 +40,9 @@ namespace jiu.CreateDS
                 dotnet run CreateService LDTech.ERP.Domain.BusinessServices 
                 dotnet run CreateService LDTech.ERP.Domain.Services 
                 dotnet run CreateService LDTech.ERP.Domain.SettingServices 
+                
+                dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories CentralizePurchaseRequisition
+                dotnet run CreateService LDTech.ERP.Domain.BusinessServices CentralizePurchaseRequisition
             
              */
 

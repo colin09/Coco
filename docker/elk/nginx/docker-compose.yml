@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  nginx:
+    restart: always
+    image: nginx
+    ports:
+      - 8080:80
+      - 443:443
+    environment:
+      - NGINX_HOST=127.0.0.1
+      - NGINX_PORT=80
+    volumes:
+      #- ./conf.d/my-ng.conf:/etc/nginx/conf.d/my-ng.conf
+      - ./config/:/etc/nginx/conf.d/
+      - ./log:/var/log/nginx/
+      - ./www:/var/www
+      #- ./letsencrypt:/etc/letsencrypt
+    #command: ['ls','/etc/nginx/conf.d/']
+    #command: ['cat','/etc/nginx/conf.d/my-ng.conf']
+    
+    #volumes:
+    #  - ./conf:/etc/nginx/nginx.conf
+    #command: [nginx-debug, '-g', 'daemon off;']
+

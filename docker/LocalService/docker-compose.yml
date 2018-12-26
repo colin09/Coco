@@ -7,7 +7,7 @@ services:
     ports: 
       - 6379:6379
   db:
-    image: mysql
+    image: mysql:5.7
     restart: always
     ports: 
       - 3306:3306

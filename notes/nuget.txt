@@ -1,0 +1,29 @@
+
+
+1.产生并修改nuspec
+	****.csproj文件所在目录，然后执行：
+	nuget spec
+	notepad打开 ****.nuspec 文件,把需要替换的信息替换掉，不需要的tag全部删掉
+	
+	注意两点：
+		1、$description$使用AssemblyDescriptionAttribute的值进行替换，在产生package之前，一定要记得先编译项目，否则会提示$description$找不到的错误；
+		2、releaseNotes如果没有，就直接删掉这个节点，如果有，则填入自己的内容，不要使用默认内容，否则会在下一步产生警告信息。
+
+2.产生类库包（Library Package）
+	nuget pack ****.csproj
+	需要用Release打包，则使用下面的命令：
+	nuget pack DaxnetNugetTest.csproj -Prop Configuration=Release
+	
+3.发布类库包
+	nuget push DaxnetNugetTest.1.0.0.0.nupkg
+	nuget push MicroService.BasicData.Interfaces.1.0.0.nupkg YJP-ERP-NuGet-20181212 -src http://127.0.0.1:9300/nuget/
+
+4.测试已发布的类库包
+
+
+
+
+nuget spec
+nuget pack
+nuget push YJP.ERP.MicroService.BasicData.Interfaces.1.0.0.nupkg YJP-ERP-NuGet-20181212 -src http://127.0.0.1:9300/nuget/
+
