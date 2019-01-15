@@ -43,6 +43,13 @@ namespace jiu.CreateDS
                 
                 dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories CentralizePurchaseRequisition
                 dotnet run CreateService LDTech.ERP.Domain.BusinessServices CentralizePurchaseRequisition
+
+
+                dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories CityProviderProductSettlement
+                dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories CityProviderSettlementNote
+                
+                dotnet run CreateService LDTech.ERP.Domain.BusinessServices CityProviderProductSettlement
+                dotnet run CreateService LDTech.ERP.Domain.BusinessServices CityProviderSettlementNote
             
              */
 
