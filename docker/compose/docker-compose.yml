@@ -6,7 +6,7 @@ services:
     restart: always
     ports: 
       - 6379:6379
-  db:
+  mysql:
     image: mysql:5.7
     restart: always
     ports: 
@@ -17,9 +17,9 @@ services:
       MYSQL_USER: sa
       MYSQL_PASSWORD: sa-1234
     volumes:
-      - ./local-data/mysql:/var/lib/mysql
-      - ./init-db-sql/grant.sql:/docker-entrypoint-initdb.d/1-init.sql
-      #- ./mysql.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./mysql/db:/var/lib/mysql
+      - ./mysql/sql/grant.sql:/docker-entrypoint-initdb.d/1-init.sql
+      #- ./mysql/config/mysql.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
   rabbit:
     image: rabbitmq:management
     restart: always
@@ -35,4 +35,18 @@ services:
     labels:
       NAME: "rabbitmq1"
     #volumes:
-    #  - "./enabled-mq-plugins:/etc/rabbitmq/enabled_plugins"
+    #  - "./rabbit/plugins:/etc/rabbitmq/enabled_plugins"
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: admin
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo/db:/data/db
+      #- ./mongo/config/configdb:/data/configdb
+      - ./mongo/init:/docker-entrypoint-initdb.d
+      #- ./mongo/config/myconfig.conf:/etc/mongo/mongod.conf
