@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace CcOcelot.Data {
-    public class CcRerouteItem {
+    public class CcRerouteGroup {
         [Key]
         public int Id { set; get; }
         [MaxLength(256)]

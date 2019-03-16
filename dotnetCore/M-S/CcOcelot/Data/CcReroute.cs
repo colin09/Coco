@@ -4,7 +4,7 @@ namespace CcOcelot.Data {
     public class CcReroute {
         [Key]
         public int Id { set; get; }
-        public int ItemId { set; get; }
+        public int GroupId { set; get; }
 
         [MaxLength(256)]
         public string UpstreamPathTemplate { set; get; }

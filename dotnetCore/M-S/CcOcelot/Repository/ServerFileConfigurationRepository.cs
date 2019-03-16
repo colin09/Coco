@@ -13,7 +13,7 @@ namespace CcOcelot.Repository {
     public class ServerFileConfigurationRepository : IFileConfigurationRepository {
 
         private readonly string _connString;
-        public ServerFileConfigurationRepository (CcOcelotSqlConfig config) {
+        public ServerFileConfigurationRepository (CcOcelotConfig config) {
             _connString = config.DbConnectionStrings;
         }
 
@@ -37,21 +37,21 @@ namespace CcOcelot.Repository {
             var reRouteList = new List<FileReRoute> ();
             reRoutes.ForEach (item => {
                 var reRoute = new FileReRoute () {
-                UpstreamHost = item.UpstreamHost,
-                UpstreamPathTemplate = item.UpstreamPathTemplate,
+                    UpstreamHost = item.UpstreamHost,
+                    UpstreamPathTemplate = item.UpstreamPathTemplate,
 
-                DownstreamPathTemplate = item.DownstreamPathTemplate,
-                DownstreamScheme = item.DownstreamScheme,
+                    DownstreamPathTemplate = item.DownstreamPathTemplate,
+                    DownstreamScheme = item.DownstreamScheme,
 
-                Key = item.RequestIdKey,
-                Priority = item.Priority,
-                RequestIdKey = item.RequestIdKey,
-                ServiceName = item.ServiceName,
+                    Key = item.RequestIdKey,
+                    Priority = item.Priority,
+                    RequestIdKey = item.RequestIdKey,
+                    ServiceName = item.ServiceName,
                 };
 
                 if (!item.UpstreamHttpMethod.IsEmpty ()) reRoute.UpstreamHttpMethod = item.UpstreamHttpMethod?.ToObject<List<string>> ();
                 if (!item.DownstreamHostAndPorts.IsEmpty ()) reRoute.DownstreamHostAndPorts = item.DownstreamHostAndPorts?.ToObject<List<FileHostAndPort>> ();
-System.Console.WriteLine($"DownstreamHostAndPort ： {item.DownstreamHostAndPorts} , DownstreamHostAndPorts : {reRoute.DownstreamHostAndPorts.ToJson()}");
+                System.Console.WriteLine ($"DownstreamHostAndPort ： {item.DownstreamHostAndPorts} , DownstreamHostAndPorts : {reRoute.DownstreamHostAndPorts.ToJson()}");
                 if (!item.AuthenticationOptions.IsEmpty ()) reRoute.AuthenticationOptions = item.AuthenticationOptions?.ToObject<FileAuthenticationOptions> ();
                 if (!item.CacheOptions.IsEmpty ()) reRoute.FileCacheOptions = item.CacheOptions?.ToObject<FileCacheOptions> ();
                 if (!item.DelegatingHandlers.IsEmpty ()) reRoute.DelegatingHandlers = item.DelegatingHandlers?.ToObject<List<string>> ();
@@ -84,8 +84,8 @@ System.Console.WriteLine($"DownstreamHostAndPort ： {item.DownstreamHostAndPort
         public async Task<List<CcReroute>> GetReroute (int routeId) {
             string sql = "select CcReroute.* from CcRerouteConfig inner join CcReroute on CcRerouteConfig.ReRouteId=CcReroute.Id WHERE CcRerouteConfig.RouteId=@RouteId AND CcReroute.InfoStatus=1";
             using (var conn = new MySqlConnection (_connString)) {
-                System.Console.WriteLine($"routeId : {routeId}");
-                var result = await conn.QueryAsync<CcReroute> (sql,new {RouteId=routeId});
+                System.Console.WriteLine ($"routeId : {routeId}");
+                var result = await conn.QueryAsync<CcReroute> (sql, new { RouteId = routeId });
                 return result.ToList ();
             }
             //return new List<CcReroute> ();

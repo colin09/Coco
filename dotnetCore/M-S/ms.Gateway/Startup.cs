@@ -22,6 +22,8 @@ namespace ms.Gateway {
         public void ConfigureServices (IServiceCollection services) {
             services.AddOcelot ().AddCcOcelot (option => {
                 option.DbConnectionStrings = "Server=127.0.0.1;Database=Ocelot;User ID=root;Password=root-1234;";
+                option.EnableTimer = true;
+                option.TimerDelay = 10 * 1000;
             });
         }
 
@@ -31,7 +33,7 @@ namespace ms.Gateway {
                 app.UseDeveloperExceptionPage ();
             }
 
-            app.UseCcOcelot().Wait();
+            app.UseCcOcelot ().Wait ();
 
             app.Run (async (context) => {
                 await context.Response.WriteAsync ("Hello Start!");
