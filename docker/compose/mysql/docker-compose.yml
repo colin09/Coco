@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   mysql:
-    image: mysql:5.7
+    image: mysql
     restart: always
     ports: 
       - 3306:3306
@@ -13,5 +13,5 @@ services:
       MYSQL_PASSWORD: sa-1234
     volumes:
       - ./db:/var/lib/mysql
-      - ./sql/grant.sql:/docker-entrypoint-initdb.d/1-init.sql
-      #- ../mysql/config/mysql.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      #- ./sql/grant.sql:/docker-entrypoint-initdb.d/1-init.sql
+      #- ./mysql/config/mysql.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf

@@ -1,7 +1,6 @@
 #################
 ## Eclipse
 #################
-
 *.pydevproject
 .project
 .metadata
@@ -124,7 +123,6 @@ UpgradeLog*.XML
 #################
 ## Visual Studio Code core
 #################
-
 /bin
 /obj
 project.lock.json
@@ -134,7 +132,10 @@ project.lock.json
 #################
 ## docker
 #################
-/docker/LocalService/local-data
+docker/compose/mysql/db/
+docker/compose/mongo/db/
+docker/compose/Elasticsearch/data1/
+docker/compose/Elasticsearch/data2/
 
 #################
 ## cocos-2d
@@ -168,7 +169,6 @@ Desktop.ini
 #############
 ## Python
 #############
-
 *.py[co]
 
 # Packages
@@ -184,49 +184,10 @@ sdist
 develop-eggs
 .installed.cfg
 
-# Installer logs
-pip-log.txt
 
-# Unit test / coverage reports
-.coverage
-.tox
-
-#Translations
-*.mo
-
-#Mr Developer
-.mr.developer.cfg
 
 # Mac crap
 .DS_Store
-/com.intime.fashion.data.sync.runner/job_scheduling_data_2_0.xsd
-/Intime.OPC/packages
-/OPCApp/packages
-/Intime.OPC/Intime.OPC.WebHost/Log
-/Intime.OPC/Intime.OPC.WebHost/Update
-/.localhistory
-/Api Document/.localhistory
-_dll/com.magicalhorse.arch.common.dll
-_dll/com.magicalhorse.arch.framework.dll
-_dll/com.magicalhorse.arch.common.dll.config
-com.magicalhorse.jobscheduler/Configurations/elasticSearch.config
-com.magicalhorse.jobscheduler/App.config
-.vs/config/applicationhost.config
-.vs/config/applicationhost.config
-.vs/config/applicationhost.config
-_dll/com.magicalhorse.arch.common.dll
-*.dll
-_dll/com.magicalhorse.arch.common.dll
-/.vscode
-.vs/config/applicationhost.config
-.vs/config/applicationhost.config
-.vs/config/applicationhost.config
-.vs/config/applicationhost.config
-Api Document/.vs/config/applicationhost.config
-.vs/config/applicationhost.config
-_dll/com.magicalhorse.arch.common.dll
-_dll/com.magicalhorse.arch.framework.dll
-.vs/config/applicationhost.config
 
 /cocos-2d/sushi/frameworks
 /cocos-2d/S1/s1/frameworks

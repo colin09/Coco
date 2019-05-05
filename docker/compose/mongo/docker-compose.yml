@@ -11,11 +11,9 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ./db/:/data/db/
-      #- ./config/configdb/:/data/configdb/
-      #- ./mongo/config/myconfig.conf:/etc/mongo/mongod.conf
-      #- ./init/c-users.js:/docker-entrypoint-initdb.d/c-users.js:ro
+      - mongodata:/data/db/
+      - ./log/:/data/log/
       - ./init/:/docker-entrypoint-initdb.d/
-    #command: ['ls','/docker-entrypoint-initdb.d/']
-    #command: ['ls','/data/db/']
-    #command: ['mongo ']
+volumes:
+  mongodata:
+    driver: local
