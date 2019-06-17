@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  ravendb:
+    restart: always
+    image: ravendb/ravendb
+    ports:
+      - 8080:8080
+    environment:
+      - RAVEN_ARGS='--Setup.Mode=None'
+      - RAVEN_Security_UnsecuredAccessAllowed='PrivateNetwork'
+    volumes:
+      #- ./config:/opt/RavenDB/config
+      - ./db/:/opt/RavenDB/Server/RavenData

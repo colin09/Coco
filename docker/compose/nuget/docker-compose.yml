@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  nugetServer:
+    image: sunside/simple-nuget-server
+    restart: always
+    environment:
+      NUGET_API_KEY: "ERP123456a"
+    ports:
+      - "9400:80"
+    volumes:
+      - "/db:/var/www/db"
+      - "/packages:/var/www/packagefiles"
+      #- "/nginx:/var/cache/nginx"

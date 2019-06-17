@@ -132,10 +132,15 @@ project.lock.json
 #################
 ## docker
 #################
-docker/compose/mysql/db/
-docker/compose/mongo/db/
-docker/compose/Elasticsearch/data1/
-docker/compose/Elasticsearch/data2/
+/docker/compose/mysql/db
+/docker/compose/mongo/db
+/docker/compose/Elasticsearch/data1
+/docker/compose/Elasticsearch/data2
+/db
+/data1
+/data2
+*.st
+
 
 #################
 ## cocos-2d
@@ -191,3 +196,4 @@ develop-eggs
 
 /cocos-2d/sushi/frameworks
 /cocos-2d/S1/s1/frameworks
+docker/compose/Elasticsearch/data1
