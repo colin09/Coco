@@ -59,6 +59,10 @@ namespace jiu.CreateDS
 
                 dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories ProductPresaleSetting
                 dotnet run CreateService LDTech.ERP.Domain.BusinessServices ProductPresaleSetting
+
+                
+                dotnet run CreateDapper LDTech.ERP.Domain.Dapper.Repositories ThridInventoryNote
+                dotnet run CreateService LDTech.ERP.Domain.BusinessServices ThridInventoryNote
             
              */
 

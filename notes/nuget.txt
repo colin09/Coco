@@ -1,4 +1,4 @@
-
+nuget.server
 
 1.产生并修改nuspec
 	****.csproj文件所在目录，然后执行：
@@ -27,3 +27,27 @@ nuget spec
 nuget pack
 nuget push YJP.ERP.MicroService.BasicData.Interfaces.1.0.0.nupkg YJP-ERP-NuGet-20181212 -src http://127.0.0.1:9300/nuget/
 
+
+
+##############################################################################################################
+dotnet core 
+##########
+
+dotnet pack --no-build --output nupkgs
+dotnet pack -p:PackageVersion=2.1.0 --output nupkgs
+nuget push -Source http://172.16.1.197:8200/ -ApiKey yjp-erp-nuget-server-2019 nupkgs/c.a.1.0.0.nupkg 
+
+nuget list -Source http://172.16.1.197:8200/
+
+dotnet restore Nuget 本地源配置
+VS 2017
+VS Tools/Options/Nuget 配置本地源
+
+VS Code dotnet restore
+C:\Users\Administrator\AppData\Roaming\NuGet\nuget.config 中配置本地源
+
+Jenkins dotnet restore
+C:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config 中配置本地源
+
+
+dotnet restore -s http://172.16.1.197:8200/ -s https://www.nuget.org/api/v2/  

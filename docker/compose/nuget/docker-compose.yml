@@ -9,6 +9,6 @@ services:
     ports:
       - "9400:80"
     volumes:
-      - "/db:/var/www/db"
-      - "/packages:/var/www/packagefiles"
+      - ./db:/var/www/db
+      - ./packages:/var/www/packagefiles
       #- "/nginx:/var/cache/nginx"

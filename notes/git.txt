@@ -463,3 +463,20 @@ git config --global alias.sync '!git pull && git push'
 git config --global alias.last 'log -1'
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
+================================================================================
+
+直接找到要回退的版本号（这里是：83ff2785），reset之后，强行推送到服务器端：
+
+git reset --hard 83ff2785
+git push --force
+1
+2
+此时如果有人获取了更新的版本，可能拉去不下来，执行以下操作：
+
+git fetch --all
+git reset --hard origin/branchname
+1
+2
+branchname就是分支的名称，这时候就和服务器端一致了。
+
+

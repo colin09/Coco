@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\erp.common\ERP.Common.Infrastructure\ERP.Common.Infrastructure.csproj" />
     <ProjectReference Include="..\ERP.Domain.Enums\ERP.Domain.Enums.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ERP.Common.Infrastructure" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
     <PackageReference Include="Toolbelt.EntityFrameworkCore.IndexAttribute" Version="1.0.0" />

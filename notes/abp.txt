@@ -1,0 +1,22 @@
+
+
+ABP是“ASP.NET Boilerplate Project (ASP.NET样板项目)”的简称。
+
+ASP.NET Boilerplate是一个用最佳实践和流行技术开发现代WEB应用程序的新起点，它旨在成为一个通用的WEB应用程序框架和项目模板。
+
+ASP.NET Boilerplate 基于DDD的经典分层架构思想，实现了众多DDD的概念（但没有实现所有DDD的概念）。
+
+ABP的官方网站：http://www.aspnetboilerplate.com
+
+ABP在Github上的开源项目：https://github.com/aspnetboilerplate
+
+
+
+SLN
+	Application
+	Core
+	EntityFramework
+		model,DbContext,Repository,
+	Migrator
+	Web.Core
+	Web.Host

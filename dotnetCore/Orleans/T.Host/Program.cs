@@ -29,7 +29,6 @@ namespace T.Host {
             }
         }
 
-
         private static async Task<ISiloHost> StartSilo () {
             // define the cluster configuration
             var builder = new SiloHostBuilder ()
@@ -38,8 +37,14 @@ namespace T.Host {
                     options.ClusterId = "dev";
                     options.ServiceId = "T.Grains";
                 })
-                .Configure<EndpointOptions> (options => options.AdvertisedIPAddress = IPAddress.Loopback)
-                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(T.Grains.Value).Assembly).WithReferences())
+                .Configure<EndpointOptions> (options => {
+                    options.AdvertisedIPAddress = IPAddress.Loopback;
+                    options.SiloPort = 0;
+                    options.GatewayPort = 0;
+                    options.SiloListeningEndpoint = new IPEndPoint (IPAddress.Loopback, 0);
+                    options.GatewayListeningEndpoint = new IPEndPoint (IPAddress.Loopback, 0);
+                })
+                .ConfigureApplicationParts (parts => parts.AddApplicationPart (typeof (T.Grains.Value).Assembly).WithReferences ())
                 .ConfigureLogging (logging => logging.AddConsole ());
 
             var host = builder.Build ();

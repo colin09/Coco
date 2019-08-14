@@ -2,6 +2,9 @@
 
 http://www.cnblogs.com/zitsing/archive/2012/05/02/2479009.html
 
+ssh user@127.0.0.1
+> password
+
 基本命令
 	logout => 注销
 	shutdown now ← 立刻关机
