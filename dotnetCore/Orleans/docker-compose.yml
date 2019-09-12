@@ -1,0 +1,27 @@
+
+version: '3'
+
+services:
+  silo:
+    image: thost
+    restart: always
+    ports:
+      - "8204:8204"
+      - "11111:11111"
+      - "30000:30000"
+    #networks:
+    #  - overlay
+    #volumes:
+      #- ./logs:/logs
+
+  client:
+    image: tclient
+    restart: always
+    ports:
+      - "8203:8203"
+    #networks:
+    #  - overlay
+    depends_on:
+      - silo
+    links:
+      - "silo:127.0.0.1"

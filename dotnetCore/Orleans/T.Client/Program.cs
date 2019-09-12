@@ -1,51 +1,51 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
+using Orleans.Hosting;
 using Orleans.Runtime;
 using T.IGrains;
 
 namespace T.Client {
     class Program {
-        static int  Main (string[] args) {
+        static int Main (string[] args) {
             Console.WriteLine ("start , runing ");
 
-            return RunAsync ().Result;
-        }
+            Task.Run (() => StartClientWithRetries ());
 
-        private static async Task<int> RunAsync () {
-            try {
-                using (var client = await StartClientWithRetries ()) {
-                    var gV = client.GetGrain<IValue> (0);
-                    var result = await gV.Say ("w is coming...");
-                    Console.ReadKey ();
-                }
-
-                return 0;
-            } catch (Exception e) {
-                Console.WriteLine (e);
-                Console.ReadKey ();
-                return 1;
-            }
+            System.Console.ReadLine ();
+            return 0;
         }
 
         private static int attempt = 0;
         const int initializeAttemptsBeforeFailing = 5;
         private static async Task<IClusterClient> StartClientWithRetries () {
             attempt = 0;
+
+            var gateways = new IPEndPoint[] {
+                // new IPEndPoint (IPAddress.Parse ("197.168.25.234"), 50000),
+                // new IPEndPoint (IPAddress.Parse ("197.168.25.234"), 8300),
+                new IPEndPoint (IPAddress.Parse ("197.168.25.234"), 32222),
+            };
             IClusterClient client;
             client = new ClientBuilder ()
-                .UseLocalhostClustering ()
+                // .UseLocalhostClustering ()
+                .UseStaticClustering (gateways)
+                // .UseAdoNetClustering (options => {
+                //     options.Invariant = "System.Data.SqlClient";
+                //     options.ConnectionString = "Server=172.16.1.118;Database=OrleansStorage;User ID=user;Password=123456;Trusted_Connection=false";
+                // })
                 .Configure<ClusterOptions> (options => {
-                    options.ClusterId = "dev";
+                    options.ClusterId = "yjp.erp.test";
                     options.ServiceId = "T.Grains";
                 })
                 .ConfigureLogging (logging => logging.AddConsole ())
                 .Build ();
 
             await client.Connect (RetryFilter);
-            Console.WriteLine ("Client successfully connect to silo host");
+            Console.WriteLine ("################################ Client successfully connect to silo host ################################ ");
             return client;
         }
 

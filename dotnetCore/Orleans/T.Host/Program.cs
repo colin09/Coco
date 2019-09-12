@@ -14,14 +14,27 @@ namespace T.Host {
 
             var r = RunAsync ().Result;
         }
+
+        static void WaitExit () {
+            var flag = true;
+            while (flag) {
+                var key = System.Console.ReadLine ();
+                if (key != null && key.ToLower () == "exit")
+                    flag = false;
+                // System.Console.WriteLine ("Enter 'exit' to exit ...");
+            }
+        }
+
         private static async Task<int> RunAsync () {
             try {
                 var host = await StartSilo ();
                 Console.WriteLine ("Press Enter to terminate...");
-                Console.ReadLine ();
+                WaitExit ();
 
                 await host.StopAsync ();
-
+                System.Console.WriteLine ("#####################################################################################################################");
+                System.Console.WriteLine ("####### host started ################################################################################################");
+                System.Console.WriteLine ("#####################################################################################################################");
                 return 0;
             } catch (Exception ex) {
                 Console.WriteLine (ex);
@@ -39,10 +52,10 @@ namespace T.Host {
                 })
                 .Configure<EndpointOptions> (options => {
                     options.AdvertisedIPAddress = IPAddress.Loopback;
-                    options.SiloPort = 0;
-                    options.GatewayPort = 0;
-                    options.SiloListeningEndpoint = new IPEndPoint (IPAddress.Loopback, 0);
-                    options.GatewayListeningEndpoint = new IPEndPoint (IPAddress.Loopback, 0);
+                    // options.SiloPort = 0;
+                    // options.GatewayPort = 0;
+                    // options.SiloListeningEndpoint = new IPEndPoint (IPAddress.Loopback, 0);
+                    // options.GatewayListeningEndpoint = new IPEndPoint (IPAddress.Loopback, 0);
                 })
                 .ConfigureApplicationParts (parts => parts.AddApplicationPart (typeof (T.Grains.Value).Assembly).WithReferences ())
                 .ConfigureLogging (logging => logging.AddConsole ());

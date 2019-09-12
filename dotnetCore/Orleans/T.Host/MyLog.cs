@@ -8,9 +8,9 @@ namespace T.Host {
     }
 
     public static class LoggerExtensions {
-        public static ILoggingBuilder AddMylog (this ILoggingBuilder builder) {
-builder.
-        }
+        // public static ILoggingBuilder AddMylog (this ILoggingBuilder builder) {
+ 
+        // }
 
     }
 
