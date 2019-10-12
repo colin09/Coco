@@ -1,0 +1,101 @@
+
+
+
+docker image rm $(docker images | grep -i none | awk '{print $3}')
+
+if docker ps -a | grep -i yjp.erp.message.sync;then
+	docker container rm -f $(docker ps -a | grep -i yjp.erp.message.sync | awk '{print $1}')
+fi
+ls
+docker build -t yjp.erp.message.sync:dev .
+docker image rm $(docker images | grep -i none | awk '{print $3}')
+docker run -p 8207:8090 \
+ -e ASPNETCORE_ENVIRONMENT=dev \
+ -v /etc/localtime:/etc/localtime:ro \
+ --add-host=RabbitMQ01.yjp.com:172.16.1.57  \
+ --add-host=RabbitMQ02.yjp.com:172.16.1.58  \
+ --add-host=RabbitMQ03.yjp.com:172.16.1.59  \
+ yjp.erp.message.sync:dev
+ 
+
+if docker ps -a | grep -i yjp.erp.user.silo;then
+   docker container rm -f $(docker ps -a | grep -i yjp.erp.user.silo | awk '{print $1}')
+fi
+cp -rf erp-sql/dapper-sql/SqlResources-User erp-silos/YJP.ERP.User.Silos/SqlResources
+cp -rf nuget.config erp-silos/YJP.ERP.User.Silos/nuget.config
+cd erp-silos/YJP.ERP.User.Silos
+ls
+docker build -t yjp.erp.user.silo:dev .
+docker run -d -p 8206:8206 -p 30006:30006 -p 11116:11116 -e ASPNETCORE_ENVIRONMENT=release yjp.erp.user.silo:dev
+
+
+
+if docker ps -a | grep -i yjp.erp.user.api;then
+   docker container rm -f $(docker ps -a | grep -i yjp.erp.user.api | awk '{print $1}')
+fi
+cp -rf nuget.config erp-api/YJP.ERP.User.WebApi/nuget.config
+cd erp-api/YJP.ERP.User.WebApi
+ls
+docker build -t yjp.erp.user.api:dev .
+docker run -d -p 8205:8205 -e ASPNETCORE_ENVIRONMENT=release yjp.erp.user.api:dev
+
+
+
+if docker ps -a | grep -i yjp.erp.product.silo;then
+   docker container rm -f $(docker ps -a | grep -i yjp.erp.product.silo | awk '{print $1}')
+fi
+cp -rf erp-sql/dapper-sql/SqlResources-Product erp-silos/YJP.ERP.Product.Silos/SqlResources
+cp -rf nuget.config erp-silos/YJP.ERP.Product.Silos/nuget.config
+cd erp-silos/YJP.ERP.Product.Silos
+ls
+docker build -t yjp.erp.product.silo:dev .
+docker run -d -p 8204:8204 -p 30004:30004 -p 11114:11114 -e ASPNETCORE_ENVIRONMENT=release yjp.erp.product.silo:dev
+
+
+
+
+
+if docker ps -a | grep -i yjp.erp.allocation.silo;then
+   docker container rm -f $(docker ps -a | grep -i yjp.erp.allocation.silo | awk '{print $1}')
+fi
+cp -rf erp-sql/dapper-sql/SqlResources-Allocation erp-silos/YJP.ERP.Allocation.Silos/SqlResources
+cp -rf nuget.config erp-silos/YJP.ERP.Allocation.Silos/nuget.config
+cd erp-silos/YJP.ERP.Allocation.Silos
+ls
+docker build -t yjp.erp.allocation.silo:dev .
+docker run -d -p 8208:8208 -p 30008:30008 -p 11118:11118 -e ASPNETCORE_ENVIRONMENT=release yjp.erp.allocation.silo:dev
+
+
+
+
+
+if docker ps -a | grep -i yjp.erp.user.api;then
+   docker container rm -f $(docker ps -a | grep -i yjp.erp.user.api | awk '{print $1}')
+fi
+if docker ps -a | grep -i yjp.erp.user.silo;then
+   docker container rm -f $(docker ps -a | grep -i yjp.erp.user.silo | awk '{print $1}')
+fi
+cp -rf erp-sql/dapper-sql/SqlResources-User erp-silos/YJP.ERP.User.Silos/SqlResources
+cp -rf nuget.config erp-silos/YJP.ERP.User.Silos/nuget.config
+cp -rf nuget.config erp-api/YJP.ERP.User.WebApi/nuget.config
+cd erp-silos/YJP.ERP.User.Silos
+ls
+docker build -t yjp.erp.user.silo:dev .
+cd ..
+cd ..
+cd erp-api/YJP.ERP.User.WebApi
+ls
+docker build -t yjp.erp.user.api:dev .
+docker-compose up
+
+
+
+
+
+curl -L "http://172.16.1.119/docker-compose-Linux-x86_64.zip" -o /usr/local/bin/docker-compose
+http://172.16.1.119/docker-compose-Linux-x86_64.zip
+
+
+
+
+   docker rm -f supplier

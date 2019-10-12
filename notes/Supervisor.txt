@@ -1,0 +1,200 @@
+Supervisor 
+
+
+//因为Supervisor是用Python开发的一个client/server服务，所以首先检测系统是否安装了Python2.4以上版本
+//检测命令
+python 
+//quit()退出
+//如果没有安装 
+sudo apt-get install python2.7
+//安装supervisor
+apt-get install supervisor
+
+/etc/supervisord.conf 
+
+
+
+systemctl reload supervisord.service
+systemctl stop supervisord.service
+systemctl start supervisord.service
+systemctl shutdown  supervisord.service
+systemctl status supervisord.service
+
+
+supervisorctl reload
+supervisorctl stop|start program_name
+supervisorctl status
+supervisorctl shutdown
+
+## Supervisor 配置文件
+cat /etc/supervisord.conf 
+
+
+## Supervisor 日志文件
+cat /tmp/supervisord.log
+
+
+## Error: Another program is already listening on a port that one of our HTTP servers is configured to use.
+unlink /tmp/supervisor.sock
+
+files = /etc/supervisor/conf.d/*.conf
+
+
+## YJP.ERP.User.Silos.dll 
+## UserSilo.conf
+[program:YJP.ERP.User.Silo]
+command=/bin/bash -c "dotnet YJP.ERP.User.Silos.dll"
+directory=/yjp/erp/erp-core/erp-silos/YJP.ERP.User.Silos/deploy/
+stderr_logfile=/var/log/yjp.erp.user.silos.error.log
+stdout_logfile=/var/log/yjp.erp.user.silos.log
+environment=ASPNETCORE_ENVIRONMENT=release
+user=root
+stopsignal=INT
+autostart=true
+autorestart=true
+startsecs=3
+
+
+## YJP.ERP.Product.Silos.dll
+## ProductSilo.conf
+[program:YJP.ERP.Product.Silo]
+command=/bin/bash -c "dotnet YJP.ERP.Product.Silos.dll"
+directory=/yjp/erp/erp-core/erp-silos/YJP.ERP.Product.Silos/deploy/
+stderr_logfile=/var/log/yjp.erp.product.silos.error.log
+stdout_logfile=/var/log/yjp.erp.product.silos.log
+environment=ASPNETCORE_ENVIRONMENT=release
+user=root
+stopsignal=INT
+autostart=true
+autorestart=true
+startsecs=3
+
+## YJP.ERP.Allocation.Silos.dll
+## AllocationSilo.conf
+[program:YJP.ERP.Allocation.Silo]
+command=/bin/bash -c "dotnet YJP.ERP.Allocation.Silos.dll"
+directory=/yjp/erp/erp-core/erp-silos/YJP.ERP.Allocation.Silos/deploy/
+stderr_logfile=/var/log/yjp.erp.allocation.silos.error.log
+stdout_logfile=/var/log/yjp.erp.allocation.silos.log
+environment=ASPNETCORE_ENVIRONMENT=release
+user=root
+stopsignal=INT
+autostart=true
+autorestart=true
+startsecs=3
+
+## YJP.ERP.Org.Silos.dll
+## OrgSilo.conf
+[program:YJP.ERP.Org.Silo]
+command=/bin/bash -c "dotnet YJP.ERP.Org.Silos.dll"
+directory=/yjp/erp/erp-core/erp-silos/YJP.ERP.Org.Silos/deploy/
+stderr_logfile=/var/log/yjp.erp.org.silos.error.log
+stdout_logfile=/var/log/yjp.erp.org.silos.log
+environment=ASPNETCORE_ENVIRONMENT=release
+user=root
+stopsignal=INT
+autostart=true
+autorestart=true
+startsecs=3
+
+
+## YJP.ERP.Provider.Silos.dll
+## ProviderSilo.conf
+[program:YJP.ERP.Provider.Silo]
+command=/bin/bash -c "dotnet YJP.ERP.Provider.Silos.dll"
+directory=/yjp/erp/erp-core/erp-silos/YJP.ERP.Provider.Silos/deploy/
+stderr_logfile=/var/log/yjp.erp.provider.silos.error.log
+stdout_logfile=/var/log/yjp.erp.provider.silos.log
+environment=ASPNETCORE_ENVIRONMENT=release
+user=root
+stopsignal=INT
+autostart=true
+autorestart=true
+startsecs=3
+
+## v.dll
+## v.conf
+[program:mvc]
+command=/bin/bash -c "dotnet v.dll"
+directory=/home/repository/test/v/deploy/
+stderr_logfile=/var/log/v.error.log
+stdout_logfile=/var/log/v.log
+environment=ASPNETCORE_ENVIRONMENT=dev
+## user=root
+stopsignal=INT
+autostart=true
+autorestart=true
+startsecs=3
+
+
+
+sudo netstat -nlpt
+
+
+ps -ef | grep dotnet
+
+
+## publish.sh ################################################################################
+#! /bin/bash
+
+echo =============================== run YJP.ERP.Product.Silos ===============================
+
+cd /yjp/erp/erp-core
+cd erp-silos/YJP.ERP.Product.Silos
+rm -rf deploy
+mkdir deploy
+cp -rf /yjp/erp/erp-core/erp-sql/dapper-sql/SqlResources-Product deploy/SqlResources
+cp -rf /yjp/erp/erp-core/erp-silos/YJP.ERP.Product.Silos/configurations deploy/configurations
+dotnet restore -s http://172.16.1.197:8200/ -s https://www.nuget.org/api/v2/
+dotnet publish -o deploy
+
+echo =============================== run YJP.ERP.User.Silos ===============================
+
+cd /yjp/erp/erp-core
+cd erp-silos/YJP.ERP.User.Silos
+rm -rf deploy
+mkdir deploy
+cp -rf /yjp/erp/erp-core/erp-sql/dapper-sql/SqlResources-User deploy/SqlResources
+cp -rf /yjp/erp/erp-core/erp-silos/YJP.ERP.User.Silos/configurations deploy/configurations
+dotnet restore -s http://172.16.1.197:8200/ -s https://www.nuget.org/api/v2/
+dotnet publish -o deploy
+
+echo =============================== run YJP.ERP.Allocation.Silos ===============================
+
+cd /yjp/erp/erp-core
+cd erp-silos/YJP.ERP.Allocation.Silos
+rm -rf deploy
+mkdir deploy
+cp -rf /yjp/erp/erp-core/erp-sql/dapper-sql/SqlResources-Allocation deploy/SqlResources
+cp -rf /yjp/erp/erp-core/erp-silos/YJP.ERP.Allocation.Silos/configurations deploy/configurations
+dotnet restore -s http://172.16.1.197:8200/ -s https://www.nuget.org/api/v2/
+dotnet publish -o deploy
+
+echo =============================== run YJP.ERP.OrgModule.Silos ===============================
+
+cd /yjp/erp/erp-core
+cd erp-silos/YJP.ERP.OrgModule.Silos
+rm -rf deploy
+mkdir deploy
+cp -rf /yjp/erp/erp-core/erp-sql/dapper-sql/SqlResources-Org deploy/SqlResources
+cp -rf /yjp/erp/erp-core/erp-silos/YJP.ERP.OrgModule.Silos/configurations deploy/configurations
+dotnet restore -s http://172.16.1.197:8200/ -s https://www.nuget.org/api/v2/
+dotnet publish -o deploy
+
+echo =============================== run YJP.ERP.Provider.Silos ===============================
+
+cd /yjp/erp/erp-core
+cd erp-silos/YJP.ERP.Provider.Silos
+rm -rf deploy
+mkdir deploy
+cp -rf /yjp/erp/erp-core/erp-sql/dapper-sql/SqlResources-Provider deploy/SqlResources
+cp -rf /yjp/erp/erp-core/erp-silos/YJP.ERP.Provider.Silos/configurations deploy/configurations
+dotnet restore -s http://172.16.1.197:8200/ -s https://www.nuget.org/api/v2/
+dotnet publish -o deploy
+
+
+
+
+
+
+
