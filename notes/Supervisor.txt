@@ -13,6 +13,12 @@ apt-get install supervisor
 /etc/supervisord.conf 
 
 
+编辑文件/etc/vim/vimrc.tiny，将“compatible”改成“nocompatible”非兼容模式；
+并添加一句：
+set backspace=2 
+
+
+
 
 systemctl reload supervisord.service
 systemctl stop supervisord.service
@@ -126,7 +132,16 @@ autostart=true
 autorestart=true
 startsecs=3
 
-
+## clash.conf
+[program:clash]
+command=/bin/bash -c "./clash"
+directory=/home/clash/
+stderr_logfile=/home/clash/clash.error.log
+stdout_logfile=/home/clash/clash.log
+stopsignal=INT
+autostart=true
+autorestart=true
+startsecs=3
 
 sudo netstat -nlpt
 
