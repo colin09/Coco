@@ -1,0 +1,53 @@
+deb http://deb.debian.org/debian buster main
+deb http://deb.debian.org/debian buster-updates main
+deb http://security.debian.org/debian-security/ buster/updates main
+deb [arch=amd64] https://download.docker.com/linux/debian buster stable
+# deb-src [arch=amd64] https://download.docker.com/linux/debian buster stable
+deb http://ftp.debian.org/debian buster-backports main
+
+# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free
+deb https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
+
+
+##################
+1 windows 安装 Xming
+2 Linux 
+	${HOME}/.bashrc 末行加   export DISPLAY=:0
+	source ~/.bashrc  # 使配置生效
+	sudo apt install x11-apps -y && xeyes # 测试
+
+
+# nodejs
+	sudo apt-get install nodejs
+	sudo apt-get install npm
+	
+# 升级 npm
+	npm i -g npm
+	npm i -g npm@5.0.0 #指定版本
+	
+# 用 n 升级nodejs
+	npm i -g n
+	# 查看系统node的安装路径
+	which node
+	# 通过N_PREFIX变量来修改 n 的默认node安装路径
+	vim ~/.bash_profile 
+	# 添加以下2行
+	export N_PREFIX=/urs/bin/node #node实际安装位置
+	export PATH=$N_PREFIX/bin:$PATH
+	# 执行source使修改生效
+	source ~/.bash_profile
+	echo $N_PREFIX
+	# 升级
+	n latest  #安装node最新版本
+	n stable  #稳定版
+	n v7.10.0 #指定版本
+	n lts	  #LTS版本
+	
+	
