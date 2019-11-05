@@ -23,6 +23,10 @@ deb https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main con
 	source ~/.bashrc  # 使配置生效
 	sudo apt install x11-apps -y && xeyes # 测试
 
+#重启WSL
+	net stop LxssManager
+	net start LxssManager
+
 
 # nodejs
 	sudo apt-get install nodejs
