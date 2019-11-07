@@ -54,4 +54,8 @@ deb https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main con
 	n v7.10.0 #指定版本
 	n lts	  #LTS版本
 	
-	
+#Package in a very bad inconsistent state
+	# 1st: must delete all relevant files in /var/lib/dpkg/info
+	sudo rm /var/lib/dpkg/info/docker*
+	# 2nd: Force remove with dpkg
+	sudo dpkg -r --force-depends --force-remove-reinstreq docker-ce
