@@ -210,6 +210,23 @@ dotnet publish -o deploy
 
 
 
+###########################################
+### linux clash
+	1, github 下载 .gz 压缩包
+	sudo wget https://github.com/Dreamacro/clash/releases/download/v0.16.0/clash-linux-amd64-v0.16.0.gz
+	2,解压
+	sudo gzip clash-linux-amd64-v0.16.0.gz -d
+	3,重命名
+	sudo mv clash-linux-amd64-v0.16.0 clash
+	4,授权
+	sudo chmod +x clash
+	5,测试
+	sudo clash -v
+	6,获取配送文件
+	conf.yaml
+	7,运行
+	sudo clash -d .
+
 
 
 
