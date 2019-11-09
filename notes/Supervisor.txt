@@ -12,13 +12,18 @@ apt-get install supervisor
 
 /etc/supervisord.conf 
 
-
+vi 键错乱
 编辑文件/etc/vim/vimrc.tiny，将“compatible”改成“nocompatible”非兼容模式；
 并添加一句：
 set backspace=2 
 
+可以使用echo_supervisord_conf > /etc/supervisor/supervisord.conf命令，生成默认的完整配置文件（不建议，内容比较多）
 
 
+## socket error
+sudo touch /var/run/supervisor.sock
+sudo chmod 777 /var/run/supervisor.sock
+sudo supervisord 
 
 systemctl reload supervisord.service
 systemctl stop supervisord.service
